@@ -388,39 +388,67 @@ public class GameController {
 	 */
 	public void auction(Property property) {
 		// TODO auction needs to be implemented
-		Player highestbidder = game.getCurrentPlayer();
+		int bid = 0;
+		int highestBid = 0;
+		int playerAmount = game.getPlayers().size();
+		int currentPlayerNR = 0;
+		for(int i = 0; game.getPlayers().size() > i; i++) {
+			if(game.getCurrentPlayer() == game.getPlayers().get(i)){
+				currentPlayerNR = i;
+			}
+		}
+		Player[] bidList = new Player[game.getPlayers().size()];
+		for(int i = 0; game.getPlayers().size() > i; i++){
+		if(i == currentPlayerNR){
+			bidList[0] = game.getCurrentPlayer();
+		} else {
+			bidList[(currentPlayerNR+(currentPlayerNR-1))%playerAmount] = game.getPlayers().get(i);
+		}
+
+		}
+	}
+
+
+		/*Player highestbidder = game.getCurrentPlayer();
 		int highestbid = 0;
 		int bidcount = 0;
 
+		List<Player> bidList = new ArrayList<>();
+		int z = 0;
+		for
+		for(int i = 0; game.getPlayers().size() > i; i++){
+			if(){
+				bidList.add(z,game.getCurrentPlayer());
+				z++;
+			}
+		}
 
-		while (true) {
+		while (bidcount == 0) {
 			int bid = 0;
-			List<Player> templist = new ArrayList<>();
-			templist.clear();
+			List<Player> tempList = new ArrayList<>();
+			tempList.clear();
 			int counter = 0;
 			for (int i = 0; game.getPlayers().size() > i; i++) {
 				String option = gui.getUserButtonPressed("Hello " + game.getPlayers().get(i).getName()+ " Do you wanna bid? ", "yes", "no");
 				if (option.equals("yes")) {
-					templist.add(counter, game.getPlayers().get(i));
+					tempList.add(counter, game.getPlayers().get(i));
 					counter++;
 				}
 			}
-			for (int i = 0; templist.size() > i; i++) {
-				bid = gui.getUserInteger("How much would you like to bid? " + templist.get(i).getName() + " Highest Bid: " + highestbid + " by " + highestbidder.getName());
-				if (bid > templist.get(i).getBalance()) { gui.showMessage("Since the bid is above your current balancec, the bid is ignored");}
+			for (int i = 0; tempList.size() > i; i++) {
+				bid = gui.getUserInteger("How much would you like to bid? " + tempList.get(i).getName() + " Highest Bid: " + highestbid + " by " + highestbidder.getName());
+				if (bid > tempList.get(i).getBalance()) { gui.showMessage("Since the bid is above your current balancec, the bid is ignored");}
 
-					if (bid > highestbid && bid < templist.get(i).getBalance()) {
+					if (bid > highestbid && bid < tempList.get(i).getBalance()) {
 						highestbid = bid;
-						highestbidder = templist.get(i);
+						highestbidder = tempList.get(i);
 						bidcount = 0;
 
 					} else
 						bidcount++;
 			}
-			if (bidcount >= templist.size() - 1) {
-				break;
-			}
 		}
+
 		if (highestbid == 0)
 			gui.showMessage("There were no betters, therefore we have no winner!");
 
@@ -430,7 +458,7 @@ public class GameController {
 			property.setOwner(highestbidder);
 		}
 	}
-
+*/
 
 			/**
 			 * Action handling the situation when one player is broke to another

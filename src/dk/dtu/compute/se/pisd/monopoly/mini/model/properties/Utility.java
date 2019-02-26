@@ -10,6 +10,8 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
  *
  */
 public class Utility extends Property {
+
+
 	
 	// TODO to be implemented
 
