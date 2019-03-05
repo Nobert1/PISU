@@ -6,7 +6,9 @@ import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -383,82 +385,81 @@ public class GameController {
 
 	/**
 	 * This method implements the activity of auctioning a property.
-	 *
 	 * @param property the property which is for auction
+	 * The max and min amount of bid is currently not working when i have 'highest bid' instead of a raw number ex:1,5,100
+	 * It works when using mouse on screen it wont allow player to bid if it is out of range. But it is possible to press enter
+	 * even though the 'ok' button is read
+	 *
+	 * @author s175124
 	 */
 	public void auction(Property property) {
 		// TODO auction needs to be implemented
-		int bid = 0;
+		int currentBid = 0;
 		int highestBid = 0;
 		int playerAmount = game.getPlayers().size();
 		int currentPlayerNR = 0;
-		for(int i = 0; game.getPlayers().size() > i; i++) {
-			if(game.getCurrentPlayer() == game.getPlayers().get(i)){
+
+		//Finds which number the current player has in the player array
+		for (int i = 0; game.getPlayers().size() > i; i++) {
+			if (game.getCurrentPlayer() == game.getPlayers().get(i)) {
 				currentPlayerNR = i;
 			}
 		}
-		Player[] bidList = new Player[game.getPlayers().size()];
-		for(int i = 0; game.getPlayers().size() > i; i++){
-		if(i == currentPlayerNR){
-			bidList[0] = game.getCurrentPlayer();
-		} else {
-			bidList[(currentPlayerNR+(currentPlayerNR-1))%playerAmount] = game.getPlayers().get(i);
+
+		//Creates a new player arraylist so the person that landed on the property starts the bidding
+		int moveAmount = game.getPlayers().size() - currentPlayerNR;
+		ArrayList<Player> bidList = new ArrayList<>();
+		for(int i = 0; playerAmount > i; i++){
+			bidList.add(game.getPlayers().get(i));
 		}
 
-		}
-	}
+		for (int i = 0; game.getPlayers().size() > i; i++) {
+			if (i == currentPlayerNR) {
+				bidList.remove(0);
+				bidList.add(0,game.getCurrentPlayer());
+			} else if (i == 0) {
+				bidList.remove(moveAmount);
+				bidList.add(moveAmount,game.getPlayers().get(i));
 
-
-		/*Player highestbidder = game.getCurrentPlayer();
-		int highestbid = 0;
-		int bidcount = 0;
-
-		List<Player> bidList = new ArrayList<>();
-		int z = 0;
-		for
-		for(int i = 0; game.getPlayers().size() > i; i++){
-			if(){
-				bidList.add(z,game.getCurrentPlayer());
-				z++;
+			} else {
+				bidList.remove((i + moveAmount) % game.getPlayers().size());
+				bidList.add((i + moveAmount) % game.getPlayers().size(),game.getPlayers().get(i));
 			}
 		}
 
-		while (bidcount == 0) {
-			int bid = 0;
-			List<Player> tempList = new ArrayList<>();
-			tempList.clear();
-			int counter = 0;
-			for (int i = 0; game.getPlayers().size() > i; i++) {
-				String option = gui.getUserButtonPressed("Hello " + game.getPlayers().get(i).getName()+ " Do you wanna bid? ", "yes", "no");
-				if (option.equals("yes")) {
-					tempList.add(counter, game.getPlayers().get(i));
-					counter++;
+		//Actual bidding method
+
+		Player highestBidder = new Player();
+		int counter = 0;
+		while (counter < bidList.size()-1) {
+			for (int i = 0; bidList.size() > i; i++) {
+				if(bidList.get(i).getBalance() <= highestBid){
+					gui.showMessage("You do not have sufficient funds to participate in the auction");
+					bidList.remove(i);
+				} else {
+					String option = gui.getUserButtonPressed("The highest bid is " + highestBid + " by " + highestBidder.getName() + ".\n"
+							+ bidList.get(i).getName() + " Do you want to bid? ", "yes", "no");
+					if (option.equals("yes")) {
+						currentBid = gui.getUserInteger("The highest bid is " + highestBid + " by " + highestBidder.getName() + ".\n" +
+								bidList.get(i).getName() + ", how much would you like to bid? Must be between " + highestBid + " and " + bidList.get(i).getBalance()
+								, highestBid, bidList.get(i).getBalance());
+						highestBid = currentBid;
+						highestBidder = bidList.get(i);
+						counter = 0;
+					} else if (option.equals("no")){
+						counter++;
+					}
 				}
 			}
-			for (int i = 0; tempList.size() > i; i++) {
-				bid = gui.getUserInteger("How much would you like to bid? " + tempList.get(i).getName() + " Highest Bid: " + highestbid + " by " + highestbidder.getName());
-				if (bid > tempList.get(i).getBalance()) { gui.showMessage("Since the bid is above your current balancec, the bid is ignored");}
-
-					if (bid > highestbid && bid < tempList.get(i).getBalance()) {
-						highestbid = bid;
-						highestbidder = tempList.get(i);
-						bidcount = 0;
-
-					} else
-						bidcount++;
-			}
 		}
-
-		if (highestbid == 0)
-			gui.showMessage("There were no betters, therefore we have no winner!");
-
-		else {
-			gui.showMessage("the winner of the action is " + highestbidder.getName() + " congratulations");
-			highestbidder.addOwnedProperty(property);
-			property.setOwner(highestbidder);
-		}
+		gui.showMessage("Congratulations " + highestBidder.getName() + " you win " + property.getName() + " for " + highestBid + "dollars!");
+		highestBidder.payMoney(highestBid);
+		highestBidder.addOwnedProperty(property);
+		property.setOwner(highestBidder);
 	}
-*/
+
+
+
 
 			/**
 			 * Action handling the situation when one player is broke to another
