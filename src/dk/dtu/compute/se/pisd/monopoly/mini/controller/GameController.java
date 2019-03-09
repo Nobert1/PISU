@@ -2,11 +2,15 @@ package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -52,7 +56,6 @@ public class GameController {
 	public GameController(Game game) {
 		super();
 		this.game = game;
-
 		gui = new GUI();
 	}
 
@@ -119,27 +122,89 @@ public class GameController {
 				break;
 
 			}
+			/**
+			 * Er nok lidt overkill at caste til list for derefter at cast til array. Det eneste er bare så er man sikker på at længden er rigtig.
+			 * At behandle det hele som list er måske bedre.
+			 */
+			for (Player p : players) {
+				String userbutton = gui.getUserSelection("Do you want to build anything on your real estates?", "yes", "no");
 
-			// TODO offer all players the options to trade etc.
+				if (userbutton.equals("yes")) {
+					List<RealEstate> estatelist = new ArrayList<>();
+					String[] houses = {"1", "2", "3", "a motherfucking hotel"};
+					for (int i = 0; i < player.getOwnedProperties().size(); i++) {
+						if (player.getOwnedProperties().iterator().next().getClass() == RealEstate.class) {
+							estatelist.add((RealEstate) player.getOwnedProperties().iterator().next());
+						}
+						String[] buttons = new String[estatelist.size() + 1];
+						buttons[buttons.length-1] = "exit";
+						for (int j = 0; j < estatelist.size(); j++) {
+							buttons[j] = String.valueOf(estatelist.get(j).getName());
+						}
+						while (true) {
+							String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
+							String button2 = gui.getUserButtonPressed("What would you like to build?", houses);
+							int lower = 0;
+							int upper = estatelist.size();
 
-			current = (current + 1) % players.size();
-			game.setCurrentPlayer(players.get(current));
-			if (current == 0) {
-				String selection = gui.getUserSelection(
-						"A round is finished. Do you want to continue the game?",
-						"yes",
-						"no");
-				if (selection.equals("no")) {
-					terminated = true;
+							//Sorterer arrayet alfabetisk så min super insane søgning kan finde det rigtige. Den er super overkill men
+							//han viste det i timen og jeg havde tid på arbejde til at være den største showoff nord for alperne.
+							// det med collections er straight off stackoverflow https://stackoverflow.com/questions/2784514/sort-arraylist-of-custom-objects-by-property
+
+
+							Collections.sort(estatelist, new Comparator<RealEstate>(){
+								public int compare(RealEstate s1, RealEstate s2) {
+									return s1.getName().compareToIgnoreCase(s2.getName());
+								}
+							});
+
+
+
+							if (button.equals("exit"))
+								break;
+								//Dette er selve algoritmen der søger. Den søger noget mere effektivt end et for loop. Ting som hvad det koster
+							// Er ikke gældende, det bare fyld
+								while (lower <= upper) {
+								int middle = (lower + upper) / 2;
+								if (button.equals(estatelist.get(middle).getName())) {
+									if (button2.equals("a motherfucking hotel")) {
+										player.setBalance(player.getBalance() - 4000 - 1000 * estatelist.get(middle).getHouses());
+										estatelist.get(middle).setHouses(0);
+									}else {
+										estatelist.get(middle).setHouses(Integer.valueOf(button2));
+										player.setBalance(player.getBalance() - 1000 * Integer.valueOf(button2));
+									}
+								} else if (button.charAt(0) < estatelist.get(middle).getName().charAt(0)) {
+									upper = middle - 1;
+								} else {
+									lower = middle + 1;
+								}
+							}
+							}
+						}
+					}
 				}
 			}
-		}
+				// TODO offer all players the options to trade etc.
 
+				current = (current + 1) % players.size();
+				game.setCurrentPlayer(players.get(current));
+				if (current == 0) {
+					String selection = gui.getUserSelection(
+							"A round is finished. Do you want to continue the game?",
+							"yes",
+							"no");
+					if (selection.equals("no")) {
+						terminated = true;
+					}
+				}
 		dispose();
 	}
 
+
+
 	/**
-	 * This method implements a activity of asingle move of the given player.
+	 * This method implements a activity of a single move of the given player.
 	 * It throws a {@link dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException}
 	 * if the player goes broke in this move. Note that this is still a very
 	 * basic implementation of the move of a player; many aspects are still
@@ -319,9 +384,6 @@ public class GameController {
 		auction(property);
 	}
 
-	public void auction(Player player, Property property) {
-
-	}
 
 	/**
 	 * This method implements a payment activity to another player,

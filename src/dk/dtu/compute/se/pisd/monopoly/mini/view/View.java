@@ -4,12 +4,15 @@ import dk.dtu.compute.se.pisd.designpatterns.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.Subject;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Space;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import gui_fields.GUI_Car;
 import gui_fields.GUI_Car.Pattern;
 import gui_fields.GUI_Car.Type;
 import gui_fields.GUI_Field;
 import gui_fields.GUI_Player;
+import gui_fields.GUI_Street;
 import gui_main.GUI;
 
 import java.awt.*;
@@ -38,7 +41,7 @@ public class View implements Observer {
 	private Map<Space,GUI_Field> space2GuiField = new HashMap<Space,GUI_Field>();
 	
 	private boolean disposed = false;
-	
+
 	/**
 	 * Constructor for the view of a game based on a game and an already
 	 * running Matador GUI.
@@ -57,7 +60,8 @@ public class View implements Observer {
 			// the GUI fields should actually be created according to the game's
 			// fields
 			space2GuiField.put(space, guiFields[i++]);
-			
+			space.attach(this);
+			//Her skal der evt være en eller anden form for update metode, så som updatespace eller update player
 			// TODO we should also register with the properties as observer; but
 			// the current version does not update anything for the spaces, so we do not
 			// register the view as an observer for now
@@ -74,7 +78,6 @@ public class View implements Observer {
 			// register this view with the player as an observer, in order to update the
 			// player's state in the GUI
 			player.attach(this);
-			
 			updatePlayer(player);
 		}
 	}
@@ -85,10 +88,32 @@ public class View implements Observer {
 			if (subject instanceof Player) {
 				updatePlayer((Player) subject);
 			}
-			
+			if (subject instanceof Property)
+			updateProperty((Property) subject);
 			// TODO update other subjects in the GUI
 			//      in particular properties (sold, houses, ...)
 			
+		}
+	}
+
+	private void updateProperty(Property property) {
+		GUI_Street field = (GUI_Street) this.space2GuiField.get(property);
+
+		if (property.isOwned()){
+			field.setBorder(property.getOwner().getColor());
+			field.setOwnerName(property.getOwner().getName());
+		}
+
+		if (property.getClass().equals(RealEstate.class)) {
+			RealEstate realestate = new RealEstate();
+			realestate = (RealEstate) property;
+
+				if (realestate.getHouses() != 0) {
+					field.setHouses(realestate.getHouses());
+				}
+			if (realestate.isHotel())
+				field.setHotel(true);
+			field.setHouses(0);
 		}
 	}
 	

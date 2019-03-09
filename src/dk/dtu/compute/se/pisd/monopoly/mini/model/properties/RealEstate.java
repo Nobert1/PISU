@@ -2,6 +2,11 @@ package dk.dtu.compute.se.pisd.monopoly.mini.model.properties;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 /**
  * A specific property, which represents real estate on which houses
  * and hotels can be built. Note that this class does not have details
@@ -10,8 +15,121 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public class RealEstate extends Property{
-	
-	// TODO to be implemented
 
+
+/**
+ * Method author s185031 - Gustav Emil Nobert
+ * Udvid klassen for grund (RealEstate) med private attributer og getter- og setter-metoder som
+ * tilgår og ændrer antal byggede huse på en grund. Sørg for at metoden notifyChange() bliver kaldt,
+ * så snart der er en relevant ændring i grundens attributer.
+ */
+public class RealEstate extends Property {
+    private int houses;
+    private int houseprice;
+    private int RealestateRent;
+    private boolean hotel = false;
+    public int rent;
+    private String Color;
+    private int houserent;
+
+
+    // TODO to be implemented
+
+
+    public void setHouses(int houses) {
+        this.houses = houses;
+        notifyChange();
+    }
+
+    public int getHotelRent(int hotelrent) {
+        return hotelrent;
+    }
+
+    public int getHouses() {
+        return houses;
+    }
+
+    public int getHouserent() {
+        return houserent;
+    }
+
+    public void setHouserent(int houserent) {
+        this.houserent = houserent;
+    }
+
+    @Override
+    public void setRent(int rent) {
+        this.rent = rent;
+    }
+
+    @Override
+    public int getRent() {
+        return rent;
+    }
+
+    public int getHouseprice() {
+        return houseprice;
+    }
+
+    public void setHouseprice(int houseprice) {
+        this.houseprice = houseprice;
+        notifyChange();
+    }
+
+    public int getRealestateRent() {
+        return RealestateRent;
+    }
+
+    public void setRealestateRent(int realestateRent) {
+        this.RealestateRent = realestateRent;
+        notifyChange();
+    }
+
+    public void setHotel(boolean hotel) {
+        this.hotel = hotel;
+        notifyChange();
+    }
+
+    public boolean isHotel() {
+        return hotel;
+    }
+
+    public String getColor() { return Color; }
+
+    public void setColor(String color) { Color = color; }
+
+
+
+    /**
+     * Hvordan huslejen skal skrues sammen ved jeg ikke helt endnu, jeg vil gerne
+     * have noget dynamisk husleje uden at den skal være hardcoded.
+     * - s185031 Gustav Emil Nobert
+     * @param realEstate
+     * @return
+     */
+
+    public int computerent(RealEstate realEstate) {
+        if (realEstate.isHotel())
+            return realEstate.getHotelRent(1000);
+        if (realEstate.getHouses() == 0) {
+            Set<RealEstate> realestatelist = new HashSet<RealEstate>();
+            RealEstate list = new RealEstate();
+            Iterator value = realEstate.getOwner().getOwnedProperties().iterator();
+
+            while (value.hasNext()) {
+                if (value.getClass().equals(RealEstate.class))
+                    realestatelist.add((RealEstate) value);
+            }
+            int counter = 0;
+            while (realestatelist.iterator().hasNext())
+                if (realestatelist.iterator().next().getColor().equals(realEstate.getColor()))
+                    counter++;
+            if (counter == 3)
+                return realEstate.getRent() * 2;
+            else
+                return realEstate.getRent();
+        }
+        notify();
+        return realEstate.getHouses() * realEstate.getHouserent() + realEstate.getHouses();
+    }
 }

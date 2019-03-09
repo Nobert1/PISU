@@ -2,6 +2,8 @@ package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
+import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 
 /**
  * A property which is a space that can be owned by a player.
@@ -13,7 +15,7 @@ public class Property extends Space {
 	
 	private int cost;
 	private int rent;
-	
+	private boolean owned;
 	private Player owner;
 	
 
@@ -26,6 +28,14 @@ public class Property extends Space {
 		return cost;
 	}
 
+	public void setOwned(boolean owned) {
+		this.owned = owned;
+	}
+
+	public boolean isOwned() {
+		return owned;
+	}
+
 	/**
 	 * Sets the cost of this property.
 	 * 
@@ -35,6 +45,8 @@ public class Property extends Space {
 		this.cost = cost;
 		notifyChange();
 	}
+
+
 
 	/**
 	 * Returns the rent to be payed for this property.
@@ -90,5 +102,4 @@ public class Property extends Space {
 			controller.payment(player, rent, owner);
 		}
 	}
-
 }
