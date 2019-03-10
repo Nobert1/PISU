@@ -124,67 +124,76 @@ public class GameController {
 			}
 			/**
 			 * Er nok lidt overkill at caste til list for derefter at cast til array. Det eneste er bare så er man sikker på at længden er rigtig.
-			 * At behandle det hele som list er måske bedre.
+			 * At behandle det hele som list er måske bedre. Kaster også out of bounds for array
 			 */
 			for (Player p : players) {
-				String userbutton = gui.getUserSelection("Do you want to build anything on your real estates?", "yes", "no");
+				if (p.getOwnedProperties().size() != 0){
+					String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
 
-				if (userbutton.equals("yes")) {
-					List<RealEstate> estatelist = new ArrayList<>();
-					String[] houses = {"1", "2", "3", "a motherfucking hotel"};
-					for (int i = 0; i < player.getOwnedProperties().size(); i++) {
-						if (player.getOwnedProperties().iterator().next().getClass() == RealEstate.class) {
-							estatelist.add((RealEstate) player.getOwnedProperties().iterator().next());
+					if (userbutton.equals("yes")) {
+						List<Property> templist = new ArrayList<Property>(p.getOwnedProperties());
+						List<RealEstate> estatelist = new ArrayList<RealEstate>();
+						String[] houses = {"1", "2", "3", "a motherfucking hotel"};
+						for (int i = 0; i < templist.size(); i++) {
+							if (templist.get(i).getClass() == RealEstate.class)
+								estatelist.add((RealEstate) templist.get(i));
 						}
+
 						String[] buttons = new String[estatelist.size() + 1];
-						buttons[buttons.length-1] = "exit";
+						buttons[buttons.length - 1] = "exit";
 						for (int j = 0; j < estatelist.size(); j++) {
 							buttons[j] = String.valueOf(estatelist.get(j).getName());
 						}
 						while (true) {
 							String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
-							String button2 = gui.getUserButtonPressed("What would you like to build?", houses);
-							int lower = 0;
-							int upper = estatelist.size();
+							if (button.equals("exit"))
+								break;
+
+							String button2 = gui.getUserButtonPressed("How many houses would  you like, or perhaps a hotel?", houses);
+
 
 							//Sorterer arrayet alfabetisk så min super insane søgning kan finde det rigtige. Den er super overkill men
 							//han viste det i timen og jeg havde tid på arbejde til at være den største showoff nord for alperne.
 							// det med collections er straight off stackoverflow https://stackoverflow.com/questions/2784514/sort-arraylist-of-custom-objects-by-property
 
 
-							Collections.sort(estatelist, new Comparator<RealEstate>(){
+							Collections.sort(estatelist, new Comparator<RealEstate>() {
 								public int compare(RealEstate s1, RealEstate s2) {
 									return s1.getName().compareToIgnoreCase(s2.getName());
 								}
 							});
 
-
-
-							if (button.equals("exit"))
-								break;
-								//Dette er selve algoritmen der søger. Den søger noget mere effektivt end et for loop. Ting som hvad det koster
-							// Er ikke gældende, det bare fyld
-								while (lower <= upper) {
+							int lower = 0;
+							int upper = estatelist.size();
+							//Dette er selve algoritmen der søger. Den søger noget mere effektivt end et for loop. Ting som hvad det koster er ikke gældende, det bare fyld
+							// While loopet breaker ikke hvis der kun er et hus, fordi at upper altid er en og lower altid er 0. Derfor vil middle altid være en og jeg kan love dig for der bliver suget noget husleje her
+							// - Gustav Nobert
+							while (lower <= upper) {
 								int middle = (lower + upper) / 2;
 								if (button.equals(estatelist.get(middle).getName())) {
 									if (button2.equals("a motherfucking hotel")) {
 										player.setBalance(player.getBalance() - 4000 - 1000 * estatelist.get(middle).getHouses());
+										estatelist.get(middle).isHotel();
 										estatelist.get(middle).setHouses(0);
-									}else {
+									} else {
+										player.setBalance(player.getBalance() - 1000 * Integer.valueOf(button2) - estatelist.get(middle).getHouses() * 1000);
 										estatelist.get(middle).setHouses(Integer.valueOf(button2));
-										player.setBalance(player.getBalance() - 1000 * Integer.valueOf(button2));
 									}
+									if (estatelist.size() == 1)
+										break;
+
 								} else if (button.charAt(0) < estatelist.get(middle).getName().charAt(0)) {
 									upper = middle - 1;
 								} else {
 									lower = middle + 1;
 								}
 							}
-							}
 						}
 					}
 				}
-			}
+					}
+				}
+
 				// TODO offer all players the options to trade etc.
 
 				current = (current + 1) % players.size();

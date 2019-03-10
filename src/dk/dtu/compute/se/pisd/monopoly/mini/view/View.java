@@ -7,12 +7,9 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Space;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
-import gui_fields.GUI_Car;
+import gui_fields.*;
 import gui_fields.GUI_Car.Pattern;
 import gui_fields.GUI_Car.Type;
-import gui_fields.GUI_Field;
-import gui_fields.GUI_Player;
-import gui_fields.GUI_Street;
 import gui_main.GUI;
 
 import java.awt.*;
@@ -97,7 +94,7 @@ public class View implements Observer {
 	}
 
 	private void updateProperty(Property property) {
-		GUI_Street field = (GUI_Street) this.space2GuiField.get(property);
+		GUI_Ownable field = (GUI_Ownable) this.space2GuiField.get(property);
 
 		if (property.isOwned()){
 			field.setBorder(property.getOwner().getColor());
@@ -105,15 +102,14 @@ public class View implements Observer {
 		}
 
 		if (property.getClass().equals(RealEstate.class)) {
-			RealEstate realestate = new RealEstate();
-			realestate = (RealEstate) property;
-
+			RealEstate realestate = (RealEstate) property;
 				if (realestate.getHouses() != 0) {
-					field.setHouses(realestate.getHouses());
+					((GUI_Street) field).setHouses(realestate.getHouses());
 				}
-			if (realestate.isHotel())
-				field.setHotel(true);
-			field.setHouses(0);
+			if (realestate.isHotel()) {
+				((GUI_Street) field).setHotel(true);
+				((GUI_Street) field).setHouses(0);
+			}
 		}
 	}
 	
