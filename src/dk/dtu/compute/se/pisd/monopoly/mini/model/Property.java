@@ -15,7 +15,7 @@ public class Property extends Space {
 	
 	private int cost;
 	private int rent;
-	private boolean owned;
+	private boolean owned = false;
 	private Player owner;
 	
 
