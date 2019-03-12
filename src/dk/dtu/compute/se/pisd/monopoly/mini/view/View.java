@@ -100,15 +100,20 @@ public class View implements Observer {
 			field.setBorder(property.getOwner().getColor());
 			field.setOwnerName(property.getOwner().getName());
 		}
+		if (property.isOwned()) {
+		    field.setBorder(null);
+		    field.setOwnerName(null);
+        }
 
-		if (property.getClass().equals(RealEstate.class)) {
+		if (property instanceof RealEstate) {
 			RealEstate realestate = (RealEstate) property;
-				if (realestate.getHouses() != 0) {
-					((GUI_Street) field).setHouses(realestate.getHouses());
-				}
+			GUI_Street estatefield = (GUI_Street) field;
+				if (realestate.getHouses() != 0 ) {
+					estatefield.setHouses(realestate.getHouses());
+                }
 			if (realestate.isHotel()) {
-				((GUI_Street) field).setHotel(true);
-				((GUI_Street) field).setHouses(0);
+				estatefield.setHotel(true);
+				estatefield.setHouses(0);
 			}
 		}
 	}

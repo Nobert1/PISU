@@ -122,94 +122,27 @@ public class GameController {
 				break;
 
 			}
-			/**
-			 * Er nok lidt overkill at caste til list for derefter at cast til array. Det eneste er bare så er man sikker på at længden er rigtig.
-			 * At behandle det hele som list er måske bedre. Kaster også out of bounds for array
-			 */
-			for (Player p : players) {
-				if (p.getOwnedProperties().size() != 0){
-					String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
 
-					if (userbutton.equals("yes")) {
-						List<Property> templist = new ArrayList<Property>(p.getOwnedProperties());
-						List<RealEstate> estatelist = new ArrayList<RealEstate>();
-						String[] houses = {"1", "2", "3", "a motherfucking hotel"};
-						for (int i = 0; i < templist.size(); i++) {
-							if (templist.get(i).getClass() == RealEstate.class)
-								estatelist.add((RealEstate) templist.get(i));
-						}
-
-						String[] buttons = new String[estatelist.size() + 1];
-						buttons[buttons.length - 1] = "exit";
-						for (int j = 0; j < estatelist.size(); j++) {
-							buttons[j] = String.valueOf(estatelist.get(j).getName());
-						}
-						while (true) {
-							String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
-							if (button.equals("exit"))
-								break;
-
-							String button2 = gui.getUserButtonPressed("How many houses would  you like, or perhaps a hotel?", houses);
+			Offerhouses(players);
 
 
-							//Sorterer arrayet alfabetisk så min super insane søgning kan finde det rigtige. Den er super overkill men
-							//han viste det i timen og jeg havde tid på arbejde til at være den største showoff nord for alperne.
-							// det med collections er straight off stackoverflow https://stackoverflow.com/questions/2784514/sort-arraylist-of-custom-objects-by-property
+			// TODO offer all players the options to trade etc.
 
-
-							Collections.sort(estatelist, new Comparator<RealEstate>() {
-								public int compare(RealEstate s1, RealEstate s2) {
-									return s1.getName().compareToIgnoreCase(s2.getName());
-								}
-							});
-
-							int lower = 0;
-							int upper = estatelist.size();
-							//Dette er selve algoritmen der søger. Den søger noget mere effektivt end et for loop. Ting som hvad det koster er ikke gældende, det bare fyld
-							// While loopet breaker ikke hvis der kun er et hus, fordi at upper altid er en og lower altid er 0. Derfor vil middle altid være en og jeg kan love dig for der bliver suget noget husleje her
-							// - Gustav Nobert
-							while (lower <= upper) {
-								int middle = (lower + upper) / 2;
-								if (button.equals(estatelist.get(middle).getName())) {
-									if (button2.equals("a motherfucking hotel")) {
-										player.setBalance(player.getBalance() - 4000 - 1000 * estatelist.get(middle).getHouses());
-										estatelist.get(middle).isHotel();
-										estatelist.get(middle).setHouses(0);
-									} else {
-										player.setBalance(player.getBalance() - 1000 * Integer.valueOf(button2) - estatelist.get(middle).getHouses() * 1000);
-										estatelist.get(middle).setHouses(Integer.valueOf(button2));
-									}
-									if (estatelist.size() == 1)
-										break;
-
-								} else if (button.charAt(0) < estatelist.get(middle).getName().charAt(0)) {
-									upper = middle - 1;
-								} else {
-									lower = middle + 1;
-								}
-							}
-						}
-					}
+			current = (current + 1) % players.size();
+			game.setCurrentPlayer(players.get(current));
+			if (current == 0) {
+				String selection = gui.getUserSelection(
+						"A round is finished. Do you want to continue the game?",
+						"yes",
+						"no");
+				if (selection.equals("no")) {
+					terminated = true;
 				}
-					}
-				}
+			}
 
-				// TODO offer all players the options to trade etc.
-
-				current = (current + 1) % players.size();
-				game.setCurrentPlayer(players.get(current));
-				if (current == 0) {
-					String selection = gui.getUserSelection(
-							"A round is finished. Do you want to continue the game?",
-							"yes",
-							"no");
-					if (selection.equals("no")) {
-						terminated = true;
-					}
-				}
+		}
 		dispose();
 	}
-
 
 
 	/**
@@ -243,7 +176,7 @@ public class GameController {
 				gui.showMessage("Player " + player.getName() + " stays in prison since he did not cast a double!");
 			}
 			// TODO note that the player could also pay to get out of prison,
-			//      which is not yet implemented 
+			//      which is not yet implemented
 			if (castDouble) {
 				doublesCount++;
 				if (doublesCount > 2) {
@@ -364,30 +297,30 @@ public class GameController {
 		// TODO We might also allow the player to obtainCash before
 		// the actual offer, to see whether he can free enough cash
 		// for the sale.
+		if (player.getBalance() > property.getCost()) {
+			String choice = gui.getUserSelection(
+					"Player " + player.getName() +
+							": Do you want to buy " + property.getName() +
+							" for " + property.getCost() + "$?",
+					"yes",
+					"no");
 
-		String choice = gui.getUserSelection(
-				"Player " + player.getName() +
-						": Do you want to buy " + property.getName() +
-						" for " + property.getCost() + "$?",
-				"yes",
-				"no");
-
-		if (choice.equals("yes")) {
-			try {
-				paymentToBank(player, property.getCost());
-			} catch (PlayerBrokeException e) {
-				// if the payment fails due to the player being broke,
-				// an auction (among the other players is started
-				auction(property);
-				// then the current move is aborted by casting the
-				// PlayerBrokeException again
-				throw e;
+			if (choice.equals("yes")) {
+				try {
+					paymentToBank(player, property.getCost());
+				} catch (PlayerBrokeException e) {
+					// if the payment fails due to the player being broke,
+					// an auction (among the other players is started
+					auction(property);
+					// then the current move is aborted by casting the
+					// PlayerBrokeException again
+					throw e;
+				}
+				player.addOwnedProperty(property);
+				property.setOwner(player);
+				return;
 			}
-			player.addOwnedProperty(property);
-			property.setOwner(player);
-			return;
 		}
-
 		// In case the player does not buy the property,
 		// an auction is started
 		auction(property);
@@ -459,67 +392,41 @@ public class GameController {
 	 */
 	public void auction(Property property) {
 		// TODO auction needs to be implemented
-		int bid = 0;
-		int highestBid = 0;
-		int playerAmount = game.getPlayers().size();
-		int currentPlayerNR = 0;
-		for(int i = 0; game.getPlayers().size() > i; i++) {
-			if(game.getCurrentPlayer() == game.getPlayers().get(i)){
-				currentPlayerNR = i;
-			}
-		}
-		Player[] bidList = new Player[game.getPlayers().size()];
-		for(int i = 0; game.getPlayers().size() > i; i++){
-		if(i == currentPlayerNR){
-			bidList[0] = game.getCurrentPlayer();
-		} else {
-			bidList[(currentPlayerNR+(currentPlayerNR-1))%playerAmount] = game.getPlayers().get(i);
-		}
-
-		}
-	}
-
-
-		/*Player highestbidder = game.getCurrentPlayer();
+		Player highestbidder = game.getCurrentPlayer();
 		int highestbid = 0;
 		int bidcount = 0;
 
-		List<Player> bidList = new ArrayList<>();
-		int z = 0;
-		for
-		for(int i = 0; game.getPlayers().size() > i; i++){
-			if(){
-				bidList.add(z,game.getCurrentPlayer());
-				z++;
-			}
-		}
 
-		while (bidcount == 0) {
+		while (true) {
 			int bid = 0;
-			List<Player> tempList = new ArrayList<>();
-			tempList.clear();
+			List<Player> templist = new ArrayList<>();
+			templist.clear();
 			int counter = 0;
 			for (int i = 0; game.getPlayers().size() > i; i++) {
-				String option = gui.getUserButtonPressed("Hello " + game.getPlayers().get(i).getName()+ " Do you wanna bid? ", "yes", "no");
+				String option = gui.getUserButtonPressed("Hello " + game.getPlayers().get(i).getName() + " Do you wanna bid? ", "yes", "no");
 				if (option.equals("yes")) {
-					tempList.add(counter, game.getPlayers().get(i));
+					templist.add(counter, game.getPlayers().get(i));
 					counter++;
 				}
 			}
-			for (int i = 0; tempList.size() > i; i++) {
-				bid = gui.getUserInteger("How much would you like to bid? " + tempList.get(i).getName() + " Highest Bid: " + highestbid + " by " + highestbidder.getName());
-				if (bid > tempList.get(i).getBalance()) { gui.showMessage("Since the bid is above your current balancec, the bid is ignored");}
+			for (int i = 0; templist.size() > i; i++) {
+				bid = gui.getUserInteger("How much would you like to bid? " + templist.get(i).getName() + " Highest Bid: " + highestbid + " by " + highestbidder.getName());
+				if (bid > templist.get(i).getBalance()) {
+					gui.showMessage("Since the bid is above your current balancec, the bid is ignored");
+				}
 
-					if (bid > highestbid && bid < tempList.get(i).getBalance()) {
-						highestbid = bid;
-						highestbidder = tempList.get(i);
-						bidcount = 0;
+				if (bid > highestbid && bid < templist.get(i).getBalance()) {
+					highestbid = bid;
+					highestbidder = templist.get(i);
+					bidcount = 0;
 
-					} else
-						bidcount++;
+				} else
+					bidcount++;
+			}
+			if (bidcount >= templist.size() - 1) {
+				break;
 			}
 		}
-
 		if (highestbid == 0)
 			gui.showMessage("There were no betters, therefore we have no winner!");
 
@@ -529,79 +436,119 @@ public class GameController {
 			property.setOwner(highestbidder);
 		}
 	}
-*/
 
-			/**
-			 * Action handling the situation when one player is broke to another
-			 * player. All money and properties are transferred to the other player.
-			 *
-			 * @param brokePlayer the broke player
-			 * @param benificiary the player who receives the money and assets
-			 */
-			public void playerBrokeTo (Player brokePlayer, Player benificiary){
-				int amount = brokePlayer.getBalance();
-				benificiary.receiveMoney(amount);
-				brokePlayer.setBalance(0);
-				brokePlayer.setBroke(true);
 
-				// TODO We assume here, that the broke player has already sold all his houses! But, if
-				// not, we could make sure at this point that all houses are removed from
-				// properties (properties with houses on are not supposed to be transferred, neither
-				// in a trade between players, nor when  player goes broke to another player)
-				for (Property property : brokePlayer.getOwnedProperties()) {
-					property.setOwner(benificiary);
-					benificiary.addOwnedProperty(property);
-				}
-				brokePlayer.removeAllProperties();
+	/**
+	 * Action handling the situation when one player is broke to another
+	 * player. All money and properties are transferred to the other player.
+	 *
+	 * @param brokePlayer the broke player
+	 * @param benificiary the player who receives the money and assets
+	 */
+	public void playerBrokeTo(Player brokePlayer, Player benificiary) {
+		int amount = brokePlayer.getBalance();
+		benificiary.receiveMoney(amount);
+		brokePlayer.setBalance(0);
+		brokePlayer.setBroke(true);
 
-				while (!brokePlayer.getOwnedCards().isEmpty()) {
-					game.returnCardToDeck(brokePlayer.getOwnedCards().get(0));
-				}
+		// TODO We assume here, that the broke player has already sold all his houses! But, if
+		// not, we could make sure at this point that all houses are removed from
+		// properties (properties with houses on are not supposed to be transferred, neither
+		// in a trade between players, nor when  player goes broke to another player)
+		for (Property property : brokePlayer.getOwnedProperties()) {
+			property.setOwner(benificiary);
+			benificiary.addOwnedProperty(property);
+		}
+		brokePlayer.removeAllProperties();
 
-				gui.showMessage("Player " + brokePlayer.getName() + "went broke and transfered all"
-						+ "assets to " + benificiary.getName());
-			}
-
-			/**
-			 * Action handling the situation when a player is broke to the bank.
-			 *
-			 * @param player the broke player
-			 */
-			public void playerBrokeToBank (Player player){
-
-				player.setBalance(0);
-				player.setBroke(true);
-
-				// TODO we also need to remove the houses and the mortgage from the properties
-
-				for (Property property : player.getOwnedProperties()) {
-					property.setOwner(null);
-				}
-				player.removeAllProperties();
-
-				gui.showMessage("Player " + player.getName() + " went broke");
-
-				while (!player.getOwnedCards().isEmpty()) {
-					game.returnCardToDeck(player.getOwnedCards().get(0));
-				}
-			}
-
-			/**
-			 * Method for disposing of this controller and cleaning up its resources.
-			 */
-			public void dispose () {
-				if (!disposed && view != null) {
-					disposed = true;
-					if (view != null) {
-						view.dispose();
-						view = null;
-					}
-					// TODO we should also dispose of the GUI here. But this works only
-					//      for my private version of the GUI and not for the GUI currently
-					//      deployed via Maven (or other official versions);
-				}
-			}
-
+		while (!brokePlayer.getOwnedCards().isEmpty()) {
+			game.returnCardToDeck(brokePlayer.getOwnedCards().get(0));
 		}
 
+		gui.showMessage("Player " + brokePlayer.getName() + "went broke and transfered all"
+				+ "assets to " + benificiary.getName());
+	}
 
+	/**
+	 * Action handling the situation when a player is broke to the bank.
+	 *
+	 * @param player the broke player
+	 */
+	public void playerBrokeToBank(Player player) {
+
+		player.setBalance(0);
+		player.setBroke(true);
+
+		// TODO we also need to remove the houses and the mortgage from the properties
+
+		for (Property property : player.getOwnedProperties()) {
+			property.setOwner(null);
+		}
+		player.removeAllProperties();
+
+		gui.showMessage("Player " + player.getName() + " went broke");
+
+		while (!player.getOwnedCards().isEmpty()) {
+			game.returnCardToDeck(player.getOwnedCards().get(0));
+		}
+	}
+
+	/**
+	 * Method for disposing of this controller and cleaning up its resources.
+	 */
+	public void dispose() {
+		if (!disposed && view != null) {
+			disposed = true;
+			if (view != null) {
+				view.dispose();
+				view = null;
+			}
+			// TODO we should also dispose of the GUI here. But this works only
+			//      for my private version of the GUI and not for the GUI currently
+			//      deployed via Maven (or other official versions);
+		}
+	}
+
+	public void Offerhouses(List<Player> players) {
+		for (Player p : players) {
+			List<RealEstate> estatelist = new ArrayList<RealEstate>();
+			for (Property property : p.getOwnedProperties()) {
+				if (property instanceof RealEstate) {
+					estatelist.add((RealEstate) property);
+				}
+			}
+			if (estatelist.size() != 0) {
+				String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
+
+				if (userbutton.equals("yes")) {
+					String[] buttons = new String[estatelist.size() + 1];
+					buttons[buttons.length - 1] = "exit";
+					for (int i = 0; i < estatelist.size(); i++) {
+						buttons[i] = estatelist.get(i).getName();
+					}
+					while (true) {
+						String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
+
+						if (button.equals("exit"))
+							break;
+
+						String[] houses = {"1", "2", "3", "a motherfucking hotel"};
+						String button2 = gui.getUserButtonPressed("What would you like to have on your RealEstate", houses);
+						for (RealEstate estate : estatelist) {
+							if (button.equals(estate.getName())) {
+								if (button2.equals("a motherfucking hotel")) {
+									p.setBalance(p.getBalance() - 4000 + 1000 * estate.getHouses());
+									estate.setHotel(true);
+									estate.setHouses(0);
+								} else {
+									p.setBalance(p.getBalance() - 1000 * Integer.valueOf(button2) + estate.getHouses() * 1000);
+									estate.setHouses(Integer.valueOf(button2));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
