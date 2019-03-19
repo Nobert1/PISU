@@ -180,6 +180,7 @@ public class MiniMonopoly {
 	try {
 		controller.play();
 	} catch (GameEndedException e){
+		//Should there be made a GetGUI in controller so there can be shown a message here or in the exception class?
 
 	}
 	}

@@ -11,15 +11,11 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
 
 public class GameEndedException extends Exception {
 
-    private Player player;
 
-    public GameEndedException(Player player) {
+
+    public GameEndedException() {
+//Is the guin message here or in the catch clause?
         super("Everyone except 1 is broke");
-        this.player = player;
-
-    }
-
-    Player getWinner{
 
     }
 

@@ -76,6 +76,9 @@ public class GameController {
 	 * current player of the game; this makes it possible to resume a
 	 * game at any point.
 	 */
+
+
+
 	public void play() throws GameEndedException {
 			List<Player> players = game.getPlayers();
 			Player c = game.getCurrentPlayer();
@@ -95,6 +98,8 @@ public class GameController {
 					try {
 						this.makeMove(player);
 					} catch (PlayerBrokeException e) {
+						throw new GameEndedException();
+						//Is it here Game exception should be thrown??
 						// We could react to the player having gone broke
 					}
 				}
