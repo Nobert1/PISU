@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
@@ -75,139 +76,139 @@ public class GameController {
 	 * current player of the game; this makes it possible to resume a
 	 * game at any point.
 	 */
-	public void play() {
-		List<Player> players = game.getPlayers();
-		Player c = game.getCurrentPlayer();
+	public void play() throws GameEndedException {
+			List<Player> players = game.getPlayers();
+			Player c = game.getCurrentPlayer();
 
-		int current = 0;
-		for (int i = 0; i < players.size(); i++) {
-			Player p = players.get(i);
-			if (c.equals(p)) {
-				current = i;
-			}
-		}
-
-		boolean terminated = false;
-		while (!terminated) {
-			Player player = players.get(current);
-			if (!player.isBroke()) {
-				try {
-					this.makeMove(player);
-				} catch (PlayerBrokeException e) {
-					// We could react to the player having gone broke
+			int current = 0;
+			for (int i = 0; i < players.size(); i++) {
+				Player p = players.get(i);
+				if (c.equals(p)) {
+					current = i;
 				}
 			}
 
-			// Check whether we have a winner
-			Player winner = null;
-			int countActive = 0;
-			for (Player p : players) {
-				if (!p.isBroke()) {
-					countActive++;
-					winner = p;
+			boolean terminated = false;
+			while (!terminated) {
+				Player player = players.get(current);
+				if (!player.isBroke()) {
+					try {
+						this.makeMove(player);
+					} catch (PlayerBrokeException e) {
+						// We could react to the player having gone broke
+					}
 				}
-			}
-			if (countActive == 1) {
-				gui.showMessage(
-						"Player " + winner.getName() +
-								" has won with " + winner.getBalance() + "$.");
-				break;
-			} else if (countActive < 1) {
-				// This can actually happen in very rare conditions and only
-				// if the last player makes a stupid mistake (like buying something
-				// in an auction in the same round when the last but one player went
-				// bankrupt)
-				gui.showMessage(
-						"All players are broke.");
-				break;
 
-			}
-			/**
-			 * Er nok lidt overkill at caste til list for derefter at cast til array. Det eneste er bare så er man sikker på at længden er rigtig.
-			 * At behandle det hele som list er måske bedre. Kaster også out of bounds for array
-			 */
-			for (Player p : players) {
-				if (p.getOwnedProperties().size() != 0){
-					String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
+				// Check whether we have a winner
+				Player winner = null;
+				int countActive = 0;
+				for (Player p : players) {
+					if (!p.isBroke()) {
+						countActive++;
+						winner = p;
+					}
+				}
+				if (countActive == 1) {
+					gui.showMessage(
+							"Player " + winner.getName() +
+									" has won with " + winner.getBalance() + "$.");
+					break;
+				} else if (countActive < 1) {
+					// This can actually happen in very rare conditions and only
+					// if the last player makes a stupid mistake (like buying something
+					// in an auction in the same round when the last but one player went
+					// bankrupt)
+					gui.showMessage(
+							"All players are broke.");
+					break;
 
-					if (userbutton.equals("yes")) {
-						List<Property> templist = new ArrayList<Property>(p.getOwnedProperties());
-						List<RealEstate> estatelist = new ArrayList<RealEstate>();
-						String[] houses = {"1", "2", "3", "a motherfucking hotel"};
-						for (int i = 0; i < templist.size(); i++) {
-							if (templist.get(i).getClass() == RealEstate.class)
-								estatelist.add((RealEstate) templist.get(i));
-						}
+				}
+				/**
+				 * Er nok lidt overkill at caste til list for derefter at cast til array. Det eneste er bare så er man sikker på at længden er rigtig.
+				 * At behandle det hele som list er måske bedre. Kaster også out of bounds for array
+				 */
+				for (Player p : players) {
+					if (p.getOwnedProperties().size() != 0) {
+						String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
 
-						String[] buttons = new String[estatelist.size() + 1];
-						buttons[buttons.length - 1] = "exit";
-						for (int j = 0; j < estatelist.size(); j++) {
-							buttons[j] = String.valueOf(estatelist.get(j).getName());
-						}
-						while (true) {
-							String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
-							if (button.equals("exit"))
-								break;
+						if (userbutton.equals("yes")) {
+							List<Property> templist = new ArrayList<Property>(p.getOwnedProperties());
+							List<RealEstate> estatelist = new ArrayList<RealEstate>();
+							String[] houses = {"1", "2", "3", "a motherfucking hotel"};
+							for (int i = 0; i < templist.size(); i++) {
+								if (templist.get(i).getClass() == RealEstate.class)
+									estatelist.add((RealEstate) templist.get(i));
+							}
 
-							String button2 = gui.getUserButtonPressed("How many houses would  you like, or perhaps a hotel?", houses);
+							String[] buttons = new String[estatelist.size() + 1];
+							buttons[buttons.length - 1] = "exit";
+							for (int j = 0; j < estatelist.size(); j++) {
+								buttons[j] = String.valueOf(estatelist.get(j).getName());
+							}
+							while (true) {
+								String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
+								if (button.equals("exit"))
+									break;
+
+								String button2 = gui.getUserButtonPressed("How many houses would  you like, or perhaps a hotel?", houses);
 
 
-							//Sorterer arrayet alfabetisk så min super insane søgning kan finde det rigtige. Den er super overkill men
-							//han viste det i timen og jeg havde tid på arbejde til at være den største showoff nord for alperne.
-							// det med collections er straight off stackoverflow https://stackoverflow.com/questions/2784514/sort-arraylist-of-custom-objects-by-property
+								//Sorterer arrayet alfabetisk så min super insane søgning kan finde det rigtige. Den er super overkill men
+								//han viste det i timen og jeg havde tid på arbejde til at være den største showoff nord for alperne.
+								// det med collections er straight off stackoverflow https://stackoverflow.com/questions/2784514/sort-arraylist-of-custom-objects-by-property
 
 
-							Collections.sort(estatelist, new Comparator<RealEstate>() {
-								public int compare(RealEstate s1, RealEstate s2) {
-									return s1.getName().compareToIgnoreCase(s2.getName());
-								}
-							});
-
-							int lower = 0;
-							int upper = estatelist.size();
-							//Dette er selve algoritmen der søger. Den søger noget mere effektivt end et for loop. Ting som hvad det koster er ikke gældende, det bare fyld
-							// While loopet breaker ikke hvis der kun er et hus, fordi at upper altid er en og lower altid er 0. Derfor vil middle altid være en og jeg kan love dig for der bliver suget noget husleje her
-							// - Gustav Nobert
-							while (lower <= upper) {
-								int middle = (lower + upper) / 2;
-								if (button.equals(estatelist.get(middle).getName())) {
-									if (button2.equals("a motherfucking hotel")) {
-										player.setBalance(player.getBalance() - 4000 - 1000 * estatelist.get(middle).getHouses());
-										estatelist.get(middle).isHotel();
-										estatelist.get(middle).setHouses(0);
-									} else {
-										player.setBalance(player.getBalance() - 1000 * Integer.valueOf(button2) - estatelist.get(middle).getHouses() * 1000);
-										estatelist.get(middle).setHouses(Integer.valueOf(button2));
+								Collections.sort(estatelist, new Comparator<RealEstate>() {
+									public int compare(RealEstate s1, RealEstate s2) {
+										return s1.getName().compareToIgnoreCase(s2.getName());
 									}
-									if (estatelist.size() == 1)
-										break;
+								});
 
-								} else if (button.charAt(0) < estatelist.get(middle).getName().charAt(0)) {
-									upper = middle - 1;
-								} else {
-									lower = middle + 1;
+								int lower = 0;
+								int upper = estatelist.size();
+								//Dette er selve algoritmen der søger. Den søger noget mere effektivt end et for loop. Ting som hvad det koster er ikke gældende, det bare fyld
+								// While loopet breaker ikke hvis der kun er et hus, fordi at upper altid er en og lower altid er 0. Derfor vil middle altid være en og jeg kan love dig for der bliver suget noget husleje her
+								// - Gustav Nobert
+								while (lower <= upper) {
+									int middle = (lower + upper) / 2;
+									if (button.equals(estatelist.get(middle).getName())) {
+										if (button2.equals("a motherfucking hotel")) {
+											player.setBalance(player.getBalance() - 4000 - 1000 * estatelist.get(middle).getHouses());
+											estatelist.get(middle).isHotel();
+											estatelist.get(middle).setHouses(0);
+										} else {
+											player.setBalance(player.getBalance() - 1000 * Integer.valueOf(button2) - estatelist.get(middle).getHouses() * 1000);
+											estatelist.get(middle).setHouses(Integer.valueOf(button2));
+										}
+										if (estatelist.size() == 1)
+											break;
+
+									} else if (button.charAt(0) < estatelist.get(middle).getName().charAt(0)) {
+										upper = middle - 1;
+									} else {
+										lower = middle + 1;
+									}
 								}
 							}
 						}
 					}
 				}
-					}
-				}
+			}
 
-				// TODO offer all players the options to trade etc.
+			// TODO offer all players the options to trade etc.
 
-				current = (current + 1) % players.size();
-				game.setCurrentPlayer(players.get(current));
-				if (current == 0) {
-					String selection = gui.getUserSelection(
-							"A round is finished. Do you want to continue the game?",
-							"yes",
-							"no");
-					if (selection.equals("no")) {
-						terminated = true;
-					}
+			current = (current + 1) % players.size();
+			game.setCurrentPlayer(players.get(current));
+			if (current == 0) {
+				String selection = gui.getUserSelection(
+						"A round is finished. Do you want to continue the game?",
+						"yes",
+						"no");
+				if (selection.equals("no")) {
+					terminated = true;
 				}
-		dispose();
+			}
+			dispose();
 	}
 
 
