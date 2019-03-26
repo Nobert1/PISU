@@ -564,6 +564,12 @@ public class GameController {
 				}
 			}
 
+			public void endGameMessage(){
+			    gui.showMessage("Everyone is broke game is over.");
+			    dispose();
+            }
+
+
 			/**
 			 * Method for disposing of this controller and cleaning up its resources.
 			 */

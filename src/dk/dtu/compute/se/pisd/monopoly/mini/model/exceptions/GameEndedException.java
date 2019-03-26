@@ -14,8 +14,8 @@ public class GameEndedException extends Exception {
 
 
     public GameEndedException() {
-//Is the guin message here or in the catch clause?
-        super("Everyone except 1 is broke");
+//Is the gui message here or in the catch clause?
+        super("Everyone except is broke");
 
     }
 
