@@ -30,13 +30,14 @@ import java.util.Map;
  */
 public class View implements Observer {
 
+    private PlayerPanel playerPanel;
 	private Game game;
 	private GUI gui;
 	
 	private Map<Player,GUI_Player> player2GuiPlayer = new HashMap<Player,GUI_Player>();
 	private Map<Player,Integer> player2position = new HashMap<Player,Integer>();
 	private Map<Space,GUI_Field> space2GuiField = new HashMap<Space,GUI_Field>();
-	
+
 	private boolean disposed = false;
 
 	/**
@@ -46,9 +47,11 @@ public class View implements Observer {
 	 * @param game the game
 	 * @param gui the GUI
 	 */
-	public View(Game game, GUI gui) {
+	public View(Game game, GUI gui, PlayerPanel playerPanel) {
 		this.game = game;
 		this.gui = gui;
+		this.playerPanel = playerPanel;
+
 		GUI_Field[] guiFields = gui.getFields();
 		
 		int i = 0;
@@ -68,8 +71,10 @@ public class View implements Observer {
 		for (Player player: game.getPlayers()) {
 			GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
 			GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
+			PlayerPanel panel = new PlayerPanel(game, player);
 			player2GuiPlayer.put(player, guiPlayer);
 			gui.addPlayer(guiPlayer);
+			panel.setVisible(true);
 			// player2position.put(player, 0);
 			
 			// register this view with the player as an observer, in order to update the
@@ -84,6 +89,7 @@ public class View implements Observer {
 		if (!disposed) {
 			if (subject instanceof Player) {
 				updatePlayer((Player) subject);
+
 			}
 			if (subject instanceof Property)
 			updateProperty((Property) subject);

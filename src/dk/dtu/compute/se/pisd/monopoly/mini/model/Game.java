@@ -34,6 +34,7 @@ public class Game extends Subject {
 		return Collections.unmodifiableList(spaces);
 	}
 
+
 	/**
 	 * Sets all the spaces of the game. Note that the provided
 	 * list of spaces is copied, so that they cannot be changed
