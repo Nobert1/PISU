@@ -79,7 +79,7 @@ public class GameController {
 
 
 
-	public void play() throws GameEndedException {
+	public void play() {
 			List<Player> players = game.getPlayers();
 			Player c = game.getCurrentPlayer();
 
@@ -98,9 +98,10 @@ public class GameController {
 					try {
 						this.makeMove(player);
 					} catch (PlayerBrokeException e) {
-						throw new GameEndedException();
-						//Is it here Game exception should be thrown??
-						// We could react to the player having gone broke
+
+					} catch (GameEndedException e){
+						gui.showMessage("Everyone is broke game is over.");
+						dispose();
 					}
 				}
 
@@ -411,12 +412,12 @@ public class GameController {
 	 * @param receiver the beneficiary of the payment
 	 * @throws PlayerBrokeException when the payer goes broke by this payment
 	 */
-	public void payment(Player payer, int amount, Player receiver) throws PlayerBrokeException {
+	public void payment(Player payer, int amount, Player receiver) throws GameEndedException {
 		if (payer.getBalance() < amount) {
 			obtainCash(payer, amount);
 			if (payer.getBalance() < amount) {
 				playerBrokeTo(payer, receiver);
-				throw new PlayerBrokeException(payer);
+				throw new GameEndedException();
 			}
 		}
 		gui.showMessage("Player " + payer.getName() + " pays " + amount + "$ to player " + receiver.getName() + ".");
@@ -516,7 +517,7 @@ public class GameController {
 			 * @param brokePlayer the broke player
 			 * @param benificiary the player who receives the money and assets
 			 */
-			public void playerBrokeTo (Player brokePlayer, Player benificiary){
+			public void playerBrokeTo (Player brokePlayer, Player benificiary) {
 				int amount = brokePlayer.getBalance();
 				benificiary.receiveMoney(amount);
 				brokePlayer.setBalance(0);
@@ -538,6 +539,7 @@ public class GameController {
 
 				gui.showMessage("Player " + brokePlayer.getName() + "went broke and transfered all"
 						+ "assets to " + benificiary.getName());
+
 			}
 
 			/**
@@ -563,12 +565,6 @@ public class GameController {
 					game.returnCardToDeck(player.getOwnedCards().get(0));
 				}
 			}
-
-			public void endGameMessage(){
-			    gui.showMessage("Everyone is broke game is over.");
-			    dispose();
-            }
-
 
 			/**
 			 * Method for disposing of this controller and cleaning up its resources.

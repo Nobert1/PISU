@@ -177,13 +177,10 @@ public class MiniMonopoly {
 
 		GameController controller = new GameController(game);
 		controller.initializeGUI();
-	try {
 		controller.play();
-	} catch (GameEndedException e){
-		controller.endGameMessage();
-		//Should there be made a GetGUI in controller so there can be shown a message here or in the exception class?
+
 
 	}
-	}
-
 }
+
+
