@@ -7,13 +7,11 @@ import dk.dtu.compute.se.pisd.monopoly.mini.view.PlayerPanel;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -174,6 +172,15 @@ public class GameController {
 			castDouble = (die1 == die2);
 			gui.setDice(die1, die2);
 
+			if (player.isInPrison()) {
+				String choice = gui.getUserSelection("Would you like to pay your way out of prison?", "yes", "no");
+				if (choice.equals("yes")) {
+					player.setInPrison(false);
+					player.setBalance(player.getBalance() - 500);
+				}
+				//Needs testing, does it cost 500? - Gustav
+
+			}
 			if (player.isInPrison() && castDouble) {
 				player.setInPrison(false);
 				gui.showMessage("Player " + player.getName() + " leaves prison now since he cast a double!");
@@ -221,8 +228,8 @@ public class GameController {
 			// Note that this assumes that the game has more than 12 spaces here!
 			// TODO: the amount of 2000$ should not be a fixed constant here (could also
 			//       be configured in the Game class.
-			gui.showMessage("Player " + player.getName() + " receives 2000$ for passing Go!");
-			this.paymentFromBank(player, 2000);
+			gui.showMessage("Player " + player.getName() + " receives " + game.getPassstartbonus() + " for passing Go!");
+			this.paymentFromBank(player, game.getPassstartbonus());
 		}
 		gui.showMessage("Player " + player.getName() + " arrives at " + space.getIndex() + ": " + space.getName() + ".");
 
@@ -280,12 +287,171 @@ public class GameController {
 	 * the player does not manage to free at least the given amount of money,
 	 * the player will be broke; this is to help the player make the right
 	 * choices for freeing enough money.
+	 * <p>
+	 *     Det her er lidt noget lort TODO få det her reviewet.
+	 * - method author s185031 - Gustav Emil Nobert
 	 *
 	 * @param player the player
 	 * @param amount the amount the player should have available after the act
 	 */
-	public void obtainCash(Player player, int amount) {
+
+	public void offertosellhouses(Player player) {
+
+		String selection = gui.getUserSelection(player.getName() + "Do you want to sell any houses? The property can't be sold if the strip contains houses", "yes", "no");
+
+		if (selection.equals("yes")) {
+
+			ArrayList<RealEstate> estatelist = new ArrayList<>();
+
+			for (Property property : player.getOwnedProperties()) {
+				if (property instanceof RealEstate) {
+					estatelist.add((RealEstate) property);
+					if (estatelist.get(estatelist.size() - 1).getHouses() == 0 && !estatelist.get(estatelist.size() - 1).isHotel()) {
+						estatelist.remove(estatelist.size() - 1);
+					}
+					String[] estatebuttons = new String[estatelist.size() + 1];
+					estatebuttons[estatebuttons.length - 1] = "back";
+					for (int i = 0; i < estatelist.size(); i++) {
+						estatebuttons[i] = estatelist.get(i).getName();
+					}
+					do {
+						//Må være en smartere løsning, har jo allerede fundet det objekt der skal findes
+						RealEstate houseestate = null;
+						selection = gui.getUserButtonPressed(player.getName() + " Where do you wanna sell", estatebuttons);
+						for (RealEstate estate : estatelist) {
+							if (selection.equals(estate.getName()))
+								houseestate = estate;
+						}
+						int housecount;
+						try {
+							if (houseestate.isHotel()) {
+								housecount = 4;
+							} else {
+								housecount = houseestate.getHouses();
+							}
+						} catch (NullPointerException e) {
+							gui.showMessage("the estate you clicked didn't have any houses");
+							break;
+						}
+						//input validering
+						Pattern housepattern = Pattern.compile("\b(0|" + housecount + ")\b]");
+						boolean isnum = false;
+						int houseselection;
+						do {
+
+							houseselection = gui.getUserInteger(player.getName() + " How many would you like to sell? Type 4 to sell your hotel");
+							Matcher matcher = housepattern.matcher(String.valueOf(houseselection));
+							if (matcher.find()) {
+								isnum = true;
+							} else {
+								gui.showMessage("invalid input, try agian");
+							}
+						} while (!isnum);
+
+						paymentFromBank(player, 500 * housecount);
+						if (houseestate.isHotel()) {
+							houseestate.setHotel(false);
+							houseestate.setHouses(houseestate.getHouses() - housecount + 1);
+						} else {
+							houseestate.setHouses(houseestate.getHouses() - housecount);
+						}
+
+					} while (!selection.equals("back"));
+				}
+			}
+		}
+	}
+
+	/**
+	 * I need a method here, just not sure yet how to do it. Could also be a boolean status, probably easier to work with
+	 * Gustav Rmil Nobert
+	 *
+	 * @param property
+	 */
+	public void mortgageproperty(Property property) {
+		paymentFromBank(property.getOwner(), property.getCost() / 2);
+		property.setMortgaged(true);
+	}
+
+	public void mortgage(Player player, String[] buttons) {
+
+
+			String button = "";
+			//Igen jeg har jo fundet navnet, burde være lige til bare at finde den sidste.
+			button = gui.getUserButtonPressed(player.getName() + " Would you like to mortgage any of your properties", buttons);
+
+			for (Property property : player.getOwnedProperties()) {
+				if (property.getName().equals(button)) {
+					mortgageproperty(property);
+					break;
+				}
+			}
+	}
+
+	/**
+	 * Gustav Emil Nobert
+	 * i have made a few methods to back this up, still needs work.
+	 *
+	 * @param player
+	 * @param amount
+	 * @throws PlayerBrokeException
+	 */
+
+
+	public void obtainCash(Player player, int amount) throws PlayerBrokeException {
 		// TODO implement
+		String button = "";
+		String selection = "";
+		for (Player bidder : game.getPlayers()) {
+			if (bidder != player) {
+				//Er dette det rigtige sted at tilbyde at sælge?
+				// Kommer exit til at stå det rigtige sted her?
+				offertosellhouses(player);
+				selection = gui.getUserSelection("Would you like to mortgage properties?", "yes", "no");
+
+				Set<Property> ownedProperties = player.getOwnedProperties();
+				for (Property property : ownedProperties) {
+					if (property instanceof RealEstate) {
+						if (((RealEstate) property).getHouses() != 0 || ((RealEstate) property).isHotel()) {
+							ownedProperties.remove(property);
+						}
+					}
+				}
+				String[] buttons = new String[ownedProperties.size() + 1];
+				int increm = 0;
+				for (Property property : ownedProperties) {
+					buttons[increm] = property.getName();
+					increm++;
+				}
+
+				if (selection.equals("yes"))
+					mortgage(player, buttons);
+
+				gui.showMessage("then we go to the bidding round!");
+				do {
+					//Kan det her være en parameter der bliver passeret i stedet?
+
+
+					button = gui.getUserButtonPressed(bidder.getName() + " What would you like to bid on?", buttons);
+					int bid = gui.getUserInteger("How much would you like to bid?");
+					String selection1 = gui.getUserSelection(player.getName() + " Do you accept this bid?", "yes", "no");
+
+					if (selection1.equals("yes")) {
+						payment(bidder, bid, player);
+						for (Property property : player.getOwnedProperties()) {
+							if (property.getName().equals(button)) {
+								property.setOwner(bidder);
+								bidder.getOwnedProperties().add(property);
+								player.getOwnedProperties().remove(property);
+							}
+						}
+					}
+				} while (!button.equals("no"));
+				}
+			if (player.getBalance() < amount && player.getOwnedProperties().size() == 0) {
+				throw new PlayerBrokeException(player);
+			}
+		}
 	}
 
 	/**
@@ -392,11 +558,11 @@ public class GameController {
 
 	/**
 	 * This method implements the activity of auctioning a property.
-	 * @param property the property which is for auction
-	 * The max and min amount of bid is currently not working when i have 'highest bid' instead of a raw number ex:1,5,100
-	 * It works when using mouse on screen it wont allow player to bid if it is out of range. But it is possible to press enter
-	 * even though the 'ok' button is read
 	 *
+	 * @param property the property which is for auction
+	 *                 The max and min amount of bid is currently not working when i have 'highest bid' instead of a raw number ex:1,5,100
+	 *                 It works when using mouse on screen it wont allow player to bid if it is out of range. But it is possible to press enter
+	 *                 even though the 'ok' button is read
 	 * @author s175124
 	 */
 	public void auction(Property property) {
@@ -416,21 +582,21 @@ public class GameController {
 		//Creates a new player arraylist so the person that landed on the property starts the bidding
 		int moveAmount = game.getPlayers().size() - currentPlayerNR;
 		ArrayList<Player> bidList = new ArrayList<>();
-		for(int i = 0; playerAmount > i; i++){
+		for (int i = 0; playerAmount > i; i++) {
 			bidList.add(game.getPlayers().get(i));
 		}
 
 		for (int i = 0; game.getPlayers().size() > i; i++) {
 			if (i == currentPlayerNR) {
 				bidList.remove(0);
-				bidList.add(0,game.getCurrentPlayer());
+				bidList.add(0, game.getCurrentPlayer());
 			} else if (i == 0) {
 				bidList.remove(moveAmount);
-				bidList.add(moveAmount,game.getPlayers().get(i));
+				bidList.add(moveAmount, game.getPlayers().get(i));
 
 			} else {
 				bidList.remove((i + moveAmount) % game.getPlayers().size());
-				bidList.add((i + moveAmount) % game.getPlayers().size(),game.getPlayers().get(i));
+				bidList.add((i + moveAmount) % game.getPlayers().size(), game.getPlayers().get(i));
 			}
 		}
 
@@ -438,9 +604,9 @@ public class GameController {
 
 		Player highestBidder = new Player();
 		int counter = 0;
-		while (counter < bidList.size()-1) {
+		while (counter < bidList.size() - 1) {
 			for (int i = 0; bidList.size() > i; i++) {
-				if(bidList.get(i).getBalance() <= highestBid){
+				if (bidList.get(i).getBalance() <= highestBid) {
 					gui.showMessage("You do not have sufficient funds to participate in the auction");
 					bidList.remove(i);
 				} else {
@@ -448,12 +614,12 @@ public class GameController {
 							+ bidList.get(i).getName() + " Do you want to bid? ", "yes", "no");
 					if (option.equals("yes")) {
 						currentBid = gui.getUserInteger("The highest bid is " + highestBid + " by " + highestBidder.getName() + ".\n" +
-								bidList.get(i).getName() + ", how much would you like to bid? Must be between " + highestBid + " and " + bidList.get(i).getBalance()
+										bidList.get(i).getName() + ", how much would you like to bid? Must be between " + highestBid + " and " + bidList.get(i).getBalance()
 								, highestBid, bidList.get(i).getBalance());
 						highestBid = currentBid;
 						highestBidder = bidList.get(i);
 						counter = 0;
-					} else if (option.equals("no")){
+					} else if (option.equals("no")) {
 						counter++;
 					}
 				}
@@ -466,30 +632,28 @@ public class GameController {
 	}
 
 
+	/**
+	 * Action handling the situation when one player is broke to another
+	 * player. All money and properties are transferred to the other player.
+	 *
+	 * @param brokePlayer the broke player
+	 * @param benificiary the player who receives the money and assets
+	 */
+	public void playerBrokeTo(Player brokePlayer, Player benificiary) {
+		int amount = brokePlayer.getBalance();
+		benificiary.receiveMoney(amount);
+		brokePlayer.setBalance(0);
+		brokePlayer.setBroke(true);
 
-
-			/**
-			 * Action handling the situation when one player is broke to another
-			 * player. All money and properties are transferred to the other player.
-			 *
-			 * @param brokePlayer the broke player
-			 * @param benificiary the player who receives the money and assets
-			 */
-			public void playerBrokeTo (Player brokePlayer, Player benificiary){
-				int amount = brokePlayer.getBalance();
-				benificiary.receiveMoney(amount);
-				brokePlayer.setBalance(0);
-				brokePlayer.setBroke(true);
-
-				// TODO We assume here, that the broke player has already sold all his houses! But, if
-				// not, we could make sure at this point that all houses are removed from
-				// properties (properties with houses on are not supposed to be transferred, neither
-				// in a trade between players, nor when  player goes broke to another player)
-				for (Property property : brokePlayer.getOwnedProperties()) {
-					property.setOwner(benificiary);
-					benificiary.addOwnedProperty(property);
-				}
-				brokePlayer.removeAllProperties();
+		// TODO We assume here, that the broke player has already sold all his houses! But, if
+		// not, we could make sure at this point that all houses are removed from
+		// properties (properties with houses on are not supposed to be transferred, neither
+		// in a trade between players, nor when  player goes broke to another player)
+		for (Property property : brokePlayer.getOwnedProperties()) {
+			property.setOwner(benificiary);
+			benificiary.addOwnedProperty(property);
+		}
+		brokePlayer.removeAllProperties();
 
 		while (!brokePlayer.getOwnedCards().isEmpty()) {
 			game.returnCardToDeck(brokePlayer.getOwnedCards().get(0));
@@ -539,44 +703,72 @@ public class GameController {
 		}
 	}
 
+	public static boolean checkEquals(List<RealEstate> estateList, RealEstate realEstate) {
+		return estateList.stream().anyMatch(p -> p.equals(realEstate));
+	}
+
 	public void Offerhouses(List<Player> players) {
 		for (Player p : players) {
-			List<RealEstate> estatelist = new ArrayList<RealEstate>();
+			HashSet<RealEstate> estatelist = new HashSet<>();
 			for (Property property : p.getOwnedProperties()) {
 				if (property instanceof RealEstate) {
 					estatelist.add((RealEstate) property);
 				}
 			}
-			if (estatelist.size() != 0) {
-				String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
-
-				if (userbutton.equals("yes")) {
-					String[] buttons = new String[estatelist.size() + 1];
-					buttons[buttons.length - 1] = "exit";
-					for (int i = 0; i < estatelist.size(); i++) {
-						buttons[i] = estatelist.get(i).getName();
+			//Tjekker om der overhovedet er nogle real estates der kan bygges på.
+			Iterator<RealEstate> i = estatelist.iterator();
+			Iterator<RealEstate> i2 = estatelist.iterator();
+			while (i.hasNext()) {
+				RealEstate s = i.next();
+				int counter = 0;
+				while (i2.hasNext()) {
+					RealEstate s2 = i2.next();
+					if (s.getColor() == s2.getColor()) {
+						counter++;
 					}
-					while (true) {
-						String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
+				}
+				if (counter < 3) {
+					estatelist.remove(s);
+				}
 
-						if (button.equals("exit"))
-							break;
+				if (estatelist.size() != 0) {
+					String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
 
-						String[] houses = {"1", "2", "3", "a motherfucking hotel"};
-						String button2 = gui.getUserButtonPressed("What would you like to have on your RealEstate", houses);
-						for (RealEstate estate : estatelist) {
-							if (button.equals(estate.getName())) {
-								if (button2.equals("a motherfucking hotel")) {
-									p.setBalance(p.getBalance() - 4000 + 1000 * estate.getHouses());
-									estate.setHotel(true);
-									estate.setHouses(0);
-								} else {
-									p.setBalance(p.getBalance() - 1000 * Integer.valueOf(button2) + estate.getHouses() * 1000);
-									estate.setHouses(Integer.valueOf(button2));
+					if (userbutton.equals("yes")) {
+						//Makes the list of real estates that can be build on.
+
+						String[] buttons = new String[estatelist.size() + 1];
+						int incrementer = 0;
+						if (estatelist.size() != 0)
+							for (RealEstate estate : estatelist) {
+								buttons[incrementer] = estate.getName();
+								incrementer++;
+							}
+						buttons[buttons.length - 1] = "exit";
+						while (true) {
+							String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
+
+							if (button.equals("exit"))
+								break;
+
+							String[] houses = {"1", "2", "3", "hotel"};
+							String button2 = gui.getUserButtonPressed("What would you like to have on your RealEstate", houses);
+							for (RealEstate estate : estatelist) {
+								if (button.equals(estate.getName())) {
+									if (button2.equals("hotel")) {
+										p.setBalance(p.getBalance() - 4000 + 1000 * estate.getHouses());
+										estate.setHotel(true);
+										estate.setHouses(0);
+									} else {
+										p.setBalance(p.getBalance() - 1000 * Integer.valueOf(button2) + estate.getHouses() * 1000);
+										estate.setHouses(Integer.valueOf(button2));
+									}
 								}
 							}
 						}
 					}
+					} else {
+					gui.showMessage(p.getName() + " you don't have anything you can build on");
 				}
 			}
 		}

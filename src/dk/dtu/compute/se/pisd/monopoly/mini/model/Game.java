@@ -25,6 +25,8 @@ public class Game extends Subject {
 	
 	private Player current;
 
+	private int passstartbonus = 2000;
+
 	/**
 	 * Returns a list of all the games spaces.
 	 * 
@@ -173,4 +175,7 @@ public class Game extends Subject {
 		notifyChange();
 	}
 
+	public int getPassstartbonus() {
+		return passstartbonus;
+	}
 }

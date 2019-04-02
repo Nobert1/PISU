@@ -12,6 +12,7 @@ import gui_fields.GUI_Car.Pattern;
 import gui_fields.GUI_Car.Type;
 import gui_main.GUI;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,8 @@ public class View implements Observer {
 	private Map<Player,GUI_Player> player2GuiPlayer = new HashMap<Player,GUI_Player>();
 	private Map<Player,Integer> player2position = new HashMap<Player,Integer>();
 	private Map<Space,GUI_Field> space2GuiField = new HashMap<Space,GUI_Field>();
+	private Map<Player,PlayerPanel> playerPanelMap = new HashMap<Player,PlayerPanel>();
+
 
 	private boolean disposed = false;
 
@@ -73,8 +76,10 @@ public class View implements Observer {
 			GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
 			PlayerPanel panel = new PlayerPanel(game, player);
 			player2GuiPlayer.put(player, guiPlayer);
+			playerPanelMap.put(player, panel);
 			gui.addPlayer(guiPlayer);
 			panel.setVisible(true);
+
 			// player2position.put(player, 0);
 			
 			// register this view with the player as an observer, in order to update the
@@ -90,19 +95,25 @@ public class View implements Observer {
 			if (subject instanceof Player) {
 				updatePlayer((Player) subject);
 
+
 			}
 			if (subject instanceof Property)
 			updateProperty((Property) subject);
 			// TODO update other subjects in the GUI
 			//      in particular properties (sold, houses, ...)
-			
+
 		}
-	}
+		}
+
+	/**
+	 * Method author s185031 - Gustav Emil Nobert
+	 * @param property
+	 */
 
 	private void updateProperty(Property property) {
 		GUI_Ownable field = (GUI_Ownable) this.space2GuiField.get(property);
 
-		if (property.isOwned()){
+		if (!property.isOwned()){
 			field.setBorder(property.getOwner().getColor());
 			field.setOwnerName(property.getOwner().getName());
 		}
@@ -118,8 +129,9 @@ public class View implements Observer {
 					estatefield.setHouses(realestate.getHouses());
                 }
 			if (realestate.isHotel()) {
-				estatefield.setHotel(true);
 				estatefield.setHouses(0);
+				estatefield.setHotel(true);
+
 			}
 		}
 	}
@@ -134,6 +146,8 @@ public class View implements Observer {
 	 */
 	private void updatePlayer(Player player) {
 		GUI_Player guiPlayer = this.player2GuiPlayer.get(player);
+		PlayerPanel panel = this.playerPanelMap.get(player);
+
 		if (guiPlayer != null) {
 			guiPlayer.setBalance(player.getBalance());
 
@@ -156,7 +170,11 @@ public class View implements Observer {
 			if (!name.equals(guiPlayer.getName())) {
 				guiPlayer.setName(name);
 			}
+			panel.update(player);
 		}
+	}
+	private void updateframes(PlayerPanel playerPanel) {
+
 	}
 	
 	public void dispose() {
