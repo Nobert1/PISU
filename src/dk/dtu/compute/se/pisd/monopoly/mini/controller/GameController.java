@@ -403,33 +403,16 @@ public class GameController {
 		int playerAmount = game.getPlayers().size();
 		int currentPlayerNR = 0;
 
-		//Finds which number the current player has in the player array
-		for (int i = 0; game.getPlayers().size() > i; i++) {
-			if (game.getCurrentPlayer() == game.getPlayers().get(i)) {
-				currentPlayerNR = i;
+		//Creates the bidlist in the right order.
+
+		ArrayList<Player> bidList = new ArrayList<>(game.getPlayers());
+		do{
+			Player p = bidList.remove(0);
+			bidList.add(p);
+			if(p.equals(game.getCurrentPlayer())){
+				break;
 			}
-		}
-
-		//Creates a new player arraylist so the person that landed on the property starts the bidding
-		int moveAmount = game.getPlayers().size() - currentPlayerNR;
-		ArrayList<Player> bidList = new ArrayList<>();
-		for(int i = 0; playerAmount > i; i++){
-			bidList.add(game.getPlayers().get(i));
-		}
-
-		for (int i = 0; game.getPlayers().size() > i; i++) {
-			if (i == currentPlayerNR) {
-				bidList.remove(0);
-				bidList.add(0,game.getCurrentPlayer());
-			} else if (i == 0) {
-				bidList.remove(moveAmount);
-				bidList.add(moveAmount,game.getPlayers().get(i));
-
-			} else {
-				bidList.remove((i + moveAmount) % game.getPlayers().size());
-				bidList.add((i + moveAmount) % game.getPlayers().size(),game.getPlayers().get(i));
-			}
-		}
+		}while(true);
 
 		//Actual bidding method
 
@@ -461,7 +444,6 @@ public class GameController {
 		highestBidder.addOwnedProperty(property);
 		property.setOwner(highestBidder);
 	}
-
 
 
 
