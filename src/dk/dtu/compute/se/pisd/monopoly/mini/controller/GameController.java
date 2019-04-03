@@ -291,8 +291,7 @@ public class GameController {
 	 *     Det her er lidt noget lort TODO få det her reviewet.
 	 * - method author s185031 - Gustav Emil Nobert
 	 *
-	 * @param player the player
-	 * @param amount the amount the player should have available after the act
+	 * @param player the player, @param amount the amount the player should have available after the act
 	 */
 
 	public void offertosellhouses(Player player) {
@@ -338,7 +337,6 @@ public class GameController {
 						boolean isnum = false;
 						int houseselection;
 						do {
-
 							houseselection = gui.getUserInteger(player.getName() + " How many would you like to sell? Type 4 to sell your hotel");
 							Matcher matcher = housepattern.matcher(String.valueOf(houseselection));
 							if (matcher.find()) {
@@ -401,13 +399,11 @@ public class GameController {
 	public void obtainCash(Player player, int amount) throws PlayerBrokeException {
 		// TODO implement
 		String button = "";
-		String selection = "";
 		for (Player bidder : game.getPlayers()) {
 			if (bidder != player) {
 				//Er dette det rigtige sted at tilbyde at sælge?
 				// Kommer exit til at stå det rigtige sted her?
 				offertosellhouses(player);
-				selection = gui.getUserSelection("Would you like to mortgage properties?", "yes", "no");
 
 				Set<Property> ownedProperties = player.getOwnedProperties();
 				for (Property property : ownedProperties) {
@@ -424,7 +420,8 @@ public class GameController {
 					increm++;
 				}
 
-				if (selection.equals("yes"))
+                String selection = gui.getUserSelection("Would you like to mortgage properties?", "yes", "no");
+                if (selection.equals("yes"))
 					mortgage(player, buttons);
 
 				gui.showMessage("then we go to the bidding round!");
