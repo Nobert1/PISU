@@ -14,7 +14,7 @@ public interface IGameDAO {
 
     GameDTO getGame (int gameId) throws IUserDAO.DALException;
 
-    void newgame() throws IUserDAO.DALException;
+    void creategame() throws IUserDAO.DALException;
 
     void deleteSave(int gameId) throws IUserDAO.DALException;
 
