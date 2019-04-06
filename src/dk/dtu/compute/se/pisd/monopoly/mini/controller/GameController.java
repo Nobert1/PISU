@@ -2,12 +2,14 @@ package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Colors;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.PlayerPanel;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -50,6 +52,14 @@ public class GameController {
 	private boolean disposed = false;
 
 	private PlayerPanel playerpanel;
+
+	private int Diecount;
+
+	/**
+	 * General TODO - find ud af hvorfor fanden hustingen ikke virker som den skal, optimer panels så den ikke laver et panel for hver ejendom.
+	 * Kig på database når Alex pusher, snak med nogen om den smarteste måde at få fat i terningernes værdi på, det er vidst nok imod vmc at hente terningens værdi fra gamecontroller.
+	 * Chancekort skal udvides. Payment from player skal også gennemtestest. Der skal skrives test cases.
+	 */
 
 	/**
 	 * Constructor for a controller of a game.
@@ -159,7 +169,6 @@ public class GameController {
 	 * @throws PlayerBrokeException if the player goes broke during the move
 	 */
 	public void makeMove(Player player) throws PlayerBrokeException {
-
 		boolean castDouble;
 		int doublesCount = 0;
 		do {
@@ -167,8 +176,9 @@ public class GameController {
 			// for making the game faster. Eventually, this should be set
 			// to 1 - 6 again (to this end, the constants 3.0 below should
 			// be set to 6.0 again.
-			int die1 = (int) (1 + 6.0 * Math.random());
-			int die2 = (int) (1 + 6.0 * Math.random());
+			int die1 = (int) (1 + 6 * Math.random());
+			int die2 = (int) (1 + 6 * Math.random());
+			setDiecount(die1, die2);
 			castDouble = (die1 == die2);
 			gui.setDice(die1, die2);
 
@@ -297,17 +307,13 @@ public class GameController {
 	public void offertosellhouses(Player player) {
 
 		String selection = gui.getUserSelection(player.getName() + "Do you want to sell any houses? The property can't be sold if the strip contains houses", "yes", "no");
-
 		if (selection.equals("yes")) {
-
 			ArrayList<RealEstate> estatelist = new ArrayList<>();
-
 			for (Property property : player.getOwnedProperties()) {
 				if (property instanceof RealEstate) {
-					estatelist.add((RealEstate) property);
-					if (estatelist.get(estatelist.size() - 1).getHouses() == 0 && !estatelist.get(estatelist.size() - 1).isHotel()) {
-						estatelist.remove(estatelist.size() - 1);
-					}
+					if (((RealEstate) property).getHouses() > 0 || ((RealEstate) property).isHotel() == true) {
+						estatelist.add((RealEstate) property);
+					} }
 					String[] estatebuttons = new String[estatelist.size() + 1];
 					estatebuttons[estatebuttons.length - 1] = "back";
 					for (int i = 0; i < estatelist.size(); i++) {
@@ -358,7 +364,6 @@ public class GameController {
 				}
 			}
 		}
-	}
 
 	/**
 	 * I need a method here, just not sure yet how to do it. Could also be a boolean status, probably easier to work with
@@ -372,11 +377,8 @@ public class GameController {
 	}
 
 	public void mortgage(Player player, String[] buttons) {
-
-
-			String button = "";
 			//Igen jeg har jo fundet navnet, burde være lige til bare at finde den sidste.
-			button = gui.getUserButtonPressed(player.getName() + " Would you like to mortgage any of your properties", buttons);
+			String button = gui.getUserButtonPressed(player.getName() + " What would you like to mortgage?", buttons);
 
 			for (Property property : player.getOwnedProperties()) {
 				if (property.getName().equals(button)) {
@@ -404,7 +406,6 @@ public class GameController {
 				//Er dette det rigtige sted at tilbyde at sælge?
 				// Kommer exit til at stå det rigtige sted her?
 				offertosellhouses(player);
-
 				Set<Property> ownedProperties = player.getOwnedProperties();
 				for (Property property : ownedProperties) {
 					if (property instanceof RealEstate) {
@@ -419,7 +420,7 @@ public class GameController {
 					buttons[increm] = property.getName();
 					increm++;
 				}
-
+				buttons[buttons.length - 1] = "no";
                 String selection = gui.getUserSelection("Would you like to mortgage properties?", "yes", "no");
                 if (selection.equals("yes"))
 					mortgage(player, buttons);
@@ -427,8 +428,6 @@ public class GameController {
 				gui.showMessage("then we go to the bidding round!");
 				do {
 					//Kan det her være en parameter der bliver passeret i stedet?
-
-
 					button = gui.getUserButtonPressed(bidder.getName() + " What would you like to bid on?", buttons);
 					int bid = gui.getUserInteger("How much would you like to bid?");
 					String selection1 = gui.getUserSelection(player.getName() + " Do you accept this bid?", "yes", "no");
@@ -622,10 +621,14 @@ public class GameController {
 				}
 			}
 		}
+		if (highestBidder != null) {
 		gui.showMessage("Congratulations " + highestBidder.getName() + " you win " + property.getName() + " for " + highestBid + "dollars!");
 		highestBidder.payMoney(highestBid);
 		highestBidder.addOwnedProperty(property);
 		property.setOwner(highestBidder);
+		} else {
+			gui.showMessage("there were no bidders so it remains unowned!");
+		}
 	}
 
 
@@ -700,44 +703,46 @@ public class GameController {
 		}
 	}
 
-	public static boolean checkEquals(List<RealEstate> estateList, RealEstate realEstate) {
-		return estateList.stream().anyMatch(p -> p.equals(realEstate));
+	public void checkforbuildable(RealEstate estate) {
+		Set<RealEstate> estateSet = RealEstate.getcolormap(estate);
+		int counter = 0;
+		for (RealEstate realEstate : estateSet) {
+			if (realEstate.getOwner() == estate.getOwner()) {
+				counter++;
+			}
+		}
+		if (counter == estateSet.size())
+			estate.setBuildable(true);
 	}
 
 	public void Offerhouses(List<Player> players) {
+
 		for (Player p : players) {
-			HashSet<RealEstate> estatelist = new HashSet<>();
+			ArrayList<RealEstate> realEstates = new ArrayList<>();
+			ArrayList<RealEstate> buildablelist = new ArrayList<>();
 			for (Property property : p.getOwnedProperties()) {
 				if (property instanceof RealEstate) {
-					estatelist.add((RealEstate) property);
+					realEstates.add((RealEstate) property);
 				}
 			}
-			//Tjekker om der overhovedet er nogle real estates der kan bygges på.
-			Iterator<RealEstate> i = estatelist.iterator();
-			Iterator<RealEstate> i2 = estatelist.iterator();
-			while (i.hasNext()) {
-				RealEstate s = i.next();
-				int counter = 0;
-				while (i2.hasNext()) {
-					RealEstate s2 = i2.next();
-					if (s.getColor() == s2.getColor()) {
-						counter++;
-					}
+			for (RealEstate realEstate : realEstates) {
+				checkforbuildable(realEstate);
+			}
+			//Tjekker om der overhovedet er nogle real estates der kan bygges på. TODO brug de nye color hashsets for optimering.
+			for (RealEstate realEstate : realEstates) {
+				if (realEstate.isBuildable() == true) {
+					buildablelist.add(realEstate);
 				}
-				if (counter < 3) {
-					estatelist.remove(s);
-				}
-
-				if (estatelist.size() != 0) {
+			}
+				if (buildablelist.size() > 0) {
 					String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
 
 					if (userbutton.equals("yes")) {
 						//Makes the list of real estates that can be build on.
 
-						String[] buttons = new String[estatelist.size() + 1];
+						String[] buttons = new String[buildablelist.size() + 1];
 						int incrementer = 0;
-						if (estatelist.size() != 0)
-							for (RealEstate estate : estatelist) {
+							for (RealEstate estate : buildablelist) {
 								buttons[incrementer] = estate.getName();
 								incrementer++;
 							}
@@ -745,17 +750,26 @@ public class GameController {
 						while (true) {
 							String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
 
-							if (button.equals("exit"))
+							if (button.equals("exit")) {
 								break;
+							}
 
+							//Jeg ved jo allerede hvad det er for en ejendom, er der en anden måde end at iterere igen?
 							String[] houses = {"1", "2", "3", "hotel"};
 							String button2 = gui.getUserButtonPressed("What would you like to have on your RealEstate", houses);
-							for (RealEstate estate : estatelist) {
+							for (RealEstate estate : buildablelist) {
 								if (button.equals(estate.getName())) {
 									if (button2.equals("hotel")) {
+										if (estate.isHotel()) {
+											gui.showMessage("You already have a hotel!");
+										} else {
 										p.setBalance(p.getBalance() - 4000 + 1000 * estate.getHouses());
 										estate.setHotel(true);
 										estate.setHouses(0);
+										}
+									} else if (estate.getHouses() >= Integer.valueOf(button2)) {
+										//TODO Thow an exeception?
+										gui.showMessage("what you doin boiiiiiiii");
 									} else {
 										p.setBalance(p.getBalance() - 1000 * Integer.valueOf(button2) + estate.getHouses() * 1000);
 										estate.setHouses(Integer.valueOf(button2));
@@ -768,6 +782,14 @@ public class GameController {
 					gui.showMessage(p.getName() + " you don't have anything you can build on");
 				}
 			}
+
 		}
+
+	public void setDiecount(int diecount1, int diecount2) {
+		Diecount = diecount1 + diecount2;
+	}
+
+	public int getDiecount() {
+		return Diecount;
 	}
 }

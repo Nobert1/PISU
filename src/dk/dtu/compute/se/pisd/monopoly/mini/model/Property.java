@@ -3,6 +3,7 @@ package dk.dtu.compute.se.pisd.monopoly.mini.model;
 import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 
 import java.awt.*;
@@ -19,8 +20,8 @@ public class Property extends Space {
     private int rent;
     private boolean owned = false;
     private Player owner;
-    private Color color;
     private boolean mortgaged = false;
+    private Color color;
 
     //Made a color attribute since i need it for the Jframe. We can just give colors to utilities as well cause it will look good.
 
@@ -41,6 +42,14 @@ public class Property extends Space {
         return owned;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     /**
      * Sets the cost of this property.
      *
@@ -51,9 +60,6 @@ public class Property extends Space {
         notifyChange();
     }
 
-    public Color getColor() {
-        return color;
-    }
 
     /**
      * Returns the rent to be payed for this property.
@@ -99,16 +105,22 @@ public class Property extends Space {
     public void doAction(GameController controller, Player player) throws PlayerBrokeException {
         if (owner == null) {
             controller.offerToBuy(this, player);
-        } else if (!owner.equals(player)) {
+        } else if (!owner.equals(player) && !this.isMortgaged()) {
+            int rent = 0;
+            if (this instanceof RealEstate) {
+               rent = ((RealEstate) this).Computerent(this);
+            } else {
+                rent = ((Utility) this).Computerent(this);
+            }
             // TODO also check whether the property is mortgaged
             // TODO the computation of the actual rent could be delegated
             //      the subclasses of Property, which can take the specific
             //      individual conditions into account. Note that the
             //      groups of properties (which are not part of the model
             //      yet also need to be taken into account).
-            controller.payment(player, rent, owner);
+            controller.payment(player, rent, this.getOwner());
         }
-
+            
         }
 
 
@@ -119,7 +131,7 @@ public class Property extends Space {
             setRent(getRent() - getRent());
         if (!mortgaged)
             setRent(getRent());
-    }
+        }
 
     public boolean isMortgaged() {
         return mortgaged;

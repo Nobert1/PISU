@@ -69,6 +69,6 @@ public class Space extends Subject {
 	 */
 	public void doAction(GameController controller, Player player) throws PlayerBrokeException {
 		// per default there is no action for a space
-	};
+	}
 
 }
