@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Colors;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
@@ -88,6 +89,9 @@ public class GameController {
 	 * current player of the game; this makes it possible to resume a
 	 * game at any point.
 	 */
+
+
+
 	public void play() {
 		List<Player> players = game.getPlayers();
 		Player c = game.getCurrentPlayer();
@@ -107,7 +111,10 @@ public class GameController {
 				try {
 					this.makeMove(player);
 				} catch (PlayerBrokeException e) {
-					// We could react to the player having gone broke
+
+//				} catch (GameEndedException e) {
+//					gui.showMessage("Everyone is broke game is over.");
+//					dispose();
 				}
 			}
 
@@ -133,29 +140,32 @@ public class GameController {
 				gui.showMessage(
 						"All players are broke.");
 				break;
-
 			}
-
 			Offerhouses(players);
 
 
-			// TODO offer all players the options to trade etc.
 
-			current = (current + 1) % players.size();
-			game.setCurrentPlayer(players.get(current));
-			if (current == 0) {
-				String selection = gui.getUserSelection(
-						"A round is finished. Do you want to continue the game?",
-						"yes",
-						"no");
-				if (selection.equals("no")) {
-					terminated = true;
+				// TODO offer all players the options to trade etc.
+
+				current = (current + 1) % players.size();
+				game.setCurrentPlayer(players.get(current));
+				if (current == 0) {
+					String selection = gui.getUserSelection(
+							"A round is finished. Do you want to continue the game?",
+							"yes",
+							"no");
+					if (selection.equals("no")) {
+						terminated = true;
+					}
 				}
-			}
 
+			}
+			dispose();
 		}
-		dispose();
-	}
+
+		// TODO offer all players the options to trade etc.
+
+
 
 
 	/**
@@ -433,7 +443,11 @@ public class GameController {
 					String selection1 = gui.getUserSelection(player.getName() + " Do you accept this bid?", "yes", "no");
 
 					if (selection1.equals("yes")) {
-						payment(bidder, bid, player);
+						try {
+							payment(bidder, bid, player);
+						} catch (GameEndedException e) {
+							obtainCash(player, bid - player.getBalance());
+						}
 						for (Property property : player.getOwnedProperties()) {
 							if (property.getName().equals(button)) {
 								property.setOwner(bidder);
@@ -505,14 +519,11 @@ public class GameController {
 	 * @param receiver the beneficiary of the payment
 	 * @throws PlayerBrokeException when the payer goes broke by this payment
 	 */
-	public void payment(Player payer, int amount, Player receiver) throws PlayerBrokeException {
-		if (payer.getBalance() < amount) {
-			obtainCash(payer, amount);
+	public void payment(Player payer, int amount, Player receiver) throws GameEndedException {
 			if (payer.getBalance() < amount) {
 				playerBrokeTo(payer, receiver);
-				throw new PlayerBrokeException(payer);
+				throw new GameEndedException();
 			}
-		}
 		gui.showMessage("Player " + payer.getName() + " pays " + amount + "$ to player " + receiver.getName() + ".");
 		payer.payMoney(amount);
 		receiver.receiveMoney(amount);
@@ -639,29 +650,7 @@ public class GameController {
 	 * @param brokePlayer the broke player
 	 * @param benificiary the player who receives the money and assets
 	 */
-	public void playerBrokeTo(Player brokePlayer, Player benificiary) {
-		int amount = brokePlayer.getBalance();
-		benificiary.receiveMoney(amount);
-		brokePlayer.setBalance(0);
-		brokePlayer.setBroke(true);
 
-		// TODO We assume here, that the broke player has already sold all his houses! But, if
-		// not, we could make sure at this point that all houses are removed from
-		// properties (properties with houses on are not supposed to be transferred, neither
-		// in a trade between players, nor when  player goes broke to another player)
-		for (Property property : brokePlayer.getOwnedProperties()) {
-			property.setOwner(benificiary);
-			benificiary.addOwnedProperty(property);
-		}
-		brokePlayer.removeAllProperties();
-
-		while (!brokePlayer.getOwnedCards().isEmpty()) {
-			game.returnCardToDeck(brokePlayer.getOwnedCards().get(0));
-		}
-
-		gui.showMessage("Player " + brokePlayer.getName() + "went broke and transfered all"
-				+ "assets to " + benificiary.getName());
-	}
 
 	/**
 	 * Action handling the situation when a player is broke to the bank.
@@ -673,19 +662,48 @@ public class GameController {
 		player.setBalance(0);
 		player.setBroke(true);
 
+	}
+			/**
+			 * Action handling the situation when one player is broke to another
+			 * player. All money and properties are transferred to the other player.
+			 *
+			 * @param brokePlayer the broke player
+			 * @param benificiary the player who receives the money and assets
+			 */
+			public void playerBrokeTo (Player brokePlayer, Player benificiary) {
+				int amount = brokePlayer.getBalance();
+				benificiary.receiveMoney(amount);
+				brokePlayer.setBalance(0);
+				brokePlayer.setBroke(true);
+
+				// TODO We assume here, that the broke player has already sold all his houses! But, if
+				// not, we could make sure at this point that all houses are removed from
+				// properties (properties with houses on are not supposed to be transferred, neither
+				// in a trade between players, nor when  player goes broke to another player)
+				for (Property property : brokePlayer.getOwnedProperties()) {
+					property.setOwner(benificiary);
+					benificiary.addOwnedProperty(property);
+				}
+				brokePlayer.removeAllProperties();
+
 		// TODO we also need to remove the houses and the mortgage from the properties
 
-		for (Property property : player.getOwnedProperties()) {
+		for (Property property : brokePlayer.getOwnedProperties()) {
 			property.setOwner(null);
 		}
-		player.removeAllProperties();
+		brokePlayer.removeAllProperties();
+				gui.showMessage("Player " + brokePlayer.getName() + "went broke and transfered all"
+						+ "assets to " + benificiary.getName());
 
-		gui.showMessage("Player " + player.getName() + " went broke");
 
-		while (!player.getOwnedCards().isEmpty()) {
-			game.returnCardToDeck(player.getOwnedCards().get(0));
+
+		gui.showMessage("Player " + brokePlayer.getName() + " went broke");
+
+		while (!brokePlayer.getOwnedCards().isEmpty()) {
+			game.returnCardToDeck(brokePlayer.getOwnedCards().get(0));
 		}
 	}
+
 
 	/**
 	 * Method for disposing of this controller and cleaning up its resources.

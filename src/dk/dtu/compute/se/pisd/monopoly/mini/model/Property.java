@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.GameEndedException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
@@ -118,7 +119,12 @@ public class Property extends Space {
             //      individual conditions into account. Note that the
             //      groups of properties (which are not part of the model
             //      yet also need to be taken into account).
+            try {
+
             controller.payment(player, rent, this.getOwner());
+            } catch (GameEndedException e) {
+                //TODO do something with exception
+            }
         }
             
         }
