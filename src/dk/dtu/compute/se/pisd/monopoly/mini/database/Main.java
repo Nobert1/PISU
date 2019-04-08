@@ -1,7 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.database;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.IUserDAO;
-import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.UserDAOImpls180557;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.dto.UserDTO;
 
 import java.util.ArrayList;

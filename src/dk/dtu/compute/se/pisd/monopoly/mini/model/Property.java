@@ -17,6 +17,8 @@ public class Property extends Space {
 	private int rent;
 	private boolean owned = false;
 	private Player owner;
+	private int PropertyId;
+	private boolean mortgaged = false;
 	
 
 	/**
@@ -28,6 +30,10 @@ public class Property extends Space {
 		return cost;
 	}
 
+	public void setPropertyId(int propertyId) { PropertyId = propertyId; }
+
+	public int getPropertyId() { return PropertyId; }
+
 	public void setOwned(boolean owned) {
 		this.owned = owned;
 	}
@@ -35,6 +41,10 @@ public class Property extends Space {
 	public boolean isOwned() {
 		return owned;
 	}
+
+	public boolean isMortgaged() { return mortgaged; }
+
+	public void setMortgaged(boolean mortgaged) { this.mortgaged = mortgaged; }
 
 	/**
 	 * Sets the cost of this property.

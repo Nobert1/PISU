@@ -1,11 +1,16 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
+import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.DALException;
+import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.GameDAO;
+import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.IUserDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -46,6 +51,8 @@ public class GameController {
 
 	private View view;
 
+	private GameDAO database;
+
 	private boolean disposed = false;
 
 	/**
@@ -75,6 +82,24 @@ public class GameController {
 	 * current player of the game; this makes it possible to resume a
 	 * game at any point.
 	 */
+	public void databaseinteraction() throws IUserDAO.DALException {
+		String selection = gui.getUserSelection("What would you like to do?", "play a new game", "load a game", "delete a game (comming soon)");
+		if (selection.equals("play a new game")) {
+			play();
+
+		} else if (selection.equals("load a game")) {
+			try {
+			int gameID = gui.getUserButtonPressed("What game would you like to load?", database.generategameIDs());
+			database;
+
+			} catch (IUserDAO.DALException | DALException e) {
+				e.printStackTrace();
+			}
+		} else if (selection.equals("delete a game (comming)")) {
+
+		}
+	}
+
 	public void play() {
 		List<Player> players = game.getPlayers();
 		Player c = game.getCurrentPlayer();
@@ -137,6 +162,7 @@ public class GameController {
 						"no");
 				if (selection.equals("no")) {
 					terminated = true;
+					//TODO here the game needs to be saved.
 				}
 			}
 

@@ -35,7 +35,9 @@ public class MiniMonopoly {
 		// of creating it programmatically. This will be discussed
 		// later in this course.
 		Game game = new Game();
-		
+
+		int i = 0;
+
 		Space go = new Space();
 		go.setName("Go");
 		game.addSpace(go);
@@ -44,6 +46,7 @@ public class MiniMonopoly {
 		p.setName("Rødovrevej");
 		p.setCost(1200);
 		p.setRent(50);
+		p.setPropertyId(i++);
 		game.addSpace(p);
 		
 		Chance chance = new Chance();
@@ -54,6 +57,7 @@ public class MiniMonopoly {
 		p.setName("Hvidovrevej");
 		p.setCost(1200);
 		p.setRent(50);
+		p.setPropertyId(i++);
 		game.addSpace(p);
 		
 		Tax t = new Tax();
@@ -96,24 +100,28 @@ public class MiniMonopoly {
 		p.setName("Frederiksberg Allé");
 		p.setCost(2800);
 		p.setRent(200);
+		p.setPropertyId(i++);
 		game.addSpace(p);
-		
-		p = new RealEstate();
-		p.setName("Coca-Cola Tapperi");
-		p.setCost(3000);
-		p.setRent(300);
-		game.addSpace(p);
+
+		s = new Utility();
+		s.setName("Coca-Cola Tapperi");
+		s.setCost(3000);
+		s.setRent(300);
+		s.setPropertyId(i++);
+		game.addSpace(s);
 		
 		p = new RealEstate();
 		p.setName("Bülowsvej");
 		p.setCost(2800);
 		p.setRent(200);
+		p.setPropertyId(i++);
 		game.addSpace(p);
 		
 		p = new RealEstate();
 		p.setName("Gl. Kongevej");
 		p.setCost(3200);
 		p.setRent(250);
+		p.setPropertyId(i++);
 		game.addSpace(p);
 		
 		List<Card> cards = new ArrayList<Card>();
@@ -176,6 +184,7 @@ public class MiniMonopoly {
 
 		GameController controller = new GameController(game);
 		controller.initializeGUI();
+
 
 		controller.play();
 	}

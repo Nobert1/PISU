@@ -31,15 +31,12 @@ public class RealEstate extends Property {
     public int rent;
     private String Color;
     private int houserent;
-
+    private int RealEstateID;
 
     // TODO to be implemented
 
 
-    public void setHouses(int houses) {
-        this.houses = houses;
-        notifyChange();
-    }
+    public void setHouses(int houses) { this.houses = houses;notifyChange(); }
 
     public int getHotelRent(int hotelrent) {
         return hotelrent;
@@ -71,24 +68,15 @@ public class RealEstate extends Property {
         return houseprice;
     }
 
-    public void setHouseprice(int houseprice) {
-        this.houseprice = houseprice;
-        notifyChange();
-    }
+    public void setHouseprice(int houseprice) { this.houseprice = houseprice;notifyChange(); }
 
     public int getRealestateRent() {
         return RealestateRent;
     }
 
-    public void setRealestateRent(int realestateRent) {
-        this.RealestateRent = realestateRent;
-        notifyChange();
-    }
+    public void setRealestateRent(int realestateRent) { this.RealestateRent = realestateRent;notifyChange(); }
 
-    public void setHotel(boolean hotel) {
-        this.hotel = hotel;
-        notifyChange();
-    }
+    public void setHotel(boolean hotel) { this.hotel = hotel;notifyChange(); }
 
     public boolean isHotel() {
         return hotel;
@@ -98,7 +86,9 @@ public class RealEstate extends Property {
 
     public void setColor(String color) { Color = color; }
 
+    public int getRealEstateID() { return RealEstateID; }
 
+    public void setRealEstateID(int realEstateID) { RealEstateID = realEstateID; }
 
     /**
      * Hvordan huslejen skal skrues sammen ved jeg ikke helt endnu, jeg vil gerne

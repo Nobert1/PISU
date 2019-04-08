@@ -18,23 +18,16 @@ import java.util.*;
  *
  */
 public class Player extends Subject {
-	
-	private String name;
-	
-	private Color color;
-	
-	private Space currentPosition;
-	
-	private int balance = 4000;
-	
-	private boolean inPrison = false;
-	
-	private boolean broke = false;
-	
-	private Set<Property> ownedProperties = new HashSet<Property>();
-	
-	private List<Card> ownedCards = new ArrayList<Card>();
 
+	private String name;
+	private Color color;
+	private Space currentPosition;
+	private int balance = 4000;
+	private boolean inPrison = false;
+	private boolean broke = false;
+	private Set<Property> ownedProperties = new HashSet<Property>();
+	private List<Card> ownedCards = new ArrayList<Card>();
+	private int playerID;
 
 	/**
 	 * Returns the name of the player.
@@ -53,6 +46,14 @@ public class Player extends Subject {
 	public void setName(String name) {
 		this.name = name;
 		notifyChange();
+	}
+
+	public int getPlayerID() {
+		return playerID;
+	}
+
+	public void setPlayerID(int playerID) {
+		this.playerID = playerID;
 	}
 
 	/**
