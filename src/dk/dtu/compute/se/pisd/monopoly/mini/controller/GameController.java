@@ -141,8 +141,9 @@ public class GameController {
 						"All players are broke.");
 				break;
 			}
-			Offerhouses(players);
 
+			Offerhouses(players);
+			trade(game.getCurrentPlayer());
 
 
 				// TODO offer all players the options to trade etc.
@@ -189,10 +190,12 @@ public class GameController {
 			int die1 = (int) (1 + 6 * Math.random());
 			int die2 = (int) (1 + 6 * Math.random());
 			setDiecount(die1, die2);
-			castDouble = (die1 == die2);
 			gui.setDice(die1, die2);
+			castDouble = (die1 == die2);
+
 
 			if (player.isInPrison()) {
+				//TODO Add if player has get out of jail free card
 				String choice = gui.getUserSelection("Would you like to pay your way out of prison?", "yes", "no");
 				if (choice.equals("yes")) {
 					player.setInPrison(false);
@@ -702,6 +705,23 @@ public class GameController {
 			//      deployed via Maven (or other official versions);
 		}
 	}
+
+	public void trade(Player player){
+		String option = gui.getUserButtonPressed(player.getName() + ", would you like to trade? ", "Yes", "No");
+		if(option == "Yes"){
+		String[] tradeListString = new String[game.getPlayers().size()-1];
+		int count = 0;
+			for(int i = 0; i <= tradeListString.length; i++){
+				if(game.getPlayers().get(i) != player ){
+				tradeListString[count] = game.getPlayers().get(i).getName();
+				count++;
+				}
+			}
+		String choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
+			System.out.println(choosePlayer);
+		}
+	}
+
 
 	public void checkforbuildable(RealEstate estate) {
 		Set<RealEstate> estateSet = RealEstate.getcolormap(estate);
