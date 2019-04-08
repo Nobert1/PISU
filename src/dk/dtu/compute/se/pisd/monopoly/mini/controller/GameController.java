@@ -591,7 +591,7 @@ public class GameController {
 		//Actual bidding method
 
 		Player highestBidder = new Player();
-		highestBidder.setName("Noone");
+		highestBidder.setName("No one");
 		int counter = 0;
 		while (counter < bidList.size() - 1) {
 			for (int i = 0; bidList.size() > i; i++) {
@@ -614,7 +614,7 @@ public class GameController {
 				}
 			}
 		}
-		if (highestBidder != null) {
+		if (!highestBidder.getName().equals("No one")) {
 		gui.showMessage("Congratulations " + highestBidder.getName() + " you win " + property.getName() + " for " + highestBid + " dollars!");
 		highestBidder.payMoney(highestBid);
 		highestBidder.addOwnedProperty(property);
