@@ -85,20 +85,13 @@ public class GameController {
 	public void databaseinteraction() throws IUserDAO.DALException {
 		String selection = gui.getUserSelection("What would you like to do?", "play a new game", "load a game", "delete a game (comming soon)");
 		if (selection.equals("play a new game")) {
-			play();
-
 		} else if (selection.equals("load a game")) {
-			try {
-			int gameID = gui.getUserButtonPressed("What game would you like to load?", database.generategameIDs());
-			database;
-
-			} catch (IUserDAO.DALException | DALException e) {
-				e.printStackTrace();
+				int gameID = Integer.valueOf(gui.getUserButtonPressed("What game would you like to load?", database.generategameIDs()));
+				database.getGame(gameID);
+			} else if (selection.equals("delete a game (comming)")) {
+			//TODO make something.
 			}
-		} else if (selection.equals("delete a game (comming)")) {
-
 		}
-	}
 
 	public void play() {
 		List<Player> players = game.getPlayers();

@@ -1,9 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.database.dal;
 
-import dk.dtu.compute.se.pisd.monopoly.mini.database.dto.GameDTO;
-import dk.dtu.compute.se.pisd.monopoly.mini.database.dto.UserDTO;
-
-import java.util.List;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
 
 public interface IGameDAO {
 
@@ -12,7 +9,7 @@ public interface IGameDAO {
     //Delete save laver vi hvis vi får tid, det er ikke en høj priotet.
     void savegame (int gameId) throws DALException;
 
-    GameDTO getGame (int gameId) throws IUserDAO.DALException;
+    Game getGame (int gameId, Game game) throws IUserDAO.DALException;
 
     void creategame() throws IUserDAO.DALException;
 

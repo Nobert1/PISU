@@ -141,6 +141,8 @@ public class MiniMonopoly {
 		cards.add(b);
 		game.setCardDeck(cards);
 
+		game.setRealEstates();
+
 		return game;
 	}
 
@@ -178,14 +180,10 @@ public class MiniMonopoly {
 	 */
 	public static void main(String[] args) {
 		Game game = createGame();
-		game.shuffleCardDeck();
-
-		createPlayers(game);
-
 		GameController controller = new GameController(game);
 		controller.initializeGUI();
-
-
+		game.shuffleCardDeck();
+		createPlayers(game);
 		controller.play();
 	}
 

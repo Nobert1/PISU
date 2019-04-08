@@ -1,6 +1,5 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.database.dal;
 
-import dk.dtu.compute.se.pisd.monopoly.mini.database.dto.GameDTO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
@@ -69,14 +68,14 @@ public class GameDAO implements IGameDAO {
      * Takes a gameID as a parameter, we need the gui to show a list of saved games. In the long run you could save with a string
      * such that it can be "xxxxxx's, yyyy's, and wwwww's game.
      * TODO this needs something that actually sets the parameters in the game.
+     * TODO - here one option is making a list of RealEstates, and a list of Utilities.
      */
     @Override
-    public GameDTO getGame(int gameId) throws IUserDAO.DALException {
-        GameDTO game = new GameDTO();
+    public Game getGame(int gameId, Game game) throws IUserDAO.DALException {
         try {
-            getPlayers(gameId);
-            getproperties(gameId);
-            getRealEstates(gameId);
+            game.setPlayers(getPlayers(gameId));
+            game.setSpaces((Space) getRealEstates(gameId));
+            game.set
             return game;
         } catch (DALException e) {
             throw new IUserDAO.DALException(e.getMessage());
@@ -89,17 +88,39 @@ public class GameDAO implements IGameDAO {
      * @return
      * @throws DALException
      */
-    private List<Property> getproperties(int gameID) throws DALException {
+
+    private List<Space> getspaces(int gameID) throws DALException {
+     List<Space> spacelist = game.getSpaces();
+     List<RealEstate> estates = getRealEstates(gameID);
+     List<Utility> utilities = getUtilites(gameID);
+     for (Space space : spacelist) {
+         if (space instanceof RealEstate) {
+             for (RealEstate estate : estates) {
+                 if (((RealEstate)space).getRealEstateID() == estate.getRealEstateID()) {
+                     spacelist.set(space.getIndex(), estate);
+                 } }
+         if (space instanceof Utility) {
+             (((Utility) space).getPropertyId())
+         }
+     }
+     getUtilites(gameID);
+
+
+    }
+     return spacelist;
+    }
+
+    private List<Utility> getUtilites(int gameID) throws DALException {
 
         try (Connection c = createConnection()) {
             Statement statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM Properties WHERE GAME ID=" + gameID);
-            ArrayList<Property> propertyList = new ArrayList<>();
+            ArrayList<Utility> Utilitylist = new ArrayList<>();
             while (resultSet.next()) {
-                Property property = makePropertyFromResultsSet(resultSet);
-                propertyList.add(property);
+                Utility utility = makeUtilityFromResultset(resultSet);
+                Utilitylist.add(utility);
             }
-            return propertyList;
+            return Utilitylist;
         } catch (SQLException e) {
             throw new DALException(e.getMessage());
         }
@@ -158,7 +179,7 @@ public class GameDAO implements IGameDAO {
     }
 
 
-    private Property makePropertyFromResultsSet(ResultSet resultSet) throws SQLException {
+    private Utility makeUtilityFromResultset(ResultSet resultSet) throws SQLException {
         //For at der skal kunne sættes en ejer kræver det han er oprettet først.
         Utility utility = new Utility();
         for (Space space : game.getSpaces()) {
@@ -287,5 +308,6 @@ public class GameDAO implements IGameDAO {
             return gameIdsArray;
         } catch (SQLException e) {
         }
+        return null;
     }
 }

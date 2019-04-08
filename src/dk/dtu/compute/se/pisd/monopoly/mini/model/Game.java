@@ -1,6 +1,8 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.Subject;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +20,11 @@ import java.util.List;
 public class Game extends Subject {
 	
 	private List<Space> spaces = new ArrayList<Space>();
-	
+
+	private List<RealEstate> realEstates = new ArrayList<RealEstate>();
+
+	private List<Utility>  utilities = new ArrayList<Utility>();
+
 	private List<Card> cardDeck = new ArrayList<Card>();
 	
 	private List<Player> players = new ArrayList<Player>();
@@ -34,6 +40,10 @@ public class Game extends Subject {
 		return Collections.unmodifiableList(spaces);
 	}
 
+	public List<RealEstate> getRealestats() { return Collections.unmodifiableList(realEstates);}
+
+	public List<Utility> getUtilities() { return Collections.unmodifiableList(utilities);}
+
 	/**
 	 * Sets all the spaces of the game. Note that the provided
 	 * list of spaces is copied, so that they cannot be changed
@@ -45,6 +55,19 @@ public class Game extends Subject {
 		this.spaces = new ArrayList<Space>(spaces);
 		notifyChange();
 	}
+
+	public void setRealEstates(List<RealEstate> realEstates) {
+		for (Space space : getSpaces()) {
+		if (space instanceof RealEstate)
+		this.realEstates.add((RealEstate) space);
+	}}
+
+	public void setUtilities(List<Utility> utilities) {
+		for (Space space : getSpaces()) {
+			if (space instanceof Utility)
+				this.utilities.add((Utility) space);
+		}}
+
 	
 	/**
 	 * Adds a space to the game at the end.
