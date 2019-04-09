@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
+@SuppressWarnings("Duplicates")
 public class GameController {
 
 	private Game game;
@@ -726,11 +727,11 @@ public class GameController {
 	public void trade(Player player){
 
 		String option = gui.getUserButtonPressed(player.getName() + ", would you like to trade? ", "Yes", "No");
-		if(option == "Yes"){
-			String[] tradeListString = new String[game.getPlayers().size()-1];
+		if(option == "Yes") {
+			String[] tradeListString = new String[game.getPlayers().size() - 1];
 			int count = 0;
-			for(int i = 0; i <= tradeListString.length; i++){
-				if(game.getPlayers().get(i) != player ){
+			for (int i = 0; i <= tradeListString.length; i++) {
+				if (game.getPlayers().get(i) != player) {
 					tradeListString[count] = game.getPlayers().get(i).getName();
 					count++;
 				}
@@ -738,59 +739,81 @@ public class GameController {
 			//Player chooses which player they would like to trade
 			String choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
 			Player tradee = new Player();
-			for(int i = 0; i < game.getPlayers().size(); i++){
-				if(game.getPlayers().get(i).getName() == choosePlayer){
+			for (int i = 0; i < game.getPlayers().size(); i++) {
+				if (game.getPlayers().get(i).getName() == choosePlayer) {
 					tradee = game.getPlayers().get(i);
 				}
 			}
 
-			ArrayList<String> playerPropertiesList= new ArrayList<>(player.getOwnedProperties().size());
-			for(Property p: player.getOwnedProperties()) {
+			ArrayList<String> playerPropertiesList = new ArrayList<>(player.getOwnedProperties().size());
+			for (Property p : player.getOwnedProperties()) {
 				playerPropertiesList.add(p.getName());
 			}
 
-
-			ArrayList<String> tradeePropertiesList= new ArrayList<>(tradee.getOwnedProperties().size());
-			for(Property p: tradee.getOwnedProperties()) {
-				tradeePropertiesList.add(p.getName());
-			}
-			String[] tradeePropertyArr = playerPropertiesList.toArray(new String[playerPropertiesList.size()]);
-
 			//First part of trade where the player choses what they want to trade away
-
-			int propertyCount = 0;
-			int moneyCount = 0;
+			String tradeOption = "s";
+			int playerPropertyCount = 0;
+			int playerMoneyCount = 0;
 			Property[] giveProperties = new Property[playerPropertiesList.size()];
-			Property[] recieveProperties = new Property[tradeePropertiesList.size()];
-			do{
+			do {
 
 				String[] playerPropertiesArr = playerPropertiesList.toArray(new String[playerPropertiesList.size()]);
 
-				String tradeOption = gui.getUserButtonPressed("What would you like to trade? \nYou have chosen " + propertyCount + " properties, " +
-								"and " + moneyCount + " dollars", "Properties", "Money", "Pick what you want to trade for");
-				if(tradeOption == "Properties"){
-					if(playerPropertiesList.isEmpty()){
+				tradeOption = gui.getUserButtonPressed("What would you like to give in the trade? \nYou have chosen " + playerPropertyCount + " properties, " +
+						"and " + playerMoneyCount + " dollars", "Properties", "Money", "Pick what you want to trade for");
+				if (tradeOption == "Properties") {
+					if (playerPropertiesList.isEmpty()) {
 						gui.showMessage("You have no more properties to trade");
 					} else {
-						String chosenProperty = gui.getUserSelection("Which property would you like to trade?",playerPropertiesArr);
-						for(Property p: player.getOwnedProperties()){
-							if(p.getName() == chosenProperty){
-								giveProperties[propertyCount++] = p;
-								for(int i = 0; i < playerPropertiesList.size(); i++){
-									if(playerPropertiesList.get(i) == chosenProperty) {
+						String chosenProperty = gui.getUserSelection("Which property would you like to trade?", playerPropertiesArr);
+						for (Property p : player.getOwnedProperties()) {
+							if (p.getName() == chosenProperty) {
+								giveProperties[playerPropertyCount++] = p;
+								for (int i = 0; i < playerPropertiesList.size(); i++) {
+									if (playerPropertiesList.get(i) == chosenProperty) {
 										playerPropertiesList.remove(i);
 									}
 								}
-
 							}
 						}
 					}
-				} else if(tradeOption == "Money"){
-					moneyCount = gui.getUserInteger("Howe much money would like to add to the trade?");
-				} else {
-					break;
+				} else if (tradeOption == "Money") {
+					playerMoneyCount = gui.getUserInteger("Howe much money would like to add to the trade?");
 				}
-			}while(true);
+			} while (tradeOption != "Pick what you want to trade for");
+			//Second part where the player chooses what to receive from trade
+			ArrayList<String> tradeePropertiesList = new ArrayList<>(tradee.getOwnedProperties().size());
+			Property[] recieveProperties = new Property[tradeePropertiesList.size()];
+			for (Property p : tradee.getOwnedProperties()) {
+				tradeePropertiesList.add(p.getName());
+			}
+			int tradeePropertyCount = 0;
+			int tradeeMoneyCount = 0;
+
+			do {
+				String[] tradeePropertiesArr = tradeePropertiesList.toArray(new String[tradeePropertiesList.size()]);
+				tradeOption = gui.getUserButtonPressed("What would you like to receive in the trade? \nYou have chosen " + tradeePropertyCount + " properties, " +
+						"and " + tradeeMoneyCount + " dollars", "Properties", "Money", "Get approval for trade");
+				if (tradeOption == "Properties") {
+					if (tradeePropertiesList.isEmpty()) {
+						gui.showMessage("You have no more properties to chose from");
+					} else {
+						String chosenProperty = gui.getUserSelection("Which property would you like to trade?", tradeePropertiesArr);
+						for (Property p : tradee.getOwnedProperties()) {
+							if (p.getName() == chosenProperty) {
+								recieveProperties[tradeePropertyCount++] = p;
+								for (int i = 0; i < tradeePropertiesList.size(); i++) {
+									if (tradeePropertiesList.get(i) == chosenProperty) {
+										tradeePropertiesList.remove(i);
+									}
+								}
+							}
+						}
+					}
+				} else if (tradeOption == "Money"){
+
+				}
+			}while (tradeOption != "Get approval for trade") ;
 
 		}
 	}
