@@ -43,6 +43,7 @@ public class PlayerPanel extends JFrame {
         this.setContentPane(contentPane);
         this.validate();
         this.setVisible(true);
+
     }
 
     @SuppressWarnings("Duplicates")
@@ -66,11 +67,12 @@ public class PlayerPanel extends JFrame {
 
         contentPane.add(playerPanel);
 
-            ArrayList<Color> colorArrayList= new ArrayList<>();
-            for (Property property2 : player.getOwnedProperties()) {
+        ArrayList<Color> colorArrayList = new ArrayList<>();
+        for (Property property2 : player.getOwnedProperties()) {
             if (!colorArrayList.contains(property2.getColor()))
-            colorArrayList.add(property2.getColor());
+                colorArrayList.add(property2.getColor());
         }
+
 
             for (Color color : colorArrayList) {
                 JPanel estatepanel = new JPanel();
@@ -108,8 +110,8 @@ public class PlayerPanel extends JFrame {
                 estatepanel.add(textArea);
                 contentPane.add(estatepanel);
 
+                this.revalidate();
+                this.repaint();
             }
-            this.revalidate();
-            this.repaint();
         }
     }

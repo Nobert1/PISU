@@ -1,0 +1,56 @@
+.
+Før der forsøges at interagere med databasen skal der først laves skemaerne:
+
+CREATE TABLE if not exists Game (
+gameID int auto_increment PRIMARY KEY);
+
+CREATE TABLE if not exists Player (
+playerID int NOT NULL,
+PlayerName varchar(45),
+gameID int references Game.gameID,
+balance int NOT NULL,
+position int,
+injail bit,
+broke bit,
+CONSTRAINT pk primary key (playerID, gameID)
+);
+
+CREATE TABLE if not exists Token (
+ownerID int references player.playerID,
+gameID int references Game.gameID,
+r int,
+g int,
+b int,
+tokentype varchar(45),
+CONSTRAINT pk primary key (gameID, ownerID)
+);
+
+CREATE TABLE if not exists Properties (
+gameID int references Game.gameID,
+ownerID int references Player.playerID,
+propertyId int NOT NULL,
+mortgaged bit,
+CONSTRAINT pk primary key (gameID, propertyId)
+);
+
+
+CREATE TABLE if not exists RealEstate  (
+gameID int references Game.gameID,
+ownerID int references Player.playerID,
+mortgaged bit,
+RealEstateId INT NOT NULL,
+houses INT,
+hotel bit,
+CONSTRAINT pk primary key (gameID, RealEstateId)
+);
+
+
+
+
+Herefter View -> Tool Windows -> Database -> + -> data source -> Mysql ->
+download drivers hvis den beder om det -> set local database.
+-> GameDAO createconnection() og sæt paramterer efter hvad hvad der står i localhost.
+
+
+Lige nu er det ikke muligt at genskabe spillere fra databasen. De bliver ikke sat på gui
+pladen ved oprettelse, men logikken bag ved er til stede. 

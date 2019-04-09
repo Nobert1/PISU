@@ -173,9 +173,7 @@ public class View implements Observer {
 			panel.update(player);
 		}
 	}
-	private void updateframes(PlayerPanel playerPanel) {
 
-	}
 	
 	public void dispose() {
 		if (!disposed) {
@@ -187,4 +185,19 @@ public class View implements Observer {
 		}
 	}
 
+	/**
+
+	public void loadplayers() {
+		for (Player player : game.getPlayers()) {
+			GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
+			GUI_Player gui_player = new GUI_Player(player.getName(), player.getBalance(), car);
+			player2GuiPlayer.put(player, gui_player);
+			gui.addPlayer(gui_player);
+			player2position.put(player, player.getCurrentPosition().getIndex());
+			player.attach(this);
+			update(player);
+		}
+	}
+	 *
+	 */
 }

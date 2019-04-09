@@ -118,8 +118,11 @@ public class GameDAO implements IGameDAO {
 
     private List<Utility> getUtilites(int gameID) throws DALException {
         try (Connection c = createConnection()) {
-            Statement statement = c.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Properties WHERE gameID=" + gameID);
+
+            PreparedStatement statement = c.prepareStatement("SELECT * FROM Properties WHERE gameID=?");
+
+            statement.setInt(1, gameID);
+            ResultSet resultSet = statement.executeQuery();
             ArrayList<Utility> Utilitylist = new ArrayList<>();
             while (resultSet.next()) {
                 Utility utility = makeUtilityFromResultset(resultSet);
