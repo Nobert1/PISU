@@ -23,7 +23,15 @@ public class Utility extends Property {
     private static Set<Utility> ShippingLine = new HashSet<Utility>();
     private static Set<Utility> Breweries = new HashSet<Utility>();
     private java.awt.Color color;
+    private int propertyid;
 
+    public int getPropertyid() {
+        return propertyid;
+    }
+
+    public void setPropertyid(int propertyid) {
+        this.propertyid = propertyid;
+    }
 
     public int Computerent(Utility utility) {
         //Noget med at den skal kunne kende forskel. Den her løsning er nok ikke 10/10

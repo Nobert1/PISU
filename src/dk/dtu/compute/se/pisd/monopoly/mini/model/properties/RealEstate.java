@@ -35,6 +35,7 @@ public class RealEstate extends Property {
     public int rent;
     private Color color;
     private int houserent;
+    private int propertid;
 
     private static Set<RealEstate> Greyproperties = new HashSet<>();
     private static Set<RealEstate> Redproperties = new HashSet<>();
@@ -51,8 +52,18 @@ public class RealEstate extends Property {
 
     // TODO to be implemented
 
+
+    public int getPropertid() {
+        return propertid;
+    }
+
+    public void setPropertid(int propertid) {
+        this.propertid = propertid;
+    }
+
     public void setHouses(int houses) {
         this.houses = houses;
+        if (this.houses > 0)
         notifyChange();
     }
 
@@ -102,6 +113,7 @@ public class RealEstate extends Property {
 
     public void setHotel(boolean hotel) {
         this.hotel = hotel;
+        if (this.hotel == true)
         notifyChange();
     }
 

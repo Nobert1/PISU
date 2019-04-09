@@ -1,5 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
+import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.DALException;
+import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Colors;
@@ -55,6 +57,8 @@ public class GameController {
 
 	private int Diecount;
 
+	private GameDAO database;
+
 	/**
 	 * General TODO - find ud af hvorfor fanden hustingen ikke virker som den skal, optimer panels så den ikke laver et panel for hver ejendom.
 	 * Kig på database når Alex pusher, snak med nogen om den smarteste måde at få fat i terningernes værdi på, det er vidst nok imod vmc at hente terningens værdi fra gamecontroller.
@@ -70,6 +74,7 @@ public class GameController {
 		super();
 		this.game = game;
 		gui = new GUI();
+		database = new GameDAO(game);
 	}
 
 	/**
@@ -88,7 +93,21 @@ public class GameController {
 	 * current player of the game; this makes it possible to resume a
 	 * game at any point.
 	 */
-	public void play() {
+
+	public void databaseinteraction () {
+	    String selection = gui.getUserSelection("What you wanna do ","load game", "create game");
+	    if (selection.equals("load game")) {
+	        int gameId = Integer.valueOf(gui.getUserButtonPressed("what game would you like to load", database.generategameIDs()));
+            try {
+                database.getGame(gameId);
+                play();
+            } catch (DALException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+	public void play() throws DALException {
 		List<Player> players = game.getPlayers();
 		Player c = game.getCurrentPlayer();
 
@@ -149,6 +168,8 @@ public class GameController {
 						"yes",
 						"no");
 				if (selection.equals("no")) {
+					database.savegame();
+					gui.showMessage("game saved");
 					terminated = true;
 				}
 			}

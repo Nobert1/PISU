@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini;
 
 import dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController;
+import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.DALException;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.cards.CardMove;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.cards.CardReceiveMoneyFromBank;
@@ -10,6 +11,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +39,10 @@ public class MiniMonopoly {
 		// of creating it programmatically. This will be discussed
 		// later in this course.
 		Game game = new Game();
-		
+
+		int i = 0;
+		int j = 0;
+
 		Space go = new Space();
 		go.setName("Go");
 		game.addSpace(go);
@@ -48,6 +53,7 @@ public class MiniMonopoly {
 		p.setRent(50);
         p.setColor(Colors.getcolor(Colors.LIGHTBLUE));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
 		Chance chance = new Chance();
@@ -60,6 +66,7 @@ public class MiniMonopoly {
 		p.setRent(50);
         p.setColor(Colors.getcolor(Colors.LIGHTBLUE));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
 		game.addSpace(p);
 		
 		Tax t = new Tax();
@@ -72,6 +79,7 @@ public class MiniMonopoly {
 		s.setRent(500);
         s.setColor(Colors.getcolor(Colors.SHIPPINGWHITE));
         Utility.getShippingLine().add(s);
+        s.setPropertyid(j++);
 		game.addSpace(s);
 
 
@@ -81,6 +89,7 @@ public class MiniMonopoly {
 		p.setRent(100);
         p.setColor(Colors.getcolor(Colors.LIGHTRED));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 		
 		chance = new Chance();
@@ -93,6 +102,7 @@ public class MiniMonopoly {
 		p.setRent(100);
         p.setColor(Colors.getcolor(Colors.LIGHTRED));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
 		game.addSpace(p);
 		
 		p = new RealEstate();
@@ -101,6 +111,7 @@ public class MiniMonopoly {
         p.setRent(150);
         p.setColor(Colors.getcolor(Colors.LIGHTRED));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
 		game.addSpace(p);
 		
 		Space prison = new Space();
@@ -113,6 +124,7 @@ public class MiniMonopoly {
 		p.setRent(200);
         p.setColor(Colors.getcolor(Colors.GREEN));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 		
 		s = new Utility();
@@ -121,6 +133,7 @@ public class MiniMonopoly {
 		s.setRent(300);
         s.setColor(Colors.getcolor(Colors.DARKGREEN));
         Utility.getBreweries().add(s);
+        s.setPropertyid(j++);
         game.addSpace(s);
 		
 		p = new RealEstate();
@@ -129,6 +142,7 @@ public class MiniMonopoly {
 		p.setRent(200);
         p.setColor(Colors.getcolor(Colors.GREEN));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
 		game.addSpace(p);
 		
 		p = new RealEstate();
@@ -137,6 +151,7 @@ public class MiniMonopoly {
 		p.setRent(250);
         p.setColor(Colors.getcolor(Colors.GREEN));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
 		game.addSpace(p);
 
         s = new Utility();
@@ -145,6 +160,7 @@ public class MiniMonopoly {
         s.setRent(250);
         s.setColor(Colors.getcolor(Colors.SHIPPINGWHITE));
         Utility.getShippingLine().add(s);
+        s.setPropertyid(j++);
         game.addSpace(s);
 
         p = new RealEstate();
@@ -153,6 +169,7 @@ public class MiniMonopoly {
         p.setRent(300);
         p.setColor(Colors.getcolor(Colors.GREY));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         chance = new Chance();
@@ -165,6 +182,7 @@ public class MiniMonopoly {
         p.setRent(300);
         p.setColor(Colors.getcolor(Colors.GREY));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         p = new RealEstate();
@@ -173,6 +191,7 @@ public class MiniMonopoly {
         p.setRent(300);
         p.setColor(Colors.getcolor(Colors.GREY));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         Space helle = new Space();
@@ -185,6 +204,7 @@ public class MiniMonopoly {
         p.setRent(350);
         p.setColor(Colors.getcolor(Colors.RED));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         chance = new Chance();
@@ -197,6 +217,7 @@ public class MiniMonopoly {
         p.setRent(350);
         p.setColor(Colors.getcolor(Colors.RED));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         p = new RealEstate();
@@ -205,6 +226,7 @@ public class MiniMonopoly {
         p.setRent(350);
         p.setColor(Colors.getcolor(Colors.RED));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         s = new Utility();
@@ -212,7 +234,9 @@ public class MiniMonopoly {
         s.setCost(2000);
         s.setRent(250);
         s.setColor(Colors.getcolor(Colors.SHIPPINGWHITE));
+        s.setPropertyid(j++);
         Utility.getShippingLine().add(s);
+
         game.addSpace(s);
 
         p = new RealEstate();
@@ -221,6 +245,7 @@ public class MiniMonopoly {
         p.setRent(400);
         p.setColor(Colors.getcolor(Colors.WHITE));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         p = new RealEstate();
@@ -229,6 +254,7 @@ public class MiniMonopoly {
         p.setRent(400);
         p.setColor(Colors.getcolor(Colors.WHITE));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         s = new Utility();
@@ -237,6 +263,7 @@ public class MiniMonopoly {
         s.setRent(250);
         s.setColor(Colors.getcolor(Colors.DARKGREEN));
         Utility.getBreweries().add(s);
+        s.setPropertyid(j++);
         game.addSpace(s);
 
         p = new RealEstate();
@@ -245,6 +272,7 @@ public class MiniMonopoly {
         p.setRent(400);
         p.setColor(Colors.getcolor(Colors.WHITE));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         Space gotoprison = new Space();
@@ -257,6 +285,7 @@ public class MiniMonopoly {
         p.setRent(420);
         p.setColor(Colors.getcolor(Colors.YELLOW));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         p = new RealEstate();
@@ -265,6 +294,7 @@ public class MiniMonopoly {
         p.setRent(420);
         p.setColor(Colors.getcolor(Colors.YELLOW));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         chance = new Chance();
@@ -277,6 +307,7 @@ public class MiniMonopoly {
         p.setRent(420);
         p.setColor(Colors.getcolor(Colors.YELLOW));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         s = new Utility();
@@ -285,6 +316,7 @@ public class MiniMonopoly {
         s.setRent(250);
         s.setColor(Colors.getcolor(Colors.SHIPPINGWHITE));
         Utility.getShippingLine().add(s);
+        s.setPropertyid(j++);
         game.addSpace(s);
 
         chance = new Chance();
@@ -297,6 +329,7 @@ public class MiniMonopoly {
         p.setRent(450);
         p.setColor(Colors.getcolor(Colors.PURPLE));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
         t = new Tax();
@@ -309,6 +342,7 @@ public class MiniMonopoly {
         p.setRent(500);
         p.setColor(Colors.getcolor(Colors.PURPLE));
         RealEstate.insertintoColorMap(p);
+        p.setPropertid(i++);
         game.addSpace(p);
 
 
@@ -339,10 +373,12 @@ public class MiniMonopoly {
 	 */
 	public static void createPlayers(Game game) {
 		// TODO the players should eventually be created interactively or be loaded from a database
+        int i = 0;
 		Player p = new Player();
 		p.setName("Player 1");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.RED);
+		p.setPlayerID(i++);
 		game.addPlayer(p);
 
 
@@ -350,12 +386,14 @@ public class MiniMonopoly {
 		p.setName("Player 2");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.YELLOW);
+        p.setPlayerID(i++);
 		game.addPlayer(p);
 
 		p = new Player();
 		p.setName("Player 3");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.GREEN);
+        p.setPlayerID(i++);
 		game.addPlayer(p);
 	}
 
@@ -369,14 +407,17 @@ public class MiniMonopoly {
 	public static void main(String[] args) {
 		Game game = createGame();
 		game.shuffleCardDeck();
-
-		createPlayers(game);
-
+        createPlayers(game);
 		GameController controller = new GameController(game);
 		controller.initializeGUI();
 
+		try {
+		    controller.databaseinteraction();
 
-		controller.play();
+            controller.play();
+        } catch (DALException e) {
+		    e.getMessage();
+        }
 	}
 
 }

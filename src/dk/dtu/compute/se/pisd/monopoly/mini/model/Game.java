@@ -1,6 +1,8 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.Subject;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
+import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +20,8 @@ import java.util.List;
 public class Game extends Subject {
 	
 	private List<Space> spaces = new ArrayList<Space>();
+	private List<Utility> Utilities = new ArrayList<>();
+	private List<RealEstate> Realestates = new ArrayList<>();
 	
 	private List<Card> cardDeck = new ArrayList<Card>();
 	
@@ -32,10 +36,15 @@ public class Game extends Subject {
 	 * 
 	 * @return an unmodifiable list of the games spaces
 	 */
-	public List<Space> getSpaces() {
-		return Collections.unmodifiableList(spaces);
+	public List<Space> getSpaces() { return spaces; }
+
+	public List<Utility> getUtilites() {
+		return Utilities;
 	}
 
+	public List<RealEstate> getRealestates() {
+		return Realestates;
+	}
 
 	/**
 	 * Sets all the spaces of the game. Note that the provided
@@ -58,6 +67,11 @@ public class Game extends Subject {
 		space.setIndex(spaces.size());
 		spaces.add(space);
 		notifyChange();
+		if (space instanceof RealEstate) {
+			getRealestates().add((RealEstate) space);
+		} else if (space instanceof Utility) {
+			getUtilites().add((Utility) space);
+		}
 	}
 
 	/**

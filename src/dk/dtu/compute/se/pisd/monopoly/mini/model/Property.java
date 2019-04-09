@@ -128,9 +128,7 @@ public class Property extends Space {
     public void setMortgaged(boolean mortgaged) {
         this.mortgaged = mortgaged;
         if (mortgaged)
-            setRent(getRent() - getRent());
-        if (!mortgaged)
-            setRent(getRent());
+            setRent(0);
         }
 
     public boolean isMortgaged() {
