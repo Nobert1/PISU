@@ -722,9 +722,12 @@ public class GameController {
 
 	/**
 	 * Method that allows player to trade properties and money for properties and or money with other players
+	 * @author s175124
 	 * @param player
 	 */
 	public void trade(Player player){
+
+		//Asks player if they would like to trade
 
 		String option = gui.getUserButtonPressed(player.getName() + ", would you like to trade? ", "Yes", "No");
 		if(option == "Yes") {
@@ -736,7 +739,9 @@ public class GameController {
 					count++;
 				}
 			}
+
 			//Player chooses which player they would like to trade
+
 			String choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
 			Player tradee = new Player();
 			for (int i = 0; i < game.getPlayers().size(); i++) {
@@ -745,12 +750,13 @@ public class GameController {
 				}
 			}
 
+			//First part of trade where the player choses what they want to trade away
+			//As owned properties is a HashSet there is made and arraylist and a String[] to use for I/O
+
 			ArrayList<String> playerPropertiesList = new ArrayList<>(player.getOwnedProperties().size());
 			for (Property p : player.getOwnedProperties()) {
 				playerPropertiesList.add(p.getName());
 			}
-
-			//First part of trade where the player choses what they want to trade away
 			String tradeOption = "s";
 			int playerPropertyCount = 0;
 			int playerMoneyCount = 0;
@@ -781,6 +787,7 @@ public class GameController {
 					playerMoneyCount = gui.getUserInteger("Howe much money would like to add to the trade?");
 				}
 			} while (tradeOption != "Pick what you want to trade for");
+
 			//Second part where the player chooses what to receive from trade
 			ArrayList<String> tradeePropertiesList = new ArrayList<>(tradee.getOwnedProperties().size());
 
@@ -812,9 +819,10 @@ public class GameController {
 						}
 					}
 				} else if (tradeOption == "Money"){
-
+					tradeeMoneyCount = gui.getUserInteger("How much money would like to add to the trade?");
 				}
 			}while (tradeOption != "Get approval for trade") ;
+
 
 		}
 	}
