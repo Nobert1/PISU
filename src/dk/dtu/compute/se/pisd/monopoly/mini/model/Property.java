@@ -120,8 +120,16 @@ public class Property extends Space {
             //      individual conditions into account. Note that the
             //      groups of properties (which are not part of the model
             //      yet also need to be taken into account).
+<<<<<<< HEAD
 
             controller.payment(player, rent, this.getOwner());
+=======
+            try {
+            controller.payment(player, rent, this.getOwner());
+            } catch (PlayerBrokeException e) {
+                //TODO do something with exception
+            }
+>>>>>>> origin/dev
         }
             
         }

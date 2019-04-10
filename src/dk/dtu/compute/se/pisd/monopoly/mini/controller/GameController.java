@@ -44,6 +44,7 @@ import java.util.regex.Pattern;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
+@SuppressWarnings("Duplicates")
 public class GameController {
 
 	private Game game;
@@ -160,7 +161,7 @@ public class GameController {
 				break;
 
 			}
-
+			trade(game.getCurrentPlayer());
 			Offerhouses(players);
 
 
@@ -592,40 +593,22 @@ public class GameController {
 		// TODO auction needs to be implemented
 		int currentBid = 0;
 		int highestBid = 0;
-		int playerAmount = game.getPlayers().size();
-		int currentPlayerNR = 0;
 
-		//Finds which number the current player has in the player array
-		for (int i = 0; game.getPlayers().size() > i; i++) {
-			if (game.getCurrentPlayer() == game.getPlayers().get(i)) {
-				currentPlayerNR = i;
+		ArrayList<Player> bidList = new ArrayList<>(game.getPlayers());
+
+		do{
+			Player p = bidList.remove(0);
+			bidList.add(p);
+			if(p.equals(game.getCurrentPlayer())){
+				break;
 			}
-		}
+		}while(true);
 
-		//Creates a new player arraylist so the person that landed on the property starts the bidding
-		int moveAmount = game.getPlayers().size() - currentPlayerNR;
-		ArrayList<Player> bidList = new ArrayList<>();
-		for (int i = 0; playerAmount > i; i++) {
-			bidList.add(game.getPlayers().get(i));
-		}
-
-		for (int i = 0; game.getPlayers().size() > i; i++) {
-			if (i == currentPlayerNR) {
-				bidList.remove(0);
-				bidList.add(0, game.getCurrentPlayer());
-			} else if (i == 0) {
-				bidList.remove(moveAmount);
-				bidList.add(moveAmount, game.getPlayers().get(i));
-
-			} else {
-				bidList.remove((i + moveAmount) % game.getPlayers().size());
-				bidList.add((i + moveAmount) % game.getPlayers().size(), game.getPlayers().get(i));
-			}
-		}
 
 		//Actual bidding method
 
 		Player highestBidder = new Player();
+		highestBidder.setName("No one");
 		int counter = 0;
 		while (counter < bidList.size() - 1) {
 			for (int i = 0; bidList.size() > i; i++) {
@@ -648,11 +631,11 @@ public class GameController {
 				}
 			}
 		}
-		if (highestBidder != null) {
-		gui.showMessage("Congratulations " + highestBidder.getName() + " you win " + property.getName() + " for " + highestBid + "dollars!");
-		highestBidder.payMoney(highestBid);
-		highestBidder.addOwnedProperty(property);
-		property.setOwner(highestBidder);
+		if (!highestBidder.getName().equals("No one")) {
+			gui.showMessage("Congratulations " + highestBidder.getName() + " you win " + property.getName() + " for " + highestBid + " dollars!");
+			highestBidder.payMoney(highestBid);
+			highestBidder.addOwnedProperty(property);
+			property.setOwner(highestBidder);
 		} else {
 			gui.showMessage("there were no bidders so it remains unowned!");
 		}
@@ -741,6 +724,106 @@ public class GameController {
 		if (counter == estateSet.size())
 			estate.setBuildable(true);
 	}
+
+	/**
+	 * Method that allows player to trade properties and money for properties and or money with other players
+	 * @param player
+	 */
+	public void trade(Player player){
+
+		String option = gui.getUserButtonPressed(player.getName() + ", would you like to trade? ", "Yes", "No");
+		if(option == "Yes") {
+			String[] tradeListString = new String[game.getPlayers().size() - 1];
+			int count = 0;
+			for (int i = 0; i <= tradeListString.length; i++) {
+				if (game.getPlayers().get(i) != player) {
+					tradeListString[count] = game.getPlayers().get(i).getName();
+					count++;
+				}
+			}
+			//Player chooses which player they would like to trade
+			String choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
+			Player tradee = new Player();
+			for (int i = 0; i < game.getPlayers().size(); i++) {
+				if (game.getPlayers().get(i).getName() == choosePlayer) {
+					tradee = game.getPlayers().get(i);
+				}
+			}
+
+			ArrayList<String> playerPropertiesList = new ArrayList<>(player.getOwnedProperties().size());
+			for (Property p : player.getOwnedProperties()) {
+				playerPropertiesList.add(p.getName());
+			}
+
+			//First part of trade where the player choses what they want to trade away
+			String tradeOption = "s";
+			int playerPropertyCount = 0;
+			int playerMoneyCount = 0;
+			Property[] giveProperties = new Property[playerPropertiesList.size()];
+			do {
+
+				String[] playerPropertiesArr = playerPropertiesList.toArray(new String[playerPropertiesList.size()]);
+
+				tradeOption = gui.getUserButtonPressed("What would you like to give in the trade? \nYou have chosen " + playerPropertyCount + " properties, " +
+						"and " + playerMoneyCount + " dollars", "Properties", "Money", "Pick what you want to trade for");
+				if (tradeOption == "Properties") {
+					if (playerPropertiesList.isEmpty()) {
+						gui.showMessage("You have no more properties to trade");
+					} else {
+						String chosenProperty = gui.getUserSelection("Which property would you like to trade?", playerPropertiesArr);
+						for (Property p : player.getOwnedProperties()) {
+							if (p.getName() == chosenProperty) {
+								giveProperties[playerPropertyCount++] = p;
+								for (int i = 0; i < playerPropertiesList.size(); i++) {
+									if (playerPropertiesList.get(i) == chosenProperty) {
+										playerPropertiesList.remove(i);
+									}
+								}
+							}
+						}
+					}
+				} else if (tradeOption == "Money") {
+					playerMoneyCount = gui.getUserInteger("Howe much money would like to add to the trade?");
+				}
+			} while (tradeOption != "Pick what you want to trade for");
+			//Second part where the player chooses what to receive from trade
+			ArrayList<String> tradeePropertiesList = new ArrayList<>(tradee.getOwnedProperties().size());
+
+			for (Property p : tradee.getOwnedProperties()) {
+				tradeePropertiesList.add(p.getName());
+			}
+			Property[] receiveProperties = new Property[tradeePropertiesList.size()];
+			int tradeePropertyCount = 0;
+			int tradeeMoneyCount = 0;
+
+			do {
+				String[] tradeePropertiesArr = tradeePropertiesList.toArray(new String[tradeePropertiesList.size()]);
+				tradeOption = gui.getUserButtonPressed("What would you like to receive in the trade? \nYou have chosen " + tradeePropertyCount + " properties, " +
+						"and " + tradeeMoneyCount + " dollars", "Properties", "Money", "Get approval for trade");
+				if (tradeOption == "Properties") {
+					if (tradeePropertiesList.isEmpty()) {
+						gui.showMessage("You have no more properties to chose from");
+					} else {
+						String chosenProperty = gui.getUserSelection("Which property would you like to trade?", tradeePropertiesArr);
+						for (Property p : tradee.getOwnedProperties()) {
+							if (p.getName() == chosenProperty) {
+								receiveProperties[tradeePropertyCount++] = p;
+								for (int i = 0; i < tradeePropertiesList.size(); i++) {
+									if (tradeePropertiesList.get(i) == chosenProperty) {
+										tradeePropertiesList.remove(i);
+									}
+								}
+							}
+						}
+					}
+				} else if (tradeOption == "Money"){
+
+				}
+			}while (tradeOption != "Get approval for trade") ;
+
+		}
+	}
+
 
 	public void Offerhouses(List<Player> players) {
 
