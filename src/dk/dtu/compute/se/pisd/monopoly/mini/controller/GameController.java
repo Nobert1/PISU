@@ -783,10 +783,11 @@ public class GameController {
 			} while (tradeOption != "Pick what you want to trade for");
 			//Second part where the player chooses what to receive from trade
 			ArrayList<String> tradeePropertiesList = new ArrayList<>(tradee.getOwnedProperties().size());
-			Property[] recieveProperties = new Property[tradeePropertiesList.size()];
+
 			for (Property p : tradee.getOwnedProperties()) {
 				tradeePropertiesList.add(p.getName());
 			}
+			Property[] receiveProperties = new Property[tradeePropertiesList.size()];
 			int tradeePropertyCount = 0;
 			int tradeeMoneyCount = 0;
 
@@ -801,7 +802,7 @@ public class GameController {
 						String chosenProperty = gui.getUserSelection("Which property would you like to trade?", tradeePropertiesArr);
 						for (Property p : tradee.getOwnedProperties()) {
 							if (p.getName() == chosenProperty) {
-								recieveProperties[tradeePropertyCount++] = p;
+								receiveProperties[tradeePropertyCount++] = p;
 								for (int i = 0; i < tradeePropertiesList.size(); i++) {
 									if (tradeePropertiesList.get(i) == chosenProperty) {
 										tradeePropertiesList.remove(i);
