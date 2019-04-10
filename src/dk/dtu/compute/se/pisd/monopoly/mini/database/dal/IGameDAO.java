@@ -9,7 +9,7 @@ public interface IGameDAO {
     //Delete save laver vi hvis vi får tid, det er ikke en høj priotet.
     void savegame () throws DALException;
 
-    Game getGame (int gameId) throws DALException;
+    void getGame (int gameId) throws DALException;
 
     void creategame() throws DALException;
 

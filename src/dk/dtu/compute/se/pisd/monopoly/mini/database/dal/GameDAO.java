@@ -81,11 +81,11 @@ public class GameDAO implements IGameDAO {
      * TODO - here one option is making a list of RealEstates, and a list of Utilities.
      */
     @Override
-    public Game getGame(int gameId) throws DALException {
+    public void getGame(int gameId) throws DALException {
         try {
             game.setPlayers(getPlayers(gameId));
             game.setSpaces(getspaces(gameId));
-            return game;
+
         } catch (DALException e) {
             throw new DALException(e.getMessage());
         }
@@ -113,6 +113,7 @@ public class GameDAO implements IGameDAO {
              utilitycounter++;
          }
      }
+
      return spacelist;
     }
 
@@ -160,7 +161,7 @@ public class GameDAO implements IGameDAO {
             while (resultSet.next() && resultSet1.next()) {
                 Player player = makePlayerFromResultset(resultSet);
                 //TODO en eller anden form for reference til playerID her.
-                Color color = new Color(resultSet1.getInt("r"), resultSet1.getInt("g"), resultSet1.getInt("g"));
+                Color color = new Color(resultSet1.getInt("r"), resultSet1.getInt("g"), resultSet1.getInt("b"));
                 player.setColor(color);
                 playerList.add(player);
             }
@@ -179,6 +180,8 @@ public class GameDAO implements IGameDAO {
                     for (Player player : game.getPlayers()) {
                         if (player.getPlayerID() == resultSet.getInt("ownerID")) {
                             realEstate.setOwner(player);
+                            realEstate.setOwned(true);
+                            player.addOwnedProperty(realEstate);
                         }
                     }
                     realEstate.setHouses(resultSet.getInt("houses"));
@@ -200,6 +203,9 @@ public class GameDAO implements IGameDAO {
                     for (Player player : game.getPlayers()) {
                         if (player.getPlayerID() == resultSet.getInt("ownerID")) {
                             utility.setOwner(player);
+                            utility.setOwned(true);
+                            player.addOwnedProperty(utility);
+
                         }
                     }
                     utility.setMortgaged(resultSet.getBoolean("mortgaged"));
