@@ -66,10 +66,32 @@ public class GameTest {
 
     @Test
     public void addPlayer() {
+
+        Game spil = new Game();
+        Player spiller1 = new Player();
+        spil.addPlayer(spiller1);
+
+        assertEquals(spiller1, spil.getPlayers().iterator().next());
+
     }
 
     @Test
     public void getCurrentPlayer() {
+
+        Game spil = new Game();
+        Player spiller1 = new Player();
+        Player spiller2 = new Player();
+        Player spiller3 = new Player();
+        spil.addPlayer(spiller1);
+        spil.addPlayer(spiller2);
+        spil.addPlayer(spiller3);
+
+        assertEquals(spiller1, spil.getCurrentPlayer());
+
+        spil.setCurrentPlayer(spiller2);
+
+        assertEquals(spiller2, spil.getCurrentPlayer());
+
     }
 
     @Test
