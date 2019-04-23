@@ -5,14 +5,11 @@ import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.DALException;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Colors;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.PlayerPanel;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -128,7 +125,20 @@ public class GameController {
 
 		boolean terminated = false;
 		while (!terminated) {
+			//The player choses which function they would like to do, which then calls the method
 			Player player = players.get(current);
+			String choice = gui.getUserButtonPressed("What would you like to do " + game.getCurrentPlayer().getName()+"?", "Roll", "Trade", "Build", "Mortgage");
+			switch(choice){
+				case "Roll":
+					break;
+				case "Trade":
+					trade(game.getCurrentPlayer());
+				case "Build":
+					buildHouses(players);
+				case "Mortgage":
+
+				default:
+			}
 			if (!player.isBroke()) {
 				try {
 					this.makeMove(player);
@@ -162,8 +172,8 @@ public class GameController {
 
 			}
 
-			trade(game.getCurrentPlayer());
-			Offerhouses(players);
+
+
 
 
 			// TODO offer all players the options to trade etc.
@@ -733,23 +743,17 @@ public class GameController {
 	 */
 	public void trade(Player player){
 
-		//Asks player if they would like to trade
-
-
-		String option = gui.getUserButtonPressed(player.getName() + ", would you like to trade? ", "Yes", "No");
-		if(option == "Yes") {
-			String[] tradeListString = new String[game.getPlayers().size() - 1];
-			int count = 0;
-			for (int i = 0; i <= tradeListString.length; i++) {
-				if (game.getPlayers().get(i) != player) {
-					tradeListString[count] = game.getPlayers().get(i).getName();
-					count++;
-				}
-			}
-
 			//Player chooses which player they would like to trade
 			String choosePlayer;
 			do{
+				String[] tradeListString = new String[game.getPlayers().size() - 1];
+				int count = 0;
+				for (int i = 0; i <= tradeListString.length; i++) {
+					if (game.getPlayers().get(i) != player) {
+						tradeListString[count] = game.getPlayers().get(i).getName();
+						count++;
+					}
+				}
 				choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
 			Player tradee = new Player();
 			for (int i = 0; i < game.getPlayers().size(); i++) {
@@ -831,13 +835,17 @@ public class GameController {
 				}
 			}while (tradeOption != "Get approval for trade") ;
 
-			}while(choosePlayer != "back");
-		}
+			String s = player.getName() + " you want to trade " + giveProperties.toString() + " and " + playerMoneyCount + " dollars with "
+						+ tradee.getName() + " for " + receiveProperties.toString() + " and " + tradeeMoneyCount + ".";
+			gui.getUserButtonPressed(s, "Accept Trade", "Deny");
 
+			}while(choosePlayer != "back");
 	}
 
 
-	public void Offerhouses(List<Player> players) {
+
+
+	public void buildHouses(List<Player> players) {
 
 		for (Player p : players) {
 			ArrayList<RealEstate> realEstates = new ArrayList<>();
