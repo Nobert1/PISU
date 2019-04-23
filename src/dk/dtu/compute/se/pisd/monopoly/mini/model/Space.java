@@ -8,7 +8,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeExceptio
  * Represents a space (field) of the Monopoly game. The method
  * {@link #doAction(GameController, Player)} implements the
  * action taken when a player arrives on the space. In order
- * to use this part of the model with the MVC-pattern, this
+ * to use this part of the modeltest with the MVC-pattern, this
  * class extends the
  * {@link dk.dtu.compute.se.pisd.designpatterns.Subject} of
  * the observer design pattern.

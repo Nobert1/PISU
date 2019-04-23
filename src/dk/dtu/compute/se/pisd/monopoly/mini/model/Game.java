@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Represents the top-level element of a Monopoly game's state. In order
- * to use this model with the MVC-pattern, it extends the
+ * to use this modeltest with the MVC-pattern, it extends the
  * {@link dk.dtu.compute.se.pisd.designpatterns.Subject} of the observer
  * design pattern.
  * 

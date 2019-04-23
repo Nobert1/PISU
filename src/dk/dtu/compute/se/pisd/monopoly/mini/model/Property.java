@@ -85,7 +85,7 @@ public class Property extends Space {
 			// TODO the computation of the actual rent could be delegated
 			//      the subclasses of Property, which can take the specific
 			//      individual conditions into account. Note that the
-			//      groups of properties (which are not part of the model
+			//      groups of properties (which are not part of the modeltest
 			//      yet also need to be taken into account).
 			controller.payment(player, rent, owner);
 		}

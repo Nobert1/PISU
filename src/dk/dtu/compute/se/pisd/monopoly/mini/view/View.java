@@ -21,9 +21,9 @@ import java.util.Map;
  * on the original Matador GUI; it serves as a kind of
  * adapter to the Matador GUI. This class realizes the
  * MVC-principle on top of the Matador GUI. In particular,
- * the view implements an observer of the model in the
+ * the view implements an observer of the modeltest in the
  * sense of the MVC-principle, which updates the GUI when
- * the state of the game (model) changes.
+ * the state of the game (modeltest) changes.
  * 
  * @author Ekkart Kindler, ekki@dtu.dk
  *

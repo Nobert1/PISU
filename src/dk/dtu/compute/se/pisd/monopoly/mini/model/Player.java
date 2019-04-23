@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Represents a player and his current state in a Monopoly game.
  * This includes the player's position, owned money and properties
- * and chance cards. In order to use this part of the model with
+ * and chance cards. In order to use this part of the modeltest with
  * the MVC-pattern, this class extends the
  * {@link dk.dtu.compute.se.pisd.designpatterns.Subject} of the observer
  * design pattern.

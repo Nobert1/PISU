@@ -16,7 +16,7 @@ import java.util.List;
  * 
  * Note that this controller is far from being finished and many
  * things could be done in a much nicer and cleaner way! But, it
- * shows the general idea of how the model, view (GUI), and the
+ * shows the general idea of how the modeltest, view (GUI), and the
  * controller could work with each other, and how different parts
  * of the game's activities can be separated from each other, so
  * that different parts can be added and extended independently
