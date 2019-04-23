@@ -101,8 +101,6 @@ public class GameController {
 	        int gameId = Integer.valueOf(gui.getUserButtonPressed("what game would you like to load", database.generategameIDs()));
             try {
                 database.getGame(gameId);
-				view.loadplayers();
-                play();
             } catch (DALException e) {
                 e.printStackTrace();
             }

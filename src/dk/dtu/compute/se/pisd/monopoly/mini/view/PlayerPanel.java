@@ -64,6 +64,8 @@ public class PlayerPanel extends JFrame {
         playerPanel.add(j);
 
         contentPane.add(playerPanel);
+
+
         ArrayList<Color> colorArrayList = new ArrayList<>();
         for (Property property2 : player.getOwnedProperties()) {
             if (!colorArrayList.contains(property2.getColor()))

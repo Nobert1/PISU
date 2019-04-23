@@ -67,6 +67,7 @@ public class View implements Observer {
 			// fields
 			space2GuiField.put(space, guiFields[i++]);
 			space.attach(this);
+			update(space);
 			//Her skal der evt være en eller anden form for update metode, så som updatespace eller update player
 			// TODO we should also register with the properties as observer; but
 			// the current version does not update anything for the spaces, so we do not
@@ -84,19 +85,34 @@ public class View implements Observer {
 			playerPanelMap.put(player, panel);
 			gui.addPlayer(guiPlayer);
 			panel.setVisible(true);
-			player2position.put(player, 0);
+			player2position.put(player, player.getCurrentPosition().getIndex());
 			// register this view with the player as an observer, in order to update the
 			// player's state in the GUI
 			player.attach(this);
 			updatePlayer(player);
 		}
+	}/**
+
+	public void loadplayers() {
+		for (Player player : game.getPlayers()) {
+			GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
+			GUI_Player gui_player = new GUI_Player(player.getName(), player.getBalance(), car);
+			PlayerPanel panel = new PlayerPanel(game, player);
+			playerPanelMap.put(player, panel);
+			player2GuiPlayer.put(player, gui_player);
+			gui.addPlayer(gui_player);
+			player2position.put(player, player.getCurrentPosition().getIndex());
+			player.attach(this);
+			update(player);
+		}
 	}
+	 **/
 	
 	@Override
 	public void update(Subject subject) {
 		if (!disposed) {
 			if (subject instanceof Player) {
-				updatePlayer((Player) subject);
+					updatePlayer((Player) subject);
 			}
 			if (subject instanceof Property) {
 			updateProperty((Property) subject);
@@ -186,17 +202,5 @@ public class View implements Observer {
 		}
 	}
 
-	public void loadplayers() {
-		for (Player player : game.getPlayers()) {
-			GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
-			GUI_Player gui_player = new GUI_Player(player.getName(), player.getBalance(), car);
-			PlayerPanel panel = new PlayerPanel(game, player);
-			playerPanelMap.put(player, panel);
-			player2GuiPlayer.put(player, gui_player);
-			gui.addPlayer(gui_player);
-			player2position.put(player, player.getCurrentPosition().getIndex());
-			player.attach(this);
-			update(player);
-		}
-	}
+
 }
