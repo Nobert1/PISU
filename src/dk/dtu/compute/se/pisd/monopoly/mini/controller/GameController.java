@@ -161,6 +161,7 @@ public class GameController {
 				break;
 
 			}
+
 			trade(game.getCurrentPlayer());
 			Offerhouses(players);
 
@@ -734,6 +735,7 @@ public class GameController {
 
 		//Asks player if they would like to trade
 
+
 		String option = gui.getUserButtonPressed(player.getName() + ", would you like to trade? ", "Yes", "No");
 		if(option == "Yes") {
 			String[] tradeListString = new String[game.getPlayers().size() - 1];
@@ -746,8 +748,9 @@ public class GameController {
 			}
 
 			//Player chooses which player they would like to trade
-
-			String choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
+			String choosePlayer;
+			do{
+				choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
 			Player tradee = new Player();
 			for (int i = 0; i < game.getPlayers().size(); i++) {
 				if (game.getPlayers().get(i).getName() == choosePlayer) {
@@ -789,7 +792,7 @@ public class GameController {
 						}
 					}
 				} else if (tradeOption == "Money") {
-					playerMoneyCount = gui.getUserInteger("Howe much money would like to add to the trade?");
+					playerMoneyCount = gui.getUserInteger("How much money would like to add to the trade?");
 				}
 			} while (tradeOption != "Pick what you want to trade for");
 
@@ -828,8 +831,9 @@ public class GameController {
 				}
 			}while (tradeOption != "Get approval for trade") ;
 
-
+			}while(choosePlayer != "back");
 		}
+
 	}
 
 
