@@ -54,9 +54,12 @@ public class View implements Observer {
 		this.game = game;
 		this.gui = gui;
 		this.playerPanel = playerPanel;
+	}
 
+
+
+		public void createFields() {
 		GUI_Field[] guiFields = gui.getFields();
-		
 		int i = 0;
 		for (Space space: game.getSpaces()) {
 			// TODO, here we assume that the games fields fit to the GUI's fields;
@@ -69,9 +72,11 @@ public class View implements Observer {
 			// the current version does not update anything for the spaces, so we do not
 			// register the view as an observer for now
 		}
-		
 		// create the players in the GUI
-		for (Player player: game.getPlayers()) {
+	}
+
+	public void createplayers() {
+		for (Player player : game.getPlayers()) {
 			GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
 			GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
 			PlayerPanel panel = new PlayerPanel(game, player);
@@ -79,9 +84,7 @@ public class View implements Observer {
 			playerPanelMap.put(player, panel);
 			gui.addPlayer(guiPlayer);
 			panel.setVisible(true);
-
-			// player2position.put(player, 0);
-			
+			player2position.put(player, 0);
 			// register this view with the player as an observer, in order to update the
 			// player's state in the GUI
 			player.attach(this);
@@ -94,11 +97,10 @@ public class View implements Observer {
 		if (!disposed) {
 			if (subject instanceof Player) {
 				updatePlayer((Player) subject);
-
-
 			}
-			if (subject instanceof Property)
+			if (subject instanceof Property) {
 			updateProperty((Property) subject);
+			}
 			// TODO update other subjects in the GUI
 			//      in particular properties (sold, houses, ...)
 
@@ -113,11 +115,11 @@ public class View implements Observer {
 	private void updateProperty(Property property) {
 		GUI_Ownable field = (GUI_Ownable) this.space2GuiField.get(property);
 
-		if (!property.isOwned()){
+		if (property.isOwned()){
 			field.setBorder(property.getOwner().getColor());
 			field.setOwnerName(property.getOwner().getName());
 		}
-		if (property.isOwned()) {
+		if (!property.isOwned()) {
 		    field.setBorder(null);
 		    field.setOwnerName(null);
         }
@@ -174,7 +176,6 @@ public class View implements Observer {
 		}
 	}
 
-	
 	public void dispose() {
 		if (!disposed) {
 			disposed = true;
@@ -185,12 +186,12 @@ public class View implements Observer {
 		}
 	}
 
-	/**
-
 	public void loadplayers() {
 		for (Player player : game.getPlayers()) {
 			GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
 			GUI_Player gui_player = new GUI_Player(player.getName(), player.getBalance(), car);
+			PlayerPanel panel = new PlayerPanel(game, player);
+			playerPanelMap.put(player, panel);
 			player2GuiPlayer.put(player, gui_player);
 			gui.addPlayer(gui_player);
 			player2position.put(player, player.getCurrentPosition().getIndex());
@@ -198,6 +199,4 @@ public class View implements Observer {
 			update(player);
 		}
 	}
-	 *
-	 */
 }

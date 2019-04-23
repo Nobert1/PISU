@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
+import dk.dtu.compute.se.pisd.monopoly.mini.MiniMonopoly;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.DALException;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
@@ -101,12 +102,16 @@ public class GameController {
 	        int gameId = Integer.valueOf(gui.getUserButtonPressed("what game would you like to load", database.generategameIDs()));
             try {
                 database.getGame(gameId);
-                //view.loadplayers();
+				view.loadplayers();
                 play();
             } catch (DALException e) {
                 e.printStackTrace();
             }
-        }
+        } else if (selection.equals("create game")) {
+			MiniMonopoly.createPlayers(game);
+		}
+		view.createplayers();
+		view.createFields();
     }
 
 	public void play() throws DALException {
@@ -175,7 +180,6 @@ public class GameController {
 					terminated = true;
 				}
 			}
-
 		}
 		dispose();
 	}
@@ -508,6 +512,7 @@ public class GameController {
 				}
 				player.addOwnedProperty(property);
 				property.setOwner(player);
+				property.setOwned(true);
 				return;
 			}
 		}
@@ -891,11 +896,8 @@ public class GameController {
 							}
 						}
 					}
-					} else {
-					gui.showMessage(p.getName() + " you don't have anything you can build on");
 				}
 			}
-
 		}
 
 	public void setDiecount(int diecount1, int diecount2) {

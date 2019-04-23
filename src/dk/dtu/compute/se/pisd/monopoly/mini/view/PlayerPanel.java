@@ -31,7 +31,6 @@ public class PlayerPanel extends JFrame {
 
     public PlayerPanel(Game game, Player currentPlayer) {
 
-
         super(currentPlayer.getName());
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setLocation(710, game.getPlayers().indexOf(currentPlayer) * 150);
@@ -49,7 +48,6 @@ public class PlayerPanel extends JFrame {
     @SuppressWarnings("Duplicates")
     public void update(Player player) {
         contentPane.removeAll();
-
         JPanel playerPanel = new JPanel();
         playerPanel.setMinimumSize(new Dimension(80, 60));
         playerPanel.setPreferredSize(new Dimension(80, 80));
@@ -66,7 +64,6 @@ public class PlayerPanel extends JFrame {
         playerPanel.add(j);
 
         contentPane.add(playerPanel);
-
         ArrayList<Color> colorArrayList = new ArrayList<>();
         for (Property property2 : player.getOwnedProperties()) {
             if (!colorArrayList.contains(property2.getColor()))
@@ -109,9 +106,8 @@ public class PlayerPanel extends JFrame {
                 estatepanel.add(estatecolorpanel);
                 estatepanel.add(textArea);
                 contentPane.add(estatepanel);
-
+            }
                 this.revalidate();
                 this.repaint();
-            }
         }
     }

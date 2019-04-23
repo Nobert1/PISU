@@ -53,4 +53,4 @@ download drivers hvis den beder om det -> set local database.
 
 
 Lige nu er det ikke muligt at genskabe spillere fra databasen. De bliver ikke sat på gui
-pladen ved oprettelse, men logikken bag ved er til stede. 
+pladen ved oprettelse, men logikken bag ved er til stede.

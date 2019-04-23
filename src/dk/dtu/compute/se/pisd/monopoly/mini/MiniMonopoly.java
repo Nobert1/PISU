@@ -33,12 +33,16 @@ public class MiniMonopoly {
     @SuppressWarnings("Duplicates")
     public static Game createGame() {
 
-		// Create the initial Game set up (note that, in this simple
-		// setup, we use only 11 spaces). Note also that this setup
-		// could actually be loaded from a file or database instead
-		// of creating it programmatically. This will be discussed
-		// later in this course.
-		Game game = new Game();
+        // Create the initial Game set up (note that, in this simple
+        // setup, we use only 11 spaces). Note also that this setup
+        // could actually be loaded from a file or database instead
+        // of creating it programmatically. This will be discussed
+        // later in this course.
+        Game game = new Game();
+        return game;
+    }
+		public static void createSpaces(Game game) {
+
 
 		int i = 0;
 		int j = 0;
@@ -364,8 +368,8 @@ public class MiniMonopoly {
 		cards.add(b);
 		game.setCardDeck(cards);
 
-		return game;
-	}
+        }
+
 
 	/**
 	 * This method will be called before the game is started to create
@@ -406,17 +410,16 @@ public class MiniMonopoly {
 	 */
 	public static void main(String[] args) {
 		Game game = createGame();
-		game.shuffleCardDeck();
-        createPlayers(game);
 		GameController controller = new GameController(game);
 		controller.initializeGUI();
-
 		try {
+            createSpaces(game);
 		    controller.databaseinteraction();
+            game.shuffleCardDeck();
+            createPlayers(game);
             controller.play();
         } catch (DALException e) {
 		    e.getMessage();
         }
 	}
-
 }
