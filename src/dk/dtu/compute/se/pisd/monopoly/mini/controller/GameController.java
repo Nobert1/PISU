@@ -94,7 +94,7 @@ public class GameController {
 	 */
 
 	public void databaseinteraction () {
-	    String selection = gui.getUserSelection("What you wanna do ","load game", "create game");
+	    String selection = gui.getUserSelection("What you wanna do ","create game", "load game");
 	    if (selection.equals("load game")) {
 	        int gameId = Integer.valueOf(gui.getUserButtonPressed("what game would you like to load", database.generategameIDs()));
             try {
@@ -132,7 +132,11 @@ public class GameController {
 				case "Roll":
 					break;
 				case "Trade":
-					trade(game.getCurrentPlayer());
+					try {
+                        trade(game.getCurrentPlayer());
+                    } catch (PlayerBrokeException e){
+
+                    }
 				case "Build":
 					buildHouses(players);
 				case "Mortgage":
@@ -741,11 +745,10 @@ public class GameController {
 	 * @author s175124
 	 * @param player
 	 */
-	public void trade(Player player){
+	public void trade(Player player)throws PlayerBrokeException{
 
 			//Player chooses which player they would like to trade
 			String choosePlayer;
-			do{
 				String[] tradeListString = new String[game.getPlayers().size() - 1];
 				int count = 0;
 				for (int i = 0; i <= tradeListString.length; i++) {
@@ -762,8 +765,8 @@ public class GameController {
 				}
 			}
 
-			//First part of trade where the player choses what they want to trade away
-			//As owned properties is a HashSet there is made and arraylist and a String[] to use for I/O
+			//First part of trade where the player chooses what they want to trade away
+			//As owned properties is a HashSet there is made and arrayList and a String[] to use for I/O
 
 			ArrayList<String> playerPropertiesList = new ArrayList<>(player.getOwnedProperties().size());
 			for (Property p : player.getOwnedProperties()) {
@@ -835,11 +838,36 @@ public class GameController {
 				}
 			}while (tradeOption != "Get approval for trade") ;
 
-			String s = player.getName() + " you want to trade " + giveProperties.toString() + " and " + playerMoneyCount + " dollars with "
-						+ tradee.getName() + " for " + receiveProperties.toString() + " and " + tradeeMoneyCount + ".";
-			gui.getUserButtonPressed(s, "Accept Trade", "Deny");
+			String givePropertiesString = "";
+			for(Property p: giveProperties){
+			    if(p == null){
+			        break;
+                }
+			    givePropertiesString += p.getName() + ", ";
+            }
 
-			}while(choosePlayer != "back");
+            String receivePropertiesString = "";
+			for(Property p: receiveProperties){
+                if(p == null){
+                    break;
+                }
+                    receivePropertiesString+= p.getName() + ", ";
+                }
+
+			String s = player.getName() + " you want to trade " + givePropertiesString + " and " + playerMoneyCount + " dollars with "
+						+ tradee.getName() + " for " + receivePropertiesString + " and " + tradeeMoneyCount + ".";
+			String tradeAccept = gui.getUserButtonPressed(s, "Accept Trade", "Deny");
+			if(tradeAccept == "Deny"){
+			    gui.getUserButtonPressed(tradee.getName() + " has denied the trade. Would you like to renegotiate?", "Yes", "No");
+
+            }
+            payment(tradee,tradeeMoneyCount,player);
+			payment(player,playerMoneyCount,tradee);
+			for(Property p: giveProperties){
+			    tradee.addOwnedProperty(p);
+            }
+
+            gui.getUserButtonPressed("Trade is complete.");
 	}
 
 
