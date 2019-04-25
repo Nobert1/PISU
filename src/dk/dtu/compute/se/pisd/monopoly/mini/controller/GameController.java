@@ -769,94 +769,92 @@ public class GameController {
 
 			//First part of trade where the player chooses what they want to trade away
 			//As owned properties is a HashSet there is made and arrayList and a String[] to use for I/O
-
-			ArrayList<String> playerPropertiesList = new ArrayList<>(player.getOwnedProperties().size());
-			for (Property p : player.getOwnedProperties()) {
-				playerPropertiesList.add(p.getName());
-			}
-			String tradeOption = "s";
-			int playerPropertyCount = 0;
-			int playerMoneyCount = 0;
-			Property[] giveProperties = new Property[playerPropertiesList.size()];
 			do {
+				ArrayList<String> playerPropertiesList = new ArrayList<>(player.getOwnedProperties().size());
+				for (Property p : player.getOwnedProperties()) {
+					playerPropertiesList.add(p.getName());
+				}
+				String tradeOption = "s";
+				int playerPropertyCount = 0;
+				int playerMoneyCount = 0;
+				Property[] giveProperties = new Property[playerPropertiesList.size()];
+				do {
+					String[] playerPropertiesArr = playerPropertiesList.toArray(new String[playerPropertiesList.size()]);
 
-				String[] playerPropertiesArr = playerPropertiesList.toArray(new String[playerPropertiesList.size()]);
-
-				tradeOption = gui.getUserButtonPressed("What would you like to give in the trade? \nYou have chosen " + playerPropertyCount + " properties, " +
-						"and " + playerMoneyCount + " dollars", "Properties", "Money", "Pick what you want to trade for");
-				if (tradeOption == "Properties") {
-					if (playerPropertiesList.isEmpty()) {
-						gui.showMessage("You have no more properties to trade");
-					} else {
-						String chosenProperty = gui.getUserSelection("Which property would you like to trade?", playerPropertiesArr);
-						for (Property p : player.getOwnedProperties()) {
-							if (p.getName() == chosenProperty) {
-								giveProperties[playerPropertyCount++] = p;
-								for (int i = 0; i < playerPropertiesList.size(); i++) {
-									if (playerPropertiesList.get(i) == chosenProperty) {
-										playerPropertiesList.remove(i);
+					tradeOption = gui.getUserButtonPressed("What would you like to give in the trade? \nYou have chosen " + playerPropertyCount + " properties, " +
+							"and " + playerMoneyCount + " dollars", "Properties", "Money", "Pick what you want to trade for");
+					if (tradeOption == "Properties") {
+						if (playerPropertiesList.isEmpty()) {
+							gui.showMessage("You have no more properties to trade");
+						} else {
+							String chosenProperty = gui.getUserSelection("Which property would you like to trade?", playerPropertiesArr);
+							for (Property p : player.getOwnedProperties()) {
+								if (p.getName() == chosenProperty) {
+									giveProperties[playerPropertyCount++] = p;
+									for (int i = 0; i < playerPropertiesList.size(); i++) {
+										if (playerPropertiesList.get(i) == chosenProperty) {
+											playerPropertiesList.remove(i);
+										}
 									}
 								}
 							}
 						}
+					} else if (tradeOption == "Money") {
+						playerMoneyCount = gui.getUserInteger("How much money would like to add to the trade?");
 					}
-				} else if (tradeOption == "Money") {
-					playerMoneyCount = gui.getUserInteger("How much money would like to add to the trade?");
+				} while (tradeOption != "Pick what you want to trade for");
+
+				//Second part where the player chooses what to receive from trade
+				ArrayList<String> tradeePropertiesList = new ArrayList<>(tradee.getOwnedProperties().size());
+
+				for (Property p : tradee.getOwnedProperties()) {
+					tradeePropertiesList.add(p.getName());
 				}
-			} while (tradeOption != "Pick what you want to trade for");
+				Property[] receiveProperties = new Property[tradeePropertiesList.size()];
+				int tradeePropertyCount = 0;
+				int tradeeMoneyCount = 0;
 
-			//Second part where the player chooses what to receive from trade
-			ArrayList<String> tradeePropertiesList = new ArrayList<>(tradee.getOwnedProperties().size());
-
-			for (Property p : tradee.getOwnedProperties()) {
-				tradeePropertiesList.add(p.getName());
-			}
-			Property[] receiveProperties = new Property[tradeePropertiesList.size()];
-			int tradeePropertyCount = 0;
-			int tradeeMoneyCount = 0;
-
-			do {
-				String[] tradeePropertiesArr = tradeePropertiesList.toArray(new String[tradeePropertiesList.size()]);
-				tradeOption = gui.getUserButtonPressed("What would you like to receive in the trade? \nYou have chosen " + tradeePropertyCount + " properties, " +
-						"and " + tradeeMoneyCount + " dollars", "Properties", "Money", "Get approval for trade");
-				if (tradeOption == "Properties") {
-					if (tradeePropertiesList.isEmpty()) {
-						gui.showMessage("You have no more properties to chose from");
-					} else {
-						String chosenProperty = gui.getUserSelection("Which property would you like to trade?", tradeePropertiesArr);
-						for (Property p : tradee.getOwnedProperties()) {
-							if (p.getName() == chosenProperty) {
-								receiveProperties[tradeePropertyCount++] = p;
-								for (int i = 0; i < tradeePropertiesList.size(); i++) {
-									if (tradeePropertiesList.get(i) == chosenProperty) {
-										tradeePropertiesList.remove(i);
+				do {
+					String[] tradeePropertiesArr = tradeePropertiesList.toArray(new String[tradeePropertiesList.size()]);
+					tradeOption = gui.getUserButtonPressed("What would you like to receive in the trade? \nYou have chosen " + tradeePropertyCount + " properties, " +
+							"and " + tradeeMoneyCount + " dollars", "Properties", "Money", "Get approval for trade");
+					if (tradeOption == "Properties") {
+						if (tradeePropertiesList.isEmpty()) {
+							gui.showMessage("You have no more properties to chose from");
+						} else {
+							String chosenProperty = gui.getUserSelection("Which property would you like to trade?", tradeePropertiesArr);
+							for (Property p : tradee.getOwnedProperties()) {
+								if (p.getName() == chosenProperty) {
+									receiveProperties[tradeePropertyCount++] = p;
+									for (int i = 0; i < tradeePropertiesList.size(); i++) {
+										if (tradeePropertiesList.get(i) == chosenProperty) {
+											tradeePropertiesList.remove(i);
+										}
 									}
 								}
 							}
 						}
+					} else if (tradeOption == "Money") {
+						tradeeMoneyCount = gui.getUserInteger("How much money would like to add to the trade?");
 					}
-				} else if (tradeOption == "Money"){
-					tradeeMoneyCount = gui.getUserInteger("How much money would like to add to the trade?");
-				}
-			}while (tradeOption != "Get approval for trade") ;
+				} while (tradeOption != "Get approval for trade");
 
-			String givePropertiesString = propArrayStringCreator(giveProperties);
-            String receivePropertiesString = propArrayStringCreator(receiveProperties);
+				String givePropertiesString = propArrayStringCreator(giveProperties);
+				String receivePropertiesString = propArrayStringCreator(receiveProperties);
 
-			String s = player.getName() + " you want to trade " + givePropertiesString + " and " + playerMoneyCount + " dollars with "
+				String s = player.getName() + " you want to trade " + givePropertiesString + " and " + playerMoneyCount + " dollars with "
 						+ tradee.getName() + " for " + receivePropertiesString + " and " + tradeeMoneyCount + ".";
-			String tradeAccept = gui.getUserButtonPressed(s, "Accept Trade", "Deny");
-			if(tradeAccept == "Deny"){
-			    gui.getUserButtonPressed(tradee.getName() + " has denied the trade. Would you like to renegotiate?", "Yes", "No");
-
-
-            }
-            payment(tradee,tradeeMoneyCount,player);
-			payment(player,playerMoneyCount,tradee);
-			tradeProperties(tradee, player,receiveProperties);
-			tradeProperties(player, tradee,giveProperties);
-
-            gui.showMessage("Trade is complete.");
+				String tradeAccept = gui.getUserButtonPressed(s, "Accept Trade", "Deny");
+				if (tradeAccept == "Deny") {
+					choosePlayer = gui.getUserButtonPressed(tradee.getName() + " has denied the trade. Would you like to renegotiate?", "Yes", "No");
+				} else {
+					payment(tradee, tradeeMoneyCount, player);
+					payment(player, playerMoneyCount, tradee);
+					tradeProperties(tradee, player, receiveProperties);
+					tradeProperties(player, tradee, giveProperties);
+					gui.showMessage("Trade is complete.");
+				}
+			}while(choosePlayer != "No");
 	}
 
 
