@@ -448,7 +448,31 @@ public class GameController {
 	 */
 
 
-	public void obtainCash(Player player, int amount) throws PlayerBrokeException {
+	public void obtainCash(Player player, int amount){
+		do{
+			String choice = gui.getUserButtonPressed("You are missing " + amount + " dollars. How would you like to get the money?",
+																				"Trade", "Sell houses", "Mortgage", "Forefit like a bitch");
+			switch(choice) {
+				case "Trade":
+					int amountBefore = player.getBalance();
+					try {
+						trade(player);
+					}catch(PlayerBrokeException e){
+
+					}
+					int amountAfter = player.getBalance();
+					amount = amount-(amountAfter-amountBefore);
+				case "Sell Houses":
+
+				case "Mortgage":
+
+				default:
+			}
+
+		}while(true);
+	}
+
+	/*public void obtainCash(Player player, int amount) throws PlayerBrokeException {
 		// TODO implement
 		String button = "";
 		for (Player bidder : game.getPlayers()) {
@@ -498,7 +522,7 @@ public class GameController {
 				throw new PlayerBrokeException(player);
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * This method implements the activity of offering a player to buy
@@ -736,18 +760,6 @@ public class GameController {
 		}
 	}
 
-	public void checkforbuildable(RealEstate estate) {
-		Set<RealEstate> estateSet = RealEstate.getcolormap(estate);
-		int counter = 0;
-		for (RealEstate realEstate : estateSet) {
-			if (realEstate.getOwner() == estate.getOwner()) {
-				counter++;
-			}
-		}
-		if (counter == estateSet.size())
-			estate.setBuildable(true);
-	}
-
 	/**
 	 * Method that allows player to trade properties and money for properties and or money with other players
 	 * @author s175124
@@ -893,8 +905,20 @@ public class GameController {
 		}
 	}
 
+	public void checkforbuildable(RealEstate estate) {
+		Set<RealEstate> estateSet = RealEstate.getcolormap(estate);
+		int counter = 0;
+		for (RealEstate realEstate : estateSet) {
+			if (realEstate.getOwner() == estate.getOwner()) {
+				counter++;
+			}
+		}
+		if (counter == estateSet.size())
+			estate.setBuildable(true);
+	}q
+
 	/**
-	 * sorry gulle fixed it
+	 * sorry gulle i fixed it
 	 * @author s175124
 	 * @param player
 	 */
