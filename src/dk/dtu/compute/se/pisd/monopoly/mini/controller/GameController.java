@@ -127,23 +127,23 @@ public class GameController {
 		while (!terminated) {
 			//The player choses which function they would like to do, which then calls the method
 			Player player = players.get(current);
-			String choice = gui.getUserButtonPressed("What would you like to do " + game.getCurrentPlayer().getName()+"?", "Roll", "Trade", "Build", "Mortgage");
-			switch(choice){
-				case "Roll":
-					break;
+			String choice;
+			do{
+			choice = gui.getUserButtonPressed("What would you like to do " + game.getCurrentPlayer().getName()+"?", "Roll", "Trade", "Build", "Mortgage");
+			switch(choice) {
 				case "Trade":
 					try {
-                        trade(game.getCurrentPlayer());
-                    } catch (PlayerBrokeException e){
+						trade(game.getCurrentPlayer());
+					} catch (PlayerBrokeException e) {
 
-                    }
+					}
 				case "Build":
 					buildHouses(players);
 				case "Mortgage":
 
-
 				default:
 			}
+			}while(choice != "Roll");
 			if (!player.isBroke()) {
 				try {
 					this.makeMove(player);
@@ -758,6 +758,7 @@ public class GameController {
 						count++;
 					}
 				}
+
 				choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
 			Player tradee = new Player();
 			for (int i = 0; i < game.getPlayers().size(); i++) {
@@ -848,19 +849,23 @@ public class GameController {
 			if(tradeAccept == "Deny"){
 			    gui.getUserButtonPressed(tradee.getName() + " has denied the trade. Would you like to renegotiate?", "Yes", "No");
 
+
             }
             payment(tradee,tradeeMoneyCount,player);
 			payment(player,playerMoneyCount,tradee);
+			tradeProperties(tradee, player,receiveProperties);
+			tradeProperties(player, tradee,giveProperties);
 
-
-            gui.getUserButtonPressed("Trade is complete.");
+            gui.showMessage("Trade is complete.");
 	}
 
 
 	public String propArrayStringCreator(Property[] propArray) {
 		String s = "";
 		for (int i = 0; i < propArray.length; i++) {
-			if (propArray[i+1] == null) {
+			if(propArray[i] == null){
+				break;
+			} else if (propArray[i+1] == null) {
 				s += propArray[i].getName();
 				break;
 			}
@@ -870,6 +875,17 @@ public class GameController {
 		return s;
 	}
 
+	public void tradeProperties(Player giver, Player receiver, Property[] properties){
+		for(Property p: properties){
+			if(p == null){
+				break;
+			}
+			giver.removeOwnedProperty(p);
+			receiver.addOwnedProperty(p);
+			p.setOwner(receiver);
+
+		}
+	}
 
 
 
