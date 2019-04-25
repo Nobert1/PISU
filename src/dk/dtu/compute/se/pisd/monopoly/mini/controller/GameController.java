@@ -141,6 +141,7 @@ public class GameController {
 					buildHouses(players);
 				case "Mortgage":
 
+
 				default:
 			}
 			if (!player.isBroke()) {
@@ -838,21 +839,8 @@ public class GameController {
 				}
 			}while (tradeOption != "Get approval for trade") ;
 
-			String givePropertiesString = "";
-			for(Property p: giveProperties){
-			    if(p == null){
-			        break;
-                }
-			    givePropertiesString += p.getName() + ", ";
-            }
-
-            String receivePropertiesString = "";
-			for(Property p: receiveProperties){
-                if(p == null){
-                    break;
-                }
-                    receivePropertiesString+= p.getName() + ", ";
-                }
+			String givePropertiesString = propArrayStringCreator(giveProperties);
+            String receivePropertiesString = propArrayStringCreator(receiveProperties);
 
 			String s = player.getName() + " you want to trade " + givePropertiesString + " and " + playerMoneyCount + " dollars with "
 						+ tradee.getName() + " for " + receivePropertiesString + " and " + tradeeMoneyCount + ".";
@@ -863,11 +851,23 @@ public class GameController {
             }
             payment(tradee,tradeeMoneyCount,player);
 			payment(player,playerMoneyCount,tradee);
-			for(Property p: giveProperties){
-			    tradee.addOwnedProperty(p);
-            }
+
 
             gui.getUserButtonPressed("Trade is complete.");
+	}
+
+
+	public String propArrayStringCreator(Property[] propArray) {
+		String s = "";
+		for (int i = 0; i < propArray.length; i++) {
+			if (propArray[i+1] == null) {
+				s += propArray[i].getName();
+				break;
+			}
+			s += propArray[i].getName() + ", ";
+
+		}
+		return s;
 	}
 
 
