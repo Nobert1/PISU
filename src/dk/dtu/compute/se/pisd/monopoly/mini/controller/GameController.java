@@ -137,9 +137,16 @@ public class GameController {
 					} catch (PlayerBrokeException e) {
 
 					}
+					break;
 				case "Build":
-					buildHouses(players);
+					try {
+						buildHouses(game.getCurrentPlayer());
+					} catch (PlayerBrokeException e) {
+
+					}
+					break;
 				case "Mortgage":
+					break;
 
 				default:
 			}
@@ -853,6 +860,7 @@ public class GameController {
 					tradeProperties(tradee, player, receiveProperties);
 					tradeProperties(player, tradee, giveProperties);
 					gui.showMessage("Trade is complete.");
+					break;
 				}
 			}while(choosePlayer != "No");
 	}
@@ -885,74 +893,61 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * sorry gulle fixed it
+	 * @author s175124
+	 * @param player
+	 */
 
-
-	public void buildHouses(List<Player> players) {
-
-		for (Player p : players) {
-			ArrayList<RealEstate> realEstates = new ArrayList<>();
-			ArrayList<RealEstate> buildablelist = new ArrayList<>();
-			for (Property property : p.getOwnedProperties()) {
-				if (property instanceof RealEstate) {
-					realEstates.add((RealEstate) property);
-				}
-			}
-			for (RealEstate realEstate : realEstates) {
-				checkforbuildable(realEstate);
-			}
-			//Tjekker om der overhovedet er nogle real estates der kan bygges på. TODO brug de nye color hashsets for optimering.
-			for (RealEstate realEstate : realEstates) {
-				if (realEstate.isBuildable() == true) {
-					buildablelist.add(realEstate);
-				}
-			}
-				if (buildablelist.size() > 0) {
-					String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
-
-					if (userbutton.equals("yes")) {
-						//Makes the list of real estates that can be build on.
-
-						String[] buttons = new String[buildablelist.size() + 1];
-						int incrementer = 0;
-							for (RealEstate estate : buildablelist) {
-								buttons[incrementer] = estate.getName();
-								incrementer++;
-							}
-						buttons[buttons.length - 1] = "exit";
-						while (true) {
-							String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
-
-							if (button.equals("exit")) {
-								break;
-							}
-
-							//Jeg ved jo allerede hvad det er for en ejendom, er der en anden måde end at iterere igen?
-							String[] houses = {"1", "2", "3", "hotel"};
-							String button2 = gui.getUserButtonPressed("What would you like to have on your RealEstate", houses);
-							for (RealEstate estate : buildablelist) {
-								if (button.equals(estate.getName())) {
-									if (button2.equals("hotel")) {
-										if (estate.isHotel()) {
-											gui.showMessage("You already have a hotel!");
-										} else {
-										p.setBalance(p.getBalance() - 4000 + 1000 * estate.getHouses());
-										estate.setHotel(true);
-										estate.setHouses(0);
-										}
-									} else if (estate.getHouses() >= Integer.valueOf(button2)) {
-										//TODO Thow an exeception?
-										gui.showMessage("what you doin boiiiiiiii");
-									} else {
-										p.setBalance(p.getBalance() - 1000 * Integer.valueOf(button2) + estate.getHouses() * 1000);
-										estate.setHouses(Integer.valueOf(button2));
-									}
-								}
-							}
-						}
-					}
+	public void buildHouses(Player player) throws PlayerBrokeException{
+		int counter = 0;
+		//Checks how many buildable properties the player has.
+		for(Property p: player.getOwnedProperties()){
+			if(p instanceof RealEstate){
+				checkforbuildable((RealEstate) p);
+				if(((RealEstate) p).isBuildable()){
+					counter++;
 				}
 			}
 		}
+		//Creates array with properties that the player is able to build on
+		int counter2 = 0;
+		String[] buildList = new String[counter];
+		for(Property p: player.getOwnedProperties()){
+			if(p instanceof RealEstate){
+				if(((RealEstate) p).isBuildable()){
+					buildList[counter2] = p.getName();
+					counter2++;
+				}
+			}
+		}
+		if(counter == 0){
+			gui.showMessage("You are unable to build on any properties");
+		} else {
+			String propertyChoice = gui.getUserButtonPressed("Which property would you like to build on?", buildList);
+			RealEstate property = new RealEstate();
+			for(Property p: player.getOwnedProperties()){
+					if (p.getName() == propertyChoice) {
+						property = (RealEstate) p;
+					}
+			}
+			String[] houseAmount = new String[5-property.getHouses()];
+			for(int i = 1; i <= houseAmount.length; i++){
+				houseAmount[i-1] = String.valueOf(i);
+			}
+			String houseChoice = gui.getUserButtonPressed("How many houses would you like build? Once there is built 5 houses, they will turn into a hotel." +
+					"\nThere is currently " + property.getHouses() + " houses built. The price per house is " + property.getRent(),houseAmount);
+			paymentToBank(player,property.getRent()*Integer.valueOf(houseChoice));
+			if(property.getHouses()+Integer.valueOf(houseChoice) < 5) {
+				property.setHouses(property.getHouses() + Integer.valueOf(houseChoice));
+				gui.showMessage("There have been built " + Integer.valueOf(houseChoice) + " houses.");
+			} else {
+				property.setHotel(true);
+				gui.showMessage("You have now built a hotel.");
+			}
+		}
+	}
+
 
 	public void setDiecount(int diecount1, int diecount2) {
 		Diecount = diecount1 + diecount2;
