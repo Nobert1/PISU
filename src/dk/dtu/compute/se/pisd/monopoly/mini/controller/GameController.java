@@ -426,12 +426,19 @@ public class GameController {
 		property.setMortgaged(true);
 	}
 
-	public void mortgage(Player player, String[] buttons) {
+	public void mortgage(Player player) {
 			//Igen jeg har jo fundet navnet, burde være lige til bare at finde den sidste.
-			String button = gui.getUserButtonPressed(player.getName() + " What would you like to mortgage?", buttons);
-
-			for (Property property : player.getOwnedProperties()) {
+		String[] propArray = new String[player.getOwnedProperties().size()];
+		int i = 0;
+		for(Property p: player.getOwnedProperties()){
+			propArray[i] = p.getName();
+		}
+		String button = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
+		for (Property property : player.getOwnedProperties()) {
 				if (property.getName().equals(button)) {
+					if(((RealEstate) property).getHouses() > 0){
+
+					}
 					mortgageproperty(property);
 					break;
 				}
@@ -465,12 +472,17 @@ public class GameController {
 				case "Sell Houses":
 
 				case "Mortgage":
-
+					amountBefore = player.getBalance();
+					mortgage(player);
+					amountAfter = player.getBalance();
+					amount -=(amountAfter-amountBefore);
 				default:
 			}
 
-		}while(true);
+		}while(amount > 0);
 	}
+
+
 
 	/*public void obtainCash(Player player, int amount) throws PlayerBrokeException {
 		// TODO implement
