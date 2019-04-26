@@ -415,35 +415,6 @@ public class GameController {
 			}
 		}
 
-	/**
-	 * I need a method here, just not sure yet how to do it. Could also be a boolean status, probably easier to work with
-	 * Gustav Rmil Nobert
-	 *
-	 * @param property
-	 */
-	public void mortgageproperty(Property property) {
-		paymentFromBank(property.getOwner(), property.getCost() / 2);
-		property.setMortgaged(true);
-	}
-
-	public void mortgage(Player player) {
-			//Igen jeg har jo fundet navnet, burde være lige til bare at finde den sidste.
-		String[] propArray = new String[player.getOwnedProperties().size()];
-		int i = 0;
-		for(Property p: player.getOwnedProperties()){
-			propArray[i] = p.getName();
-		}
-		String button = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
-		for (Property property : player.getOwnedProperties()) {
-				if (property.getName().equals(button)) {
-					if(((RealEstate) property).getHouses() > 0){
-
-					}
-					mortgageproperty(property);
-					break;
-				}
-			}
-	}
 
 	/**
 	 * Gustav Emil Nobert
@@ -483,6 +454,57 @@ public class GameController {
 	}
 
 
+	/**
+	 * I need a method here, just not sure yet how to do it. Could also be a boolean status, probably easier to work with
+	 * Gustav Rmil Nobert
+	 *
+	 * @param property
+	 */
+	public void mortgageproperty(Property property) {
+		paymentFromBank(property.getOwner(), property.getCost() / 2);
+		property.setMortgaged(true);
+	}
+
+	/**
+	 * fixed
+	 * @author s175124
+	 * @param player
+	 */
+
+	public void mortgage(Player player) {
+
+		String[] propArray = new String[player.getOwnedProperties().size()];
+		int i = 0;
+		String choice;
+		for (Property p : player.getOwnedProperties()) {
+			propArray[i] = p.getName();
+			do {
+
+				String button = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
+				for (Property property : player.getOwnedProperties()) {
+					if (property.getName().equals(button)) {
+						if (((RealEstate) property).getHouses() > 0) {
+							choice = gui.getUserButtonPressed("You are unable to mortgage this property as there are houses on one or more of the same colour. " +
+									"\nWould you like to sell these houses for 50% of what you payed and mortgage?", "Yes", "No");
+							sellHousesMortgage((RealEstate) property);
+						}
+						mortgageproperty(property);
+						break;
+					}
+				}
+			} while (choice != "No");
+		}
+	}
+
+	public void sellHousesMortgage(RealEstate realEstate){
+		Set<RealEstate> estateSet = RealEstate.getcolormap(realEstate);
+		int counter = 0;
+		for (RealEstate r : estateSet) {
+			if (realEstate.getOwner()  realEstate.getOwner()) {
+				counter++;
+			}
+		}
+	}
 
 	/*public void obtainCash(Player player, int amount) throws PlayerBrokeException {
 		// TODO implement
