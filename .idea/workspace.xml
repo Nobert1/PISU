@@ -17,11 +17,38 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="67">
-              <caret line="160" column="26" lean-forward="true" selection-start-line="160" selection-start-column="26" selection-end-line="160" selection-end-column="26" />
+            <state relative-caret-position="175">
+              <caret line="117" selection-start-line="117" selection-end-line="132" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/CardMove.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="188">
+              <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Card.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="19" column="7" lean-forward="true" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Chance.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
             </state>
           </provider>
         </entry>
@@ -35,50 +62,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="78" column="8" lean-forward="true" selection-start-line="78" selection-start-column="8" selection-end-line="78" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/test/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="26" column="31" lean-forward="true" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
+            <state relative-caret-position="202">
+              <caret line="76" column="23" lean-forward="true" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="23" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#552#559#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/designpatterns/Subject.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/test/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Player.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/test/PropertyTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
+            <state relative-caret-position="463">
+              <caret line="146" column="43" selection-start-line="146" selection-start-column="43" selection-end-line="146" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -98,7 +98,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/test/dk/dtu/compute/se/pisd/monopoly/mini/test/SpaceTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
+            <state relative-caret-position="528">
               <caret line="36" selection-start-line="36" selection-end-line="36" />
             </state>
           </provider>
@@ -170,9 +170,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
-    <option name="width" value="974" />
-    <option name="height" value="1045" />
+    <option name="x" value="1912" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1173" />
   </component>
   <component name="ProjectView">
     <navigator currentView="PackagesPane" proportions="" version="1">
@@ -211,6 +212,30 @@
               <item name="dk.dtu.compute.se.pisd" type="1f31426a:PackageElementNode" />
               <item name="monopoly.mini" type="1f31426a:PackageElementNode" />
               <item name="model" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="PISU" type="58d84e3e:PackageViewProjectNode" />
+              <item name="dk.dtu.compute.se.pisd.monopoly.mini" type="616d4139:PackageViewModuleNode" />
+              <item name="dk.dtu.compute.se.pisd" type="1f31426a:PackageElementNode" />
+              <item name="monopoly.mini" type="1f31426a:PackageElementNode" />
+              <item name="model" type="1f31426a:PackageElementNode" />
+              <item name="cards" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="PISU" type="58d84e3e:PackageViewProjectNode" />
+              <item name="dk.dtu.compute.se.pisd.monopoly.mini" type="616d4139:PackageViewModuleNode" />
+              <item name="dk.dtu.compute.se.pisd" type="1f31426a:PackageElementNode" />
+              <item name="monopoly.mini" type="1f31426a:PackageElementNode" />
+              <item name="model" type="1f31426a:PackageElementNode" />
+              <item name="exceptions" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="PISU" type="58d84e3e:PackageViewProjectNode" />
+              <item name="dk.dtu.compute.se.pisd.monopoly.mini" type="616d4139:PackageViewModuleNode" />
+              <item name="dk.dtu.compute.se.pisd" type="1f31426a:PackageElementNode" />
+              <item name="monopoly.mini" type="1f31426a:PackageElementNode" />
+              <item name="model" type="1f31426a:PackageElementNode" />
+              <item name="properties" type="1f31426a:PackageElementNode" />
             </path>
             <path>
               <item name="PISU" type="58d84e3e:PackageViewProjectNode" />
@@ -471,7 +496,7 @@
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556029569152" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556552546183" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="create.test.in.the.same.root" value="true" />
@@ -510,8 +535,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.GameTest.getCurrentPlayer">
-    <configuration name="GameTest.addPlayer" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.GameTest.returnCardToDeck">
+    <configuration name="GameTest.drawCardFromDeck" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="dk.dtu.compute.se.pisd.monopoly.mini" />
       <extension name="coverage">
         <pattern>
@@ -521,13 +546,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test" />
       <option name="MAIN_CLASS_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test.GameTest" />
-      <option name="METHOD_NAME" value="addPlayer" />
+      <option name="METHOD_NAME" value="drawCardFromDeck" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GameTest.getCurrentPlayer" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GameTest.getSpaces" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="dk.dtu.compute.se.pisd.monopoly.mini" />
       <extension name="coverage">
         <pattern>
@@ -537,13 +562,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test" />
       <option name="MAIN_CLASS_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test.GameTest" />
-      <option name="METHOD_NAME" value="getCurrentPlayer" />
+      <option name="METHOD_NAME" value="getSpaces" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GameTest.getPlayers" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GameTest.returnCardToDeck" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="dk.dtu.compute.se.pisd.monopoly.mini" />
       <extension name="coverage">
         <pattern>
@@ -553,13 +578,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test" />
       <option name="MAIN_CLASS_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test.GameTest" />
-      <option name="METHOD_NAME" value="getPlayers" />
+      <option name="METHOD_NAME" value="returnCardToDeck" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SpaceTest.getIndex" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GameTest.setCardDeck" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="dk.dtu.compute.se.pisd.monopoly.mini" />
       <extension name="coverage">
         <pattern>
@@ -568,14 +593,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test" />
-      <option name="MAIN_CLASS_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test.SpaceTest" />
-      <option name="METHOD_NAME" value="getIndex" />
+      <option name="MAIN_CLASS_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test.GameTest" />
+      <option name="METHOD_NAME" value="setCardDeck" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SpaceTest.getName" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="GameTest.shuffleCardDeck" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="dk.dtu.compute.se.pisd.monopoly.mini" />
       <extension name="coverage">
         <pattern>
@@ -584,8 +609,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test" />
-      <option name="MAIN_CLASS_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test.SpaceTest" />
-      <option name="METHOD_NAME" value="getName" />
+      <option name="MAIN_CLASS_NAME" value="dk.dtu.compute.se.pisd.monopoly.mini.test.GameTest" />
+      <option name="METHOD_NAME" value="shuffleCardDeck" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -593,11 +618,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.GameTest.getCurrentPlayer" />
-        <item itemvalue="JUnit.GameTest.addPlayer" />
-        <item itemvalue="JUnit.GameTest.getPlayers" />
-        <item itemvalue="JUnit.SpaceTest.getIndex" />
-        <item itemvalue="JUnit.SpaceTest.getName" />
+        <item itemvalue="JUnit.GameTest.returnCardToDeck" />
+        <item itemvalue="JUnit.GameTest.drawCardFromDeck" />
+        <item itemvalue="JUnit.GameTest.shuffleCardDeck" />
+        <item itemvalue="JUnit.GameTest.setCardDeck" />
+        <item itemvalue="JUnit.GameTest.getSpaces" />
       </list>
     </recent_temporary>
   </component>
@@ -612,7 +637,8 @@
       <option name="presentableId" value="Default" />
       <updated>1549456343340</updated>
       <workItem from="1550584639298" duration="6113000" />
-      <workItem from="1556021072415" duration="5947000" />
+      <workItem from="1556021072415" duration="6045000" />
+      <workItem from="1556526859704" duration="3544000" />
     </task>
     <task id="LOCAL-00001" summary="Added test package, junit4 and made testclasses for game, player, property and space.">
       <created>1556028954076</created>
@@ -621,43 +647,50 @@
       <option name="project" value="LOCAL" />
       <updated>1556028954076</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added some game tests.">
+      <created>1556035539984</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1556035539984</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PropertyTest_getCost - 2019.04.23 at 15h 57m 53s.xml">
-      <configuration name="PropertyTest.getCost" configurationId="JUnit" />
+    <history-entry file="GameTest_shuffleCardDeck - 2019.04.29 at 17h 28m 45s.xml">
+      <configuration name="GameTest.shuffleCardDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PropertyTest_getOwner - 2019.04.23 at 15h 58m 57s.xml">
-      <configuration name="PropertyTest.getOwner" configurationId="JUnit" />
+    <history-entry file="GameTest_shuffleCardDeck - 2019.04.29 at 17h 28m 47s.xml">
+      <configuration name="GameTest.shuffleCardDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SpaceTest_getName - 2019.04.23 at 16h 01m 14s.xml">
-      <configuration name="SpaceTest.getName" configurationId="JUnit" />
+    <history-entry file="GameTest_shuffleCardDeck - 2019.04.29 at 17h 28m 49s.xml">
+      <configuration name="GameTest.shuffleCardDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SpaceTest_getName - 2019.04.23 at 16h 01m 26s.xml">
-      <configuration name="SpaceTest.getName" configurationId="JUnit" />
+    <history-entry file="GameTest_shuffleCardDeck - 2019.04.29 at 17h 28m 52s.xml">
+      <configuration name="GameTest.shuffleCardDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SpaceTest_getIndex - 2019.04.23 at 16h 02m 06s.xml">
-      <configuration name="SpaceTest.getIndex" configurationId="JUnit" />
+    <history-entry file="GameTest_shuffleCardDeck - 2019.04.29 at 17h 29m 12s.xml">
+      <configuration name="GameTest.shuffleCardDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GameTest_getPlayers - 2019.04.23 at 16h 08m 09s.xml">
-      <configuration name="GameTest.getPlayers" configurationId="JUnit" />
+    <history-entry file="GameTest_shuffleCardDeck - 2019.04.29 at 17h 30m 26s.xml">
+      <configuration name="GameTest.shuffleCardDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GameTest_getPlayers - 2019.04.23 at 16h 08m 30s.xml">
-      <configuration name="GameTest.getPlayers" configurationId="JUnit" />
+    <history-entry file="GameTest_drawCardFromDeck - 2019.04.29 at 17h 35m 57s.xml">
+      <configuration name="GameTest.drawCardFromDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GameTest_getPlayers - 2019.04.23 at 16h 14m 34s.xml">
-      <configuration name="GameTest.getPlayers" configurationId="JUnit" />
+    <history-entry file="GameTest_drawCardFromDeck - 2019.04.29 at 17h 36m 21s.xml">
+      <configuration name="GameTest.drawCardFromDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GameTest_addPlayer - 2019.04.23 at 16h 18m 57s.xml">
-      <configuration name="GameTest.addPlayer" configurationId="JUnit" />
+    <history-entry file="GameTest_returnCardToDeck - 2019.04.29 at 17h 39m 21s.xml">
+      <configuration name="GameTest.returnCardToDeck" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GameTest_getCurrentPlayer - 2019.04.23 at 16h 22m 49s.xml">
-      <configuration name="GameTest.getCurrentPlayer" configurationId="JUnit" />
+    <history-entry file="GameTest_returnCardToDeck - 2019.04.29 at 17h 39m 34s.xml">
+      <configuration name="GameTest.returnCardToDeck" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12060000" />
+    <option name="totallyTimeSpent" value="15702000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -669,7 +702,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1753" height="954" extended-state="6" />
+    <frame x="1913" y="-7" width="1753" height="1062" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
@@ -677,15 +710,15 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.1740413" />
+      <window_info content_ui="combo" id="Project" order="5" visible="true" weight="0.17581122" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="2" weight="0.32806805" />
+      <window_info anchor="bottom" id="Messages" order="2" weight="0.32760474" />
       <window_info anchor="bottom" id="Version Control" order="3" />
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Find" order="5" weight="0.328877" />
-      <window_info active="true" anchor="bottom" id="Run" order="6" visible="true" weight="0.2964763" />
+      <window_info active="true" anchor="bottom" id="Run" order="6" visible="true" weight="0.2964554" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -708,7 +741,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added test package, junit4 and made testclasses for game, player, property and space." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added test package, junit4 and made testclasses for game, player, property and space." />
+    <MESSAGE value="Added some game tests." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some game tests." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/pom.xml">
@@ -720,13 +754,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dk.dtu.compute.se.pisd.monopoly.mini.iml">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/CardMove.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/CardReceiveMoneyFromBank.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -768,20 +795,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Card.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="8" column="11" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Chance.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/view/View.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1984">
@@ -813,37 +826,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Space.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/test/PropertyTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Tax.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/test/dk/dtu/compute/se/pisd/monopoly/mini/test/SpaceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/designpatterns/Subject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -858,13 +840,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java">
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/test/PropertyTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="67">
-          <caret line="160" column="26" lean-forward="true" selection-start-line="160" selection-start-column="26" selection-end-line="160" selection-end-column="26" />
+        <state relative-caret-position="800">
+          <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Space.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/test/dk/dtu/compute/se/pisd/monopoly/mini/test/SpaceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="528">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Tax.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -875,10 +878,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/test/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java">
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/CardMove.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="26" column="31" lean-forward="true" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
+        <state relative-caret-position="188">
+          <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Card.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="19" column="7" lean-forward="true" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Chance.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="117" selection-start-line="117" selection-end-line="132" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -887,8 +911,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="78" column="8" lean-forward="true" selection-start-line="78" selection-start-column="8" selection-end-line="78" selection-end-column="8" />
+        <state relative-caret-position="202">
+          <caret line="76" column="23" lean-forward="true" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="23" />
+          <folding>
+            <element signature="e#552#559#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/test/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="146" column="43" selection-start-line="146" selection-start-column="43" selection-end-line="146" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
