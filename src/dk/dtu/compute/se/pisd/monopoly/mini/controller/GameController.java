@@ -475,7 +475,7 @@ public class GameController {
 
 		String[] propArray = new String[player.getOwnedProperties().size()];
 		int i = 0;
-		String choice;
+		String choice ="";
 		for (Property p : player.getOwnedProperties()) {
 			propArray[i] = p.getName();
 			do {
@@ -501,7 +501,7 @@ public class GameController {
 		Set<RealEstate> estateSet = RealEstate.getcolormap(realEstate);
 		int counter = 0;
 		for (RealEstate r : estateSet) {
-			if (realEstate.getOwner()  realEstate.getOwner()) {
+			if (r.getOwner() ==  realEstate.getOwner()) {
 				counter++;
 			}
 		}
@@ -949,7 +949,7 @@ public class GameController {
 		}
 		if (counter == estateSet.size())
 			estate.setBuildable(true);
-	}q
+	}
 
 	/**
 	 * sorry gulle i fixed it
