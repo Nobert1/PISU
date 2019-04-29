@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/dk.dtu.compute.se.pisd.monopoly.mini.iml" filepath="$PROJECT_DIR$/dk.dtu.compute.se.pisd.monopoly.mini.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dk.dtu.compute.se.pisd.monopoly.mini.iml" filepath="$PROJECT_DIR$/.idea/dk.dtu.compute.se.pisd.monopoly.mini.iml" />
     </modules>
   </component>
 </project>

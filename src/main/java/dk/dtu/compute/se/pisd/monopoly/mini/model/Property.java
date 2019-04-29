@@ -121,7 +121,12 @@ public class Property extends Space {
             //      groups of properties (which are not part of the model
             //      yet also need to be taken into account).
 
+            try {
             controller.payment(player, rent, this.getOwner());
+            } catch (PlayerBrokeException e) {
+                //TODO do something with exception
+            }
+
         }
             
         }

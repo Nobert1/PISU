@@ -5,14 +5,11 @@ import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.DALException;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.exceptions.PlayerBrokeException;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Colors;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.PlayerPanel;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -44,6 +41,7 @@ import java.util.regex.Pattern;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
+@SuppressWarnings("Duplicates")
 public class GameController {
 
 	private Game game;
@@ -96,7 +94,7 @@ public class GameController {
 	 */
 
 	public void databaseinteraction () {
-	    String selection = gui.getUserSelection("What you wanna do ","load game", "create game");
+	    String selection = gui.getUserSelection("What you wanna do ","create game", "load game");
 	    if (selection.equals("load game")) {
 	        int gameId = Integer.valueOf(gui.getUserButtonPressed("what game would you like to load", database.generategameIDs()));
             try {
@@ -125,7 +123,32 @@ public class GameController {
 
 		boolean terminated = false;
 		while (!terminated) {
+			//The player choses which function they would like to do, which then calls the method
 			Player player = players.get(current);
+			String choice;
+			do{
+			choice = gui.getUserButtonPressed("What would you like to do " + game.getCurrentPlayer().getName()+"?", "Roll", "Trade", "Build", "Mortgage");
+			switch(choice) {
+				case "Trade":
+					try {
+						trade(game.getCurrentPlayer());
+					} catch (PlayerBrokeException e) {
+
+					}
+					break;
+				case "Build":
+					try {
+						buildHouses(game.getCurrentPlayer());
+					} catch (PlayerBrokeException e) {
+
+					}
+					break;
+				case "Mortgage":
+					break;
+
+				default:
+			}
+			}while(choice != "Roll");
 			if (!player.isBroke()) {
 				try {
 					this.makeMove(player);
@@ -159,7 +182,8 @@ public class GameController {
 
 			}
 
-			Offerhouses(players);
+
+
 
 
 			// TODO offer all players the options to trade etc.
@@ -389,28 +413,6 @@ public class GameController {
 			}
 		}
 
-	/**
-	 * I need a method here, just not sure yet how to do it. Could also be a boolean status, probably easier to work with
-	 * Gustav Rmil Nobert
-	 *
-	 * @param property
-	 */
-	public void mortgageproperty(Property property) {
-		paymentFromBank(property.getOwner(), property.getCost() / 2);
-		property.setMortgaged(true);
-	}
-
-	public void mortgage(Player player, String[] buttons) {
-			//Igen jeg har jo fundet navnet, burde være lige til bare at finde den sidste.
-			String button = gui.getUserButtonPressed(player.getName() + " What would you like to mortgage?", buttons);
-
-			for (Property property : player.getOwnedProperties()) {
-				if (property.getName().equals(button)) {
-					mortgageproperty(property);
-					break;
-				}
-			}
-	}
 
 	/**
 	 * Gustav Emil Nobert
@@ -422,7 +424,88 @@ public class GameController {
 	 */
 
 
-	public void obtainCash(Player player, int amount) throws PlayerBrokeException {
+	public void obtainCash(Player player, int amount){
+		do{
+			String choice = gui.getUserButtonPressed("You are missing " + amount + " dollars. How would you like to get the money?",
+																				"Trade", "Sell houses", "Mortgage", "Forefit like a bitch");
+			switch(choice) {
+				case "Trade":
+					int amountBefore = player.getBalance();
+					try {
+						trade(player);
+					}catch(PlayerBrokeException e){
+
+					}
+					int amountAfter = player.getBalance();
+					amount = amount-(amountAfter-amountBefore);
+				case "Sell Houses":
+
+				case "Mortgage":
+					amountBefore = player.getBalance();
+					mortgage(player);
+					amountAfter = player.getBalance();
+					amount -=(amountAfter-amountBefore);
+				default:
+			}
+
+		}while(amount > 0);
+	}
+
+
+	/**
+	 * I need a method here, just not sure yet how to do it. Could also be a boolean status, probably easier to work with
+	 * Gustav Rmil Nobert
+	 *
+	 * @param property
+	 */
+	public void mortgageproperty(Property property) {
+		paymentFromBank(property.getOwner(), property.getCost() / 2);
+		property.setMortgaged(true);
+	}
+
+	/**
+	 * fixed
+	 * @author s175124
+	 * @param player
+	 */
+
+	public void mortgage(Player player) {
+
+		String[] propArray = new String[player.getOwnedProperties().size()];
+		int i = 0;
+		String choice ="";
+		for (Property p : player.getOwnedProperties()) {
+			propArray[i] = p.getName();
+			do {
+
+				String button = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
+				for (Property property : player.getOwnedProperties()) {
+					if (property.getName().equals(button)) {
+						if (((RealEstate) property).getHouses() > 0) {
+							choice = gui.getUserButtonPressed("You are unable to mortgage this property as there are houses on one or more of the same colour. " +
+									"\nWould you like to sell these houses for 50% of what you payed and mortgage?", "Yes", "No");
+							sellHousesMortgage((RealEstate) property);
+						}
+						gui.showMessage("You will receive ");
+						mortgageproperty(property);
+						break;
+					}
+				}
+			} while (choice != "No");
+		}
+	}
+
+	public void sellHousesMortgage(RealEstate realEstate){
+		Set<RealEstate> estateSet = RealEstate.getcolormap(realEstate);
+		int counter = 0;
+		for (RealEstate r : estateSet) {
+			if (r.getOwner() ==  realEstate.getOwner()) {
+				counter++;
+			}
+		}
+	}
+
+	/*public void obtainCash(Player player, int amount) throws PlayerBrokeException {
 		// TODO implement
 		String button = "";
 		for (Player bidder : game.getPlayers()) {
@@ -472,7 +555,7 @@ public class GameController {
 				throw new PlayerBrokeException(player);
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * This method implements the activity of offering a player to buy
@@ -590,40 +673,21 @@ public class GameController {
 		// TODO auction needs to be implemented
 		int currentBid = 0;
 		int highestBid = 0;
-		int playerAmount = game.getPlayers().size();
-		int currentPlayerNR = 0;
 
-		//Finds which number the current player has in the player array
-		for (int i = 0; game.getPlayers().size() > i; i++) {
-			if (game.getCurrentPlayer() == game.getPlayers().get(i)) {
-				currentPlayerNR = i;
+		ArrayList<Player> bidList = new ArrayList<>(game.getPlayers());
+
+		do{
+			Player p = bidList.remove(0);
+			bidList.add(p);
+			if(p.equals(game.getCurrentPlayer())){
+				break;
 			}
-		}
-
-		//Creates a new player arraylist so the person that landed on the property starts the bidding
-		int moveAmount = game.getPlayers().size() - currentPlayerNR;
-		ArrayList<Player> bidList = new ArrayList<>();
-		for (int i = 0; playerAmount > i; i++) {
-			bidList.add(game.getPlayers().get(i));
-		}
-
-		for (int i = 0; game.getPlayers().size() > i; i++) {
-			if (i == currentPlayerNR) {
-				bidList.remove(0);
-				bidList.add(0, game.getCurrentPlayer());
-			} else if (i == 0) {
-				bidList.remove(moveAmount);
-				bidList.add(moveAmount, game.getPlayers().get(i));
-
-			} else {
-				bidList.remove((i + moveAmount) % game.getPlayers().size());
-				bidList.add((i + moveAmount) % game.getPlayers().size(), game.getPlayers().get(i));
-			}
-		}
+		}while(true);
 
 		//Actual bidding method
 
 		Player highestBidder = new Player();
+		highestBidder.setName("No one");
 		int counter = 0;
 		while (counter < bidList.size() - 1) {
 			for (int i = 0; bidList.size() > i; i++) {
@@ -646,11 +710,11 @@ public class GameController {
 				}
 			}
 		}
-		if (highestBidder != null) {
-		gui.showMessage("Congratulations " + highestBidder.getName() + " you win " + property.getName() + " for " + highestBid + "dollars!");
-		highestBidder.payMoney(highestBid);
-		highestBidder.addOwnedProperty(property);
-		property.setOwner(highestBidder);
+		if (!highestBidder.getName().equals("No one")) {
+			gui.showMessage("Congratulations " + highestBidder.getName() + " you win " + property.getName() + " for " + highestBid + " dollars!");
+			highestBidder.payMoney(highestBid);
+			highestBidder.addOwnedProperty(property);
+			property.setOwner(highestBidder);
 		} else {
 			gui.showMessage("there were no bidders so it remains unowned!");
 		}
@@ -728,6 +792,151 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Method that allows player to trade properties and money for properties and or money with other players
+	 * @author s175124
+	 * @param player
+	 */
+	public void trade(Player player)throws PlayerBrokeException{
+
+			//Player chooses which player they would like to trade
+			String choosePlayer;
+				String[] tradeListString = new String[game.getPlayers().size() - 1];
+				int count = 0;
+				for (int i = 0; i <= tradeListString.length; i++) {
+					if (game.getPlayers().get(i) != player) {
+						tradeListString[count] = game.getPlayers().get(i).getName();
+						count++;
+					}
+				}
+
+				choosePlayer = gui.getUserButtonPressed("Who would you like to trade with?", tradeListString);
+			Player tradee = new Player();
+			for (int i = 0; i < game.getPlayers().size(); i++) {
+				if (game.getPlayers().get(i).getName() == choosePlayer) {
+					tradee = game.getPlayers().get(i);
+				}
+			}
+
+			//First part of trade where the player chooses what they want to trade away
+			//As owned properties is a HashSet there is made and arrayList and a String[] to use for I/O
+			do {
+				ArrayList<String> playerPropertiesList = new ArrayList<>(player.getOwnedProperties().size());
+				for (Property p : player.getOwnedProperties()) {
+					playerPropertiesList.add(p.getName());
+				}
+				String tradeOption = "s";
+				int playerPropertyCount = 0;
+				int playerMoneyCount = 0;
+				Property[] giveProperties = new Property[playerPropertiesList.size()];
+				do {
+					String[] playerPropertiesArr = playerPropertiesList.toArray(new String[playerPropertiesList.size()]);
+
+					tradeOption = gui.getUserButtonPressed("What would you like to give in the trade? \nYou have chosen " + playerPropertyCount + " properties, " +
+							"and " + playerMoneyCount + " dollars", "Properties", "Money", "Pick what you want to trade for");
+					if (tradeOption == "Properties") {
+						if (playerPropertiesList.isEmpty()) {
+							gui.showMessage("You have no more properties to trade");
+						} else {
+							String chosenProperty = gui.getUserSelection("Which property would you like to trade?", playerPropertiesArr);
+							for (Property p : player.getOwnedProperties()) {
+								if (p.getName() == chosenProperty) {
+									giveProperties[playerPropertyCount++] = p;
+									for (int i = 0; i < playerPropertiesList.size(); i++) {
+										if (playerPropertiesList.get(i) == chosenProperty) {
+											playerPropertiesList.remove(i);
+										}
+									}
+								}
+							}
+						}
+					} else if (tradeOption == "Money") {
+						playerMoneyCount = gui.getUserInteger("How much money would like to add to the trade?");
+					}
+				} while (tradeOption != "Pick what you want to trade for");
+
+				//Second part where the player chooses what to receive from trade
+				ArrayList<String> tradeePropertiesList = new ArrayList<>(tradee.getOwnedProperties().size());
+
+				for (Property p : tradee.getOwnedProperties()) {
+					tradeePropertiesList.add(p.getName());
+				}
+				Property[] receiveProperties = new Property[tradeePropertiesList.size()];
+				int tradeePropertyCount = 0;
+				int tradeeMoneyCount = 0;
+
+				do {
+					String[] tradeePropertiesArr = tradeePropertiesList.toArray(new String[tradeePropertiesList.size()]);
+					tradeOption = gui.getUserButtonPressed("What would you like to receive in the trade? \nYou have chosen " + tradeePropertyCount + " properties, " +
+							"and " + tradeeMoneyCount + " dollars", "Properties", "Money", "Get approval for trade");
+					if (tradeOption == "Properties") {
+						if (tradeePropertiesList.isEmpty()) {
+							gui.showMessage("You have no more properties to chose from");
+						} else {
+							String chosenProperty = gui.getUserSelection("Which property would you like to trade?", tradeePropertiesArr);
+							for (Property p : tradee.getOwnedProperties()) {
+								if (p.getName() == chosenProperty) {
+									receiveProperties[tradeePropertyCount++] = p;
+									for (int i = 0; i < tradeePropertiesList.size(); i++) {
+										if (tradeePropertiesList.get(i) == chosenProperty) {
+											tradeePropertiesList.remove(i);
+										}
+									}
+								}
+							}
+						}
+					} else if (tradeOption == "Money") {
+						tradeeMoneyCount = gui.getUserInteger("How much money would like to add to the trade?");
+					}
+				} while (tradeOption != "Get approval for trade");
+
+				String givePropertiesString = propArrayStringCreator(giveProperties);
+				String receivePropertiesString = propArrayStringCreator(receiveProperties);
+
+				String s = player.getName() + " you want to trade " + givePropertiesString + " and " + playerMoneyCount + " dollars with "
+						+ tradee.getName() + " for " + receivePropertiesString + " and " + tradeeMoneyCount + ".";
+				String tradeAccept = gui.getUserButtonPressed(s, "Accept Trade", "Deny");
+				if (tradeAccept == "Deny") {
+					choosePlayer = gui.getUserButtonPressed(tradee.getName() + " has denied the trade. Would you like to renegotiate?", "Yes", "No");
+				} else {
+					payment(tradee, tradeeMoneyCount, player);
+					payment(player, playerMoneyCount, tradee);
+					tradeProperties(tradee, player, receiveProperties);
+					tradeProperties(player, tradee, giveProperties);
+					gui.showMessage("Trade is complete.");
+					break;
+				}
+			}while(choosePlayer != "No");
+	}
+
+
+	public String propArrayStringCreator(Property[] propArray) {
+		String s = "";
+		for (int i = 0; i < propArray.length; i++) {
+			if(propArray[i] == null){
+				break;
+			} else if (propArray[i+1] == null) {
+				s += propArray[i].getName();
+				break;
+			}
+			s += propArray[i].getName() + ", ";
+
+		}
+		return s;
+	}
+
+	public void tradeProperties(Player giver, Player receiver, Property[] properties){
+		for(Property p: properties){
+			if(p == null){
+				break;
+			}
+			giver.removeOwnedProperty(p);
+			receiver.addOwnedProperty(p);
+			p.setOwner(receiver);
+
+		}
+	}
+
 	public void checkforbuildable(RealEstate estate) {
 		Set<RealEstate> estateSet = RealEstate.getcolormap(estate);
 		int counter = 0;
@@ -740,72 +949,61 @@ public class GameController {
 			estate.setBuildable(true);
 	}
 
-	public void Offerhouses(List<Player> players) {
+	/**
+	 * sorry gulle i fixed it
+	 * @author s175124
+	 * @param player
+	 */
 
-		for (Player p : players) {
-			ArrayList<RealEstate> realEstates = new ArrayList<>();
-			ArrayList<RealEstate> buildablelist = new ArrayList<>();
-			for (Property property : p.getOwnedProperties()) {
-				if (property instanceof RealEstate) {
-					realEstates.add((RealEstate) property);
-				}
-			}
-			for (RealEstate realEstate : realEstates) {
-				checkforbuildable(realEstate);
-			}
-			//Tjekker om der overhovedet er nogle real estates der kan bygges på. TODO brug de nye color hashsets for optimering.
-			for (RealEstate realEstate : realEstates) {
-				if (realEstate.isBuildable() == true) {
-					buildablelist.add(realEstate);
-				}
-			}
-				if (buildablelist.size() > 0) {
-					String userbutton = gui.getUserSelection(p.getName() + " Do you want to build anything on your real estates?", "yes", "no");
-
-					if (userbutton.equals("yes")) {
-						//Makes the list of real estates that can be build on.
-
-						String[] buttons = new String[buildablelist.size() + 1];
-						int incrementer = 0;
-							for (RealEstate estate : buildablelist) {
-								buttons[incrementer] = estate.getName();
-								incrementer++;
-							}
-						buttons[buttons.length - 1] = "exit";
-						while (true) {
-							String button = gui.getUserButtonPressed("Where would you like to build?", buttons);
-
-							if (button.equals("exit")) {
-								break;
-							}
-
-							//Jeg ved jo allerede hvad det er for en ejendom, er der en anden måde end at iterere igen?
-							String[] houses = {"1", "2", "3", "hotel"};
-							String button2 = gui.getUserButtonPressed("What would you like to have on your RealEstate", houses);
-							for (RealEstate estate : buildablelist) {
-								if (button.equals(estate.getName())) {
-									if (button2.equals("hotel")) {
-										if (estate.isHotel()) {
-											gui.showMessage("You already have a hotel!");
-										} else {
-										p.setBalance(p.getBalance() - 4000 + 1000 * estate.getHouses());
-										estate.setHotel(true);
-										estate.setHouses(0);
-										}
-									} else if (estate.getHouses() >= Integer.valueOf(button2)) {
-										//TODO Thow an exeception?
-										gui.showMessage("what you doin boiiiiiiii");
-									} else {
-										p.setBalance(p.getBalance() - 1000 * Integer.valueOf(button2) + estate.getHouses() * 1000);
-										estate.setHouses(Integer.valueOf(button2));
-									}
-								}
-							}
-						}
-					}
+	public void buildHouses(Player player) throws PlayerBrokeException{
+		int counter = 0;
+		//Checks how many buildable properties the player has.
+		for(Property p: player.getOwnedProperties()){
+			if(p instanceof RealEstate){
+				checkforbuildable((RealEstate) p);
+				if(((RealEstate) p).isBuildable()){
+					counter++;
 				}
 			}
 		}
+		//Creates array with properties that the player is able to build on
+		int counter2 = 0;
+		String[] buildList = new String[counter];
+		for(Property p: player.getOwnedProperties()){
+			if(p instanceof RealEstate){
+				if(((RealEstate) p).isBuildable()){
+					buildList[counter2] = p.getName();
+					counter2++;
+				}
+			}
+		}
+		if(counter == 0){
+			gui.showMessage("You are unable to build on any properties");
+		} else {
+			String propertyChoice = gui.getUserButtonPressed("Which property would you like to build on?", buildList);
+			RealEstate property = new RealEstate();
+			for(Property p: player.getOwnedProperties()){
+					if (p.getName() == propertyChoice) {
+						property = (RealEstate) p;
+					}
+			}
+			String[] houseAmount = new String[5-property.getHouses()];
+			for(int i = 1; i <= houseAmount.length; i++){
+				houseAmount[i-1] = String.valueOf(i);
+			}
+			String houseChoice = gui.getUserButtonPressed("How many houses would you like build? Once there is built 5 houses, they will turn into a hotel." +
+					"\nThere is currently " + property.getHouses() + " houses built. The price per house is " + property.getRent(),houseAmount);
+			paymentToBank(player,property.getRent()*Integer.valueOf(houseChoice));
+			if(property.getHouses()+Integer.valueOf(houseChoice) < 5) {
+				property.setHouses(property.getHouses() + Integer.valueOf(houseChoice));
+				gui.showMessage("There have been built " + Integer.valueOf(houseChoice) + " houses.");
+			} else {
+				property.setHotel(true);
+				gui.showMessage("You have now built a hotel.");
+			}
+		}
+	}
+
 
 	public void setDiecount(int diecount1, int diecount2) {
 		Diecount = diecount1 + diecount2;

@@ -36,6 +36,7 @@ public class RealEstate extends Property {
     private Color color;
     private int houserent;
     private int propertid;
+    private int mortgageValue;
 
     private static Set<RealEstate> Greyproperties = new HashSet<>();
     private static Set<RealEstate> Redproperties = new HashSet<>();
@@ -135,6 +136,14 @@ public class RealEstate extends Property {
 
     public boolean isBuildable() {
         return buildable;
+    }
+
+    public int getMortgageValue() {
+        return mortgageValue;
+    }
+
+    public void setMortgageValue(int mortgageValue) {
+        this.mortgageValue = mortgageValue;
     }
 
     /**

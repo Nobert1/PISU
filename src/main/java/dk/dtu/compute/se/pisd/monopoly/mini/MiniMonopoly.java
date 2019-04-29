@@ -43,7 +43,7 @@ public class MiniMonopoly {
     }
 		public static void createSpaces(Game game) {
 
-
+//TODO: input mortgage values
 		int i = 0;
 		int j = 0;
 
@@ -55,6 +55,7 @@ public class MiniMonopoly {
 		p.setName("Rødovrevej");
 		p.setCost(1200);
 		p.setRent(50);
+		p.setMortgageValue(750);
         p.setColor(Colors.getcolor(Colors.LIGHTBLUE));
         RealEstate.insertintoColorMap(p);
         p.setPropertid(i++);
@@ -68,6 +69,7 @@ public class MiniMonopoly {
 		p.setName("Hvidovrevej");
 		p.setCost(1200);
 		p.setRent(50);
+		p.setMortgageValue(75);
         p.setColor(Colors.getcolor(Colors.LIGHTBLUE));
         RealEstate.insertintoColorMap(p);
         p.setPropertid(i++);
@@ -416,6 +418,10 @@ public class MiniMonopoly {
             createSpaces(game);
 		    controller.databaseinteraction();
             game.shuffleCardDeck();
+<<<<<<< HEAD
+=======
+            //createPlayers(game);
+>>>>>>> trade_method
             controller.play();
         } catch (DALException e) {
 		    e.getMessage();
