@@ -488,6 +488,7 @@ public class GameController {
 									"\nWould you like to sell these houses for 50% of what you payed and mortgage?", "Yes", "No");
 							sellHousesMortgage((RealEstate) property);
 						}
+						gui.showMessage("You will receive ");
 						mortgageproperty(property);
 						break;
 					}
@@ -684,7 +685,6 @@ public class GameController {
 				break;
 			}
 		}while(true);
-
 
 		//Actual bidding method
 
