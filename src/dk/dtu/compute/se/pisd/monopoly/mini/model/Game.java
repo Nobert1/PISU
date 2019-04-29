@@ -93,7 +93,7 @@ public class Game extends Subject {
 	 * Uses the provided list of cards as the new deck. The
 	 * list will be copied in order to avoid, changes on it
 	 * without the game being aware of it.
-	 *  
+	 *
 	 * @param cardDeck the new deck of cards
 	 */
 	public void setCardDeck(List<Card> cardDeck) {
