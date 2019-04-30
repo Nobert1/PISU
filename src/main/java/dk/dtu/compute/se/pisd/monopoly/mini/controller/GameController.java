@@ -437,7 +437,7 @@ public class GameController {
 
 					}
 					int amountAfter = player.getBalance();
-					amount = amount-(amountAfter-amountBefore);
+					amount -= (amountAfter-amountBefore);
 				case "Sell Houses":
 
 				case "Mortgage":
@@ -458,8 +458,9 @@ public class GameController {
 	 *
 	 * @param property
 	 */
+
 	public void mortgageproperty(Property property) {
-		paymentFromBank(property.getOwner(), property.getCost() / 2);
+		paymentFromBank(property.getOwner(), property.getMortgageValue());
 		property.setMortgaged(true);
 	}
 
@@ -471,39 +472,68 @@ public class GameController {
 
 	public void mortgage(Player player) {
 
-		String[] propArray = new String[player.getOwnedProperties().size()];
+		ArrayList<String> propList = new ArrayList<>();
 		int i = 0;
 		String choice ="";
 		for (Property p : player.getOwnedProperties()) {
-			propArray[i] = p.getName();
-			do {
-
-				String button = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
-				for (Property property : player.getOwnedProperties()) {
-					if (property.getName().equals(button)) {
-						if (((RealEstate) property).getHouses() > 0) {
-							choice = gui.getUserButtonPressed("You are unable to mortgage this property as there are houses on one or more of the same colour. " +
-									"\nWould you like to sell these houses for 50% of what you payed and mortgage?", "Yes", "No");
-							sellHousesMortgage((RealEstate) property);
-						}
-						gui.showMessage("You will receive ");
-						mortgageproperty(property);
-						break;
-					}
-				}
-			} while (choice != "No");
+			if (!p.isMortgaged()) {
+				propList.add(p.getName());
+			}
 		}
+		String[] propArray = new String[propList.size()];
+		for(String s: propList){
+			propArray[i++] = s;
+		}
+
+		//The player chooses which property they would like to mortgage. The system then checks
+		//If there are any houses built.
+		do {
+			String button = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
+			for (Property property : player.getOwnedProperties()) {
+				if (property.getName().equals(button)) {
+					if(property instanceof RealEstate){
+						Set<RealEstate> estateSet = RealEstate.getcolormap((RealEstate) property);
+						for(RealEstate realEstate: estateSet) {
+							if(realEstate.getHouses() > 0 || realEstate.isHotel()) {
+								choice = gui.getUserButtonPressed("You are unable to mortgage this property as there are houses on one or more of the same colour. " +
+										"\nWould you like to sell these houses for 50% of what you payed, and then mortgage?", "Yes", "No");
+								sellHousesMortgage((RealEstate) property);
+							}
+						}
+					}
+					gui.showMessage("You will receive " + property.getMortgageValue() + " dollars.");
+					mortgageproperty(property);
+					choice = "No";
+				}
+			}
+		} while (choice != "No");
 	}
 
+	/**
+	 * Method which sells all the houses on a colourset so the player can mortgage a property.
+	 * @author s175124
+	 * @param realEstate
+	 */
+
 	public void sellHousesMortgage(RealEstate realEstate){
+
+		//Goes through the properties and removes the houses while adding up how many there are.
 		Set<RealEstate> estateSet = RealEstate.getcolormap(realEstate);
 		int counter = 0;
 		for (RealEstate r : estateSet) {
-			if (r.getOwner() ==  realEstate.getOwner()) {
-				counter++;
+			if (r.getHouses() > 0) {
+				counter += r.getHouses();
+				r.setHouses(0);
+			} else if (r.isHotel()){
+				counter += 5;
+				r.setHotel(false);
 			}
 		}
+		int soldHousesValue = counter * (realEstate.getHouseprice()/2);
+		gui.showMessage("You have sold a total of " + counter + " houses. \nYou will receive " + soldHousesValue + " dollars.");
+		paymentFromBank(realEstate.getOwner(),soldHousesValue);
 	}
+
 
 	/*public void obtainCash(Player player, int amount) throws PlayerBrokeException {
 		// TODO implement

@@ -7,8 +7,6 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.cards.PayTax;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
