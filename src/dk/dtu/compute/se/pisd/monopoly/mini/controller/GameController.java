@@ -355,7 +355,7 @@ public class GameController {
 	 * @param player the player, @param amount the amount the player should have available after the act
 	 */
 
-	public void offertosellhouses(Player player) {
+	public void sellhouses(Player player) {
 
 		String selection = gui.getUserSelection(player.getName() + "Do you want to sell any houses? The property can't be sold if the strip contains houses", "yes", "no");
 		if (selection.equals("yes")) {
@@ -442,6 +442,11 @@ public class GameController {
 					int amountAfter = player.getBalance();
 					amount = amount-(amountAfter-amountBefore);
 				case "Sell Houses":
+					amountBefore = player.getBalance();
+					sellhouses(player);
+					amountAfter = player.getBalance();
+					amount -=(amountAfter-amountBefore);
+
 
 				case "Mortgage":
 					amountBefore = player.getBalance();
@@ -476,11 +481,18 @@ public class GameController {
 
 	public void mortgage(Player player) {
 
-		String[] propArray = new String[player.getOwnedProperties().size()];
+		ArrayList<String> propList = new ArrayList<>();
 		int i = 0;
 		String choice ="";
 		for (Property p : player.getOwnedProperties()) {
-			propArray[i] = p.getName();
+			if (!p.isMortgaged()) {
+				propList.add(p.getName());
+			}
+		}
+		String[] propArray = new String[propList.size()];
+		for(String s: propList){
+			propArray[i++] = s;
+		}
 
 			//The player chooses which property they would like to mortgage. The system then checks
 			//If there are any houses built.
@@ -488,12 +500,14 @@ public class GameController {
 				String button = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
 				for (Property property : player.getOwnedProperties()) {
 					if (property.getName().equals(button)) {
+						if(property instanceof RealEstate){
 						Set<RealEstate> estateSet = RealEstate.getcolormap((RealEstate) property);
 						for(RealEstate realEstate: estateSet) {
 							if(realEstate.getHouses() > 0 || realEstate.isHotel()) {
 								choice = gui.getUserButtonPressed("You are unable to mortgage this property as there are houses on one or more of the same colour. " +
 										"\nWould you like to sell these houses for 50% of what you payed, and then mortgage?", "Yes", "No");
 								sellHousesMortgage((RealEstate) property);
+							}
 							}
 						}
 						gui.showMessage("You will receive " + property.getMortgageValue() + " dollars.");
@@ -502,7 +516,6 @@ public class GameController {
 					}
 				}
 			} while (choice != "No");
-		}
 	}
 
 	/**
