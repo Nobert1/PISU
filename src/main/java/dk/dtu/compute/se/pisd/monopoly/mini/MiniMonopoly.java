@@ -418,10 +418,6 @@ public class MiniMonopoly {
             createSpaces(game);
 		    controller.databaseinteraction();
             game.shuffleCardDeck();
-<<<<<<< HEAD
-=======
-            //createPlayers(game);
->>>>>>> trade_method
             controller.play();
         } catch (DALException e) {
 		    e.getMessage();

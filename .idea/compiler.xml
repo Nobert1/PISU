@@ -9,8 +9,8 @@
         <module name="dk.dtu.compute.se.pisd.monopoly.mini" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="dk.dtu.compute.se.pisd.monopoly.mini" target="1.5" />
+    <bytecodeTargetLevel target="8">
+      <module name="dk.dtu.compute.se.pisd.monopoly.mini" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
