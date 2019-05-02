@@ -426,7 +426,11 @@ public class GameController {
 
 
 	public void obtainCash(Player player, int amount){
-		do{
+		boolean solvent = checkIfSolvent(player, amount);
+		if(!solvent){
+		    gui.showMessage("You do not have enough assets to get the missing money.\n");
+        }
+		    do{
 			String choice = gui.getUserButtonPressed("You are missing " + amount + " dollars. How would you like to get the money?",
 																				"Trade", "Sell houses", "Mortgage", "Forefit like a bitch");
 			switch(choice) {
@@ -451,6 +455,39 @@ public class GameController {
 
 		}while(amount > 0);
 	}
+
+    /**
+     * The method that checks if it is possible to obtain enough cash.
+     * @author s175124
+     * @param player
+     * @param amount
+     * @return
+     */
+
+	public boolean checkIfSolvent(Player player, int amount) {
+        boolean solvent = true;
+        int mortgageValue = 0;
+        int houseValue = 0;
+
+        //checks the value of players houses and properties
+        for (Property p : player.getOwnedProperties()) {
+            if (!p.isMortgaged()) {
+                mortgageValue += p.getMortgageValue();
+                if (p instanceof RealEstate) {
+                    if (((RealEstate) p).isHotel()) {
+                        houseValue += 5*((RealEstate) p).getHouseprice();
+                    } else {
+                        houseValue += ((RealEstate) p).getHouses()*((RealEstate) p).getHouseprice();
+                    }
+                }
+            }
+        }
+        int value = houseValue + mortgageValue;
+        if(value < amount){
+            solvent = false;
+        }
+        return solvent;
+    }
 
 
 	/**

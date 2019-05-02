@@ -1,44 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30cf5f02-3c6c-4fee-a865-e00ccc75e2db" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="30cf5f02-3c6c-4fee-a865-e00ccc75e2db" name="Default Changelist" comment="Have made a new checkifsolvent method">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dk.dtu.compute.se.pisd.monopoly.mini.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/designpatterns/Observer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/designpatterns/Subject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/database/dal/DALException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/database/dal/GameDAO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/database/dal/IGameDAO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/database/dto/GameDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/database/dto/IGameDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/Card.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/Chance.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/Game.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/Player.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/Space.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/Tax.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/CardMove.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/CardReceiveMoneyFromBank.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/PayTax.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/exceptions/GameEndedException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/exceptions/PlayerBrokeException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/Colors.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/RealEstate.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/Utility.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/view/PlayerPanel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/view/View.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/test/exceptionTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -83,14 +49,15 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="IDEA_MODULE" value="1" />
-          <entry key="JAVA" value="5" />
+          <entry key="JAVA" value="7" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="IDEA_MODULE" value="2" />
-          <entry key="JAVA" value="43" />
+          <entry key="JAVA" value="1321" />
+          <entry key="PLAIN_TEXT" value="91" />
         </counts>
       </usages-collector>
     </session>
@@ -100,8 +67,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="420" selection-start-line="420" selection-end-line="420" />
+            <state relative-caret-position="2393">
+              <caret line="419" column="35" selection-start-line="419" selection-start-column="35" selection-end-line="419" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -118,26 +85,52 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="386">
-              <caret line="535" selection-start-line="535" selection-end-line="535" />
+            <state relative-caret-position="225">
+              <caret line="430" column="86" selection-start-line="430" selection-start-column="86" selection-end-line="430" selection-end-column="86" />
+              <folding>
+                <element signature="e#24203#24204#0" expanded="true" />
+                <element signature="e#24237#24238#0" expanded="true" />
+                <element signature="e#37969#37970#0" expanded="true" />
+                <element signature="e#38008#38009#0" expanded="true" />
+                <element signature="e#38037#38038#0" expanded="true" />
+                <element signature="e#38059#38060#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="139" column="8" selection-start-line="139" selection-start-column="8" selection-end-line="139" selection-end-column="29" />
+            <state relative-caret-position="1830">
+              <caret line="141" selection-start-line="141" selection-end-line="141" />
               <folding>
                 <element signature="e#3775#3776#0" expanded="true" />
                 <element signature="e#3825#3826#0" expanded="true" />
                 <element signature="e#3862#3863#0" expanded="true" />
                 <element signature="e#3898#3899#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/RealEstate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-442">
+              <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Player.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="212">
+              <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -206,10 +199,10 @@
         <option value="$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/database/dal/GameDAO.java" />
         <option value="$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java" />
         <option value="$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/view/View.java" />
-        <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java" />
         <option value="$PROJECT_DIR$/dk.dtu.compute.se.pisd.monopoly.mini.iml" />
-        <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java" />
         <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java" />
+        <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java" />
+        <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java" />
       </list>
     </option>
   </component>
@@ -770,6 +763,22 @@
               <item name="se" type="462c0819:PsiDirectoryNode" />
               <item name="pisd" type="462c0819:PsiDirectoryNode" />
               <item name="monopoly" type="462c0819:PsiDirectoryNode" />
+              <item name="mini" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="properties" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PISU" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PISU" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="dk" type="462c0819:PsiDirectoryNode" />
+              <item name="dtu" type="462c0819:PsiDirectoryNode" />
+              <item name="compute" type="462c0819:PsiDirectoryNode" />
+              <item name="se" type="462c0819:PsiDirectoryNode" />
+              <item name="pisd" type="462c0819:PsiDirectoryNode" />
+              <item name="monopoly" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -785,9 +794,10 @@
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SearchEverywhereHistoryKey" value="obtain&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#obtainCash&#10;offer&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#offertosellhouses&#10;build&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#buildHouses" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556628209145" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556808830417" />
     <property name="last_opened_file_path" value="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.15.jar!/" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -803,6 +813,125 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="dk.dtu.compute.se.pisd.monopoly.mini.model.properties" />
     </key>
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/.idea/compiler.xml</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/.idea/misc.xml</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/.idea/workspace.xml</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/pom.xml</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.class</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/target/classes/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.class</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/lib/hamcrest-core-1.3.jar</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/lib/junit-4.12.jar</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/target/classes/META-INF/dk.dtu.compute.se.pisd.monopoly.mini.kotlin_module</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -865,7 +994,7 @@
       <workItem from="1554975278158" duration="7025000" />
       <workItem from="1555579795456" duration="5258000" />
       <workItem from="1555588786212" duration="738000" />
-      <workItem from="1556625274802" duration="2890000" />
+      <workItem from="1556625274802" duration="7632000" />
     </task>
     <task id="LOCAL-00001" summary="det her er nok shit">
       <created>1552406376023</created>
@@ -874,11 +1003,25 @@
       <option name="project" value="LOCAL" />
       <updated>1552406376023</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Har tilføjet ting fra min trade_fix">
+      <created>1556628826992</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1556628826992</updated>
+    </task>
+    <task id="LOCAL-00003" summary="mere work">
+      <created>1556635206758</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1556635206758</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="175315000" />
+    <option name="totallyTimeSpent" value="180057000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -902,11 +1045,11 @@
       <window_info id="Structure" order="6" sideWeight="0.5008375" side_tool="true" weight="0.1013986" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.501998" side_tool="true" weight="0.28973842" />
-      <window_info anchor="bottom" id="Messages" order="2" weight="0.19669876" />
+      <window_info anchor="bottom" id="Messages" order="2" weight="0.1961326" />
       <window_info anchor="bottom" id="Version Control" order="3" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Find" order="5" weight="0.3286119" />
-      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.498002" visible="true" weight="0.0" />
+      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.498002" weight="0.084254146" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.5573441" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.3279678" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
@@ -969,7 +1112,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="House branch bois." />
     <MESSAGE value="det her er nok shit" />
-    <option name="LAST_COMMIT_MESSAGE" value="det her er nok shit" />
+    <MESSAGE value="Har tilføjet ting fra min trade_fix" />
+    <MESSAGE value="mere work" />
+    <MESSAGE value="Have made a new checkifsolvent method" />
+    <option name="LAST_COMMIT_MESSAGE" value="Have made a new checkifsolvent method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1080,8 +1226,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/LIGHTBLUE.java" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/util/HashMap.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/util/function/Predicate.java" />
     <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/PayTax.java" />
     <entry file="file://$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/model/cards/CardMove.java" />
@@ -1158,13 +1302,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="420" selection-start-line="420" selection-end-line="420" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
@@ -1189,22 +1326,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="535" selection-start-line="535" selection-end-line="535" />
+        <state relative-caret-position="2393">
+          <caret line="419" column="35" selection-start-line="419" selection-start-column="35" selection-end-line="419" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="139" column="8" selection-start-line="139" selection-start-column="8" selection-end-line="139" selection-end-column="29" />
+        <state relative-caret-position="1830">
+          <caret line="141" selection-start-line="141" selection-end-line="141" />
           <folding>
             <element signature="e#3775#3776#0" expanded="true" />
             <element signature="e#3825#3826#0" expanded="true" />
             <element signature="e#3862#3863#0" expanded="true" />
             <element signature="e#3898#3899#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/RealEstate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-442">
+          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="430" column="86" selection-start-line="430" selection-start-column="86" selection-end-line="430" selection-end-column="86" />
+          <folding>
+            <element signature="e#24203#24204#0" expanded="true" />
+            <element signature="e#24237#24238#0" expanded="true" />
+            <element signature="e#37969#37970#0" expanded="true" />
+            <element signature="e#38008#38009#0" expanded="true" />
+            <element signature="e#38037#38038#0" expanded="true" />
+            <element signature="e#38059#38060#0" expanded="true" />
           </folding>
         </state>
       </provider>
