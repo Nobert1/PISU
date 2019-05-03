@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java" line="583" mnemonic="9" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="30cf5f02-3c6c-4fee-a865-e00ccc75e2db" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -56,47 +59,26 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="IDEA_MODULE" value="2" />
-          <entry key="JAVA" value="1427" />
-          <entry key="PLAIN_TEXT" value="100" />
+          <entry key="JAVA" value="2165" />
+          <entry key="PLAIN_TEXT" value="129" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2393">
-              <caret line="419" column="35" selection-start-line="419" selection-start-column="35" selection-end-line="419" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="9" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="512" column="8" selection-start-line="512" selection-start-column="8" selection-end-line="512" selection-end-column="8" />
+            <state relative-caret-position="120">
+              <caret line="560" column="53" lean-forward="true" selection-start-line="560" selection-start-column="53" selection-end-line="560" selection-end-column="53" />
               <folding>
-                <element signature="e#24494#24495#0" expanded="true" />
-                <element signature="e#24528#24529#0" expanded="true" />
-                <element signature="e#38260#38261#0" expanded="true" />
-                <element signature="e#38299#38300#0" expanded="true" />
-                <element signature="e#38328#38329#0" expanded="true" />
-                <element signature="e#38350#38351#0" expanded="true" />
+                <element signature="e#24155#24156#0" expanded="true" />
+                <element signature="e#24189#24190#0" expanded="true" />
+                <element signature="e#37921#37922#0" expanded="true" />
+                <element signature="e#37960#37961#0" expanded="true" />
+                <element signature="e#37989#37990#0" expanded="true" />
+                <element signature="e#38011#38012#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -126,13 +108,15 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1830">
-              <caret line="141" selection-start-line="141" selection-end-line="141" />
+            <state relative-caret-position="530">
+              <caret line="135" column="43" lean-forward="true" selection-start-line="135" selection-start-column="43" selection-end-line="135" selection-end-column="43" />
               <folding>
                 <element signature="e#3775#3776#0" expanded="true" />
                 <element signature="e#3825#3826#0" expanded="true" />
                 <element signature="e#3862#3863#0" expanded="true" />
                 <element signature="e#3898#3899#0" expanded="true" />
+                <element signature="e#3870#3871#0" expanded="true" />
+                <element signature="e#3902#3903#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -141,7 +125,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/RealEstate.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-442">
+            <state relative-caret-position="-524">
               <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
             </state>
           </provider>
@@ -221,8 +205,8 @@
         <option value="$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java" />
         <option value="$PROJECT_DIR$/src/dk/dtu/compute/se/pisd/monopoly/mini/view/View.java" />
         <option value="$PROJECT_DIR$/dk.dtu.compute.se.pisd.monopoly.mini.iml" />
-        <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java" />
         <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java" />
+        <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java" />
         <option value="$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java" />
       </list>
     </option>
@@ -818,7 +802,7 @@
     <property name="SearchEverywhereHistoryKey" value="unmort&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#unmortgage&#10;auction&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#auction&#10;trade&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#trade&#10;obtain&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#obtainCash&#10;offer&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#offertosellhouses&#10;build&#9;PSI&#9;JAVA://dk.dtu.compute.se.pisd.monopoly.mini.controller.GameController#buildHouses" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556888499553" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556889918367" />
     <property name="last_opened_file_path" value="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.15.jar!/" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -1015,7 +999,7 @@
       <workItem from="1554975278158" duration="7025000" />
       <workItem from="1555579795456" duration="5258000" />
       <workItem from="1555588786212" duration="738000" />
-      <workItem from="1556625274802" duration="10394000" />
+      <workItem from="1556625274802" duration="11954000" />
     </task>
     <task id="LOCAL-00001" summary="det her er nok shit">
       <created>1552406376023</created>
@@ -1045,11 +1029,18 @@
       <option name="project" value="LOCAL" />
       <updated>1556808850738</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="some updates with mortgage">
+      <created>1556888513422</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1556888513422</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="182819000" />
+    <option name="totallyTimeSpent" value="184379000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1062,14 +1053,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="816" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
       <window_info id="UI Designer" order="1" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info active="true" content_ui="combo" id="Project" order="5" sideWeight="0.49916247" visible="true" weight="0.15522175" />
+      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.49916247" visible="true" weight="0.15522175" />
       <window_info id="Structure" order="6" sideWeight="0.5008375" side_tool="true" weight="0.1013986" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.501998" side_tool="true" weight="0.28973842" />
@@ -1077,7 +1067,7 @@
       <window_info anchor="bottom" id="Version Control" order="3" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="4" />
       <window_info anchor="bottom" id="Find" order="5" weight="0.3286119" />
-      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.498002" visible="true" weight="0.019337017" />
+      <window_info active="true" anchor="bottom" id="Run" order="6" sideWeight="0.498002" visible="true" weight="0.019337017" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.5573441" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.3279678" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
@@ -1085,51 +1075,18 @@
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
       <window_info anchor="bottom" id="Duplicate detector" order="13" weight="0.32997987" />
-      <window_info anchor="right" id="Maven Projects" />
-      <window_info anchor="right" id="Theme Preview" order="0" />
-      <window_info anchor="right" id="Capture Analysis" order="1" />
-      <window_info anchor="right" id="Palette&#9;" order="2" />
-      <window_info anchor="right" id="Maven" order="3" weight="0.18389262" />
-      <window_info anchor="right" id="Palette" order="4" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="5" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="6" weight="0.25" />
-      <window_info anchor="right" id="Ant Build" order="7" weight="0.24966443" />
-      <window_info anchor="right" id="Database" order="8" weight="0.3295302" />
-      <window_info anchor="right" id="Coverage" order="9" side_tool="true" weight="0.32967034" />
-    </layout>
-    <layout-to-restore>
-      <window_info id="Designer" order="0" />
-      <window_info id="UI Designer" order="1" />
-      <window_info id="Capture Tool" order="2" />
-      <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info id="Image Layers" order="4" />
-      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.49916247" visible="true" weight="0.16333666" />
-      <window_info id="Structure" order="6" sideWeight="0.5008375" side_tool="true" weight="0.1013986" />
-      <window_info anchor="bottom" id="Duplicate detector" order="0" weight="0.32997987" />
-      <window_info anchor="bottom" id="Terminal" order="1" weight="0.32997987" />
-      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.5013423" side_tool="true" weight="0.30784708" />
-      <window_info anchor="bottom" id="Messages" order="3" weight="0.3249497" />
-      <window_info anchor="bottom" id="Version Control" order="4" weight="0.32997987" />
-      <window_info anchor="bottom" id="Message" order="5" />
-      <window_info anchor="bottom" id="Find" order="6" weight="0.328877" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" sideWeight="0.4986577" visible="true" weight="0.30684105" />
-      <window_info anchor="bottom" id="Debug" order="8" weight="0.55935615" />
-      <window_info anchor="bottom" id="TODO" order="9" weight="0.3279678" />
-      <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
-      <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="13" />
-      <window_info anchor="right" id="Theme Preview" order="0" />
-      <window_info anchor="right" id="Capture Analysis" order="1" />
-      <window_info anchor="right" id="Palette&#9;" order="2" />
-      <window_info anchor="right" id="Maven" order="3" weight="0.18389262" />
-      <window_info anchor="right" id="Palette" order="4" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="5" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="6" weight="0.25" />
+      <window_info anchor="right" id="Maven Projects" order="0" />
+      <window_info anchor="right" id="Theme Preview" order="1" />
+      <window_info anchor="right" id="Capture Analysis" order="2" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info anchor="right" id="Maven" order="4" weight="0.18389262" />
+      <window_info anchor="right" id="Palette" order="5" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="6" type="SLIDING" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="7" weight="0.25" />
-      <window_info anchor="right" id="Database" order="8" />
-      <window_info anchor="right" id="Coverage" order="9" side_tool="true" weight="0.32967034" />
-    </layout-to-restore>
+      <window_info anchor="right" id="Ant Build" order="8" weight="0.24966443" />
+      <window_info anchor="right" id="Database" order="9" weight="0.3295302" />
+      <window_info anchor="right" id="Coverage" order="10" side_tool="true" weight="0.32967034" />
+    </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -1144,7 +1101,8 @@
     <MESSAGE value="mere work" />
     <MESSAGE value="Have made a new checkifsolvent method" />
     <MESSAGE value="some more" />
-    <option name="LAST_COMMIT_MESSAGE" value="some more" />
+    <MESSAGE value="some updates with mortgage" />
+    <option name="LAST_COMMIT_MESSAGE" value="some updates with mortgage" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1320,16 +1278,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="9" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
@@ -1351,26 +1299,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1830">
-          <caret line="141" selection-start-line="141" selection-end-line="141" />
-          <folding>
-            <element signature="e#3775#3776#0" expanded="true" />
-            <element signature="e#3825#3826#0" expanded="true" />
-            <element signature="e#3862#3863#0" expanded="true" />
-            <element signature="e#3898#3899#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/RealEstate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-442">
-          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/database/dal/GameDAO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
@@ -1388,6 +1316,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/properties/RealEstate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-524">
+          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/model/Property.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="135" column="43" lean-forward="true" selection-start-line="135" selection-start-column="43" selection-end-line="135" selection-end-column="43" />
+          <folding>
+            <element signature="e#3775#3776#0" expanded="true" />
+            <element signature="e#3825#3826#0" expanded="true" />
+            <element signature="e#3862#3863#0" expanded="true" />
+            <element signature="e#3898#3899#0" expanded="true" />
+            <element signature="e#3870#3871#0" expanded="true" />
+            <element signature="e#3902#3903#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/MiniMonopoly.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2393">
@@ -1395,17 +1345,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/test/GameTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="9" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/dk/dtu/compute/se/pisd/monopoly/mini/controller/GameController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="512" column="8" selection-start-line="512" selection-start-column="8" selection-end-line="512" selection-end-column="8" />
+        <state relative-caret-position="120">
+          <caret line="560" column="53" lean-forward="true" selection-start-line="560" selection-start-column="53" selection-end-line="560" selection-end-column="53" />
           <folding>
-            <element signature="e#24494#24495#0" expanded="true" />
-            <element signature="e#24528#24529#0" expanded="true" />
-            <element signature="e#38260#38261#0" expanded="true" />
-            <element signature="e#38299#38300#0" expanded="true" />
-            <element signature="e#38328#38329#0" expanded="true" />
-            <element signature="e#38350#38351#0" expanded="true" />
+            <element signature="e#24155#24156#0" expanded="true" />
+            <element signature="e#24189#24190#0" expanded="true" />
+            <element signature="e#37921#37922#0" expanded="true" />
+            <element signature="e#37960#37961#0" expanded="true" />
+            <element signature="e#37989#37990#0" expanded="true" />
+            <element signature="e#38011#38012#0" expanded="true" />
           </folding>
         </state>
       </provider>
