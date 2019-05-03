@@ -144,6 +144,7 @@ public class Property extends Space {
         this.mortgaged = mortgaged;
         if (mortgaged)
             setRent(0);
+        notifyChange();
         }
 
     public boolean isMortgaged() {

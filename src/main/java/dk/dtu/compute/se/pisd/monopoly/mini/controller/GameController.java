@@ -502,6 +502,7 @@ public class GameController {
 		property.setMortgaged(true);
 	}
 
+
 	/**
 	 * fixed
 	 * @author s175124
@@ -509,9 +510,9 @@ public class GameController {
 	 */
 
 	public void mortgage(Player player) {
-
-		if(player.getOwnedProperties().isEmpty()){
-		    gui.showMessage("You have no properties to mortgage");
+		
+		if(player.getOwnedProperties().isEmpty()) {
+            gui.showMessage("You have no properties to mortgage");
         } else {
 
             ArrayList<String> propList = new ArrayList<>();
@@ -551,6 +552,12 @@ public class GameController {
             } while (choice != "No");
         }
 	}
+
+    public void unmortgage(Player player){
+
+		for(){}
+
+    }
 
 	/**
 	 * Method which sells all the houses on a colourset so the player can mortgage a property.
