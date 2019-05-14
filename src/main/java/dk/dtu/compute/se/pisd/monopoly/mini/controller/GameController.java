@@ -218,7 +218,7 @@ public class GameController {
 			Player player = players.get(current);
 			String choice;
 			do{
-			choice = gui.getUserButtonPressed("What would you like to do " + game.getCurrentPlayer().getName()+"?", "Roll", "Trade", "Build", "Mortgage");
+			choice = gui.getUserButtonPressed("What would you like to do " + game.getCurrentPlayer().getName()+"?", "Roll", "Trade", "Build or Sell houses", "Mortgage");
 			switch(choice) {
 				case "Trade":
 					try {
@@ -236,12 +236,6 @@ public class GameController {
 						}
 					} else {
 						//sellHouses();
-					}
-
-					try {
-						buildHouses(game.getCurrentPlayer());
-					} catch (PlayerBrokeException e) {
-
 					}
 					break;
 				case "Mortgage":
@@ -539,54 +533,64 @@ public class GameController {
             gui.showMessage("You have no properties to mortgage");
         } else {
 
-            ArrayList<String> propList = new ArrayList<>();
-            int i = 0;
-            String choice = "";
-            for (Property p : player.getOwnedProperties()) {
-                if (!p.isMortgaged()) {
-                    propList.add(p.getName());
-                }
-            }
+			String choice = "";
+			do {
+				ArrayList<String> propList = new ArrayList<>();
 
-            if(!propList.isEmpty()) {
-				String[] propArray = new String[propList.size()];
-				for (String s : propList) {
-					propArray[i++] = s;
+
+				for (Property p : player.getOwnedProperties()) {
+					if (!p.isMortgaged()) {
+						propList.add(p.getName());
+					}
 				}
+				int i = 0;
+				if (!propList.isEmpty()) {
+					String[] propArray = new String[propList.size() + 1];
+					for (String s : propList) {
+						propArray[i++] = s;
+					}
+					propArray[propList.size()] = "Back";
 
-				//The player chooses which property they would like to mortgage. The system then checks
-				//If there are any houses built.
-				do {
-					String button = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
-					for (Property property : player.getOwnedProperties()) {
-						if (property.getName().equals(button)) {
-							if (property instanceof RealEstate) {
-								Set<RealEstate> estateSet = RealEstate.getcolormap((RealEstate) property);
-								for (RealEstate realEstate : estateSet) {
-									if (realEstate.getHouses() > 0 || realEstate.isHotel()) {
-										choice = gui.getUserButtonPressed("You are unable to mortgage this property as there are houses on one or more of the same colour. " +
-												"\nWould you like to sell these houses for 50% of what you payed, and then mortgage?", "Yes", "No");
-										sellHousesMortgage((RealEstate) property);
+					//The player chooses which property they would like to mortgage. The system then checks
+					//If there are any houses built.
+
+					choice = gui.getUserButtonPressed(player.getName() + " which property would you like to mortgage?", propArray);
+					if(choice.equals("Back")){
+							break;
+						}
+						for (Property property : player.getOwnedProperties()) {
+							if (property.getName().equals(choice)) {
+								if (property instanceof RealEstate) {
+									Set<RealEstate> estateSet = RealEstate.getcolormap((RealEstate) property);
+									for (RealEstate realEstate : estateSet) {
+										if (realEstate.getHouses() > 0 || realEstate.isHotel()) {
+											choice = gui.getUserButtonPressed("You are unable to mortgage this property as there are houses on one or more of the same colour. " +
+													"\nWould you like to sell these houses for 50% of what you payed, and then mortgage?", "Yes", "No");
+											sellHousesMortgage((RealEstate) property);
+										}
 									}
 								}
+								if(!choice.equals("Yes")) {
+									gui.showMessage("You will receive " + property.getMortgageValue() + " dollars.");
+									mortgageProperty(property);
+									gui.showMessage("You have successfully mortgaged " + property.getName());
+								}
 							}
-							gui.showMessage("You will receive " + property.getMortgageValue() + " dollars.");
-							mortgageProperty(property);
-							choice = "No";
 						}
-					}
-				} while (choice != "No");
-			} else {
-            	gui.showMessage("All of your properties are already mortgaged.");
-			}
+				} else {
+					gui.showMessage("All of your properties are already mortgaged.");
+					break;
+				}
+			}while(!choice.equals("Back"));
         }
 	}
 
-	public void unmortgagePropery(Property property)throws PlayerBrokeException{
+	public void unmortgageProperty(Property property)throws PlayerBrokeException{
 		paymentToBank(property.getOwner(),property.getMortgageValue()+property.getMortgageValue()/10);
+		property.setMortgaged(false);
 	}
 
-    public void unmortgage(Player player){
+    public void unmortgage(Player player)throws PlayerBrokeException{
 		ArrayList<Property> mortgagedProperties = new ArrayList<>();
 		for(Property p: player.getOwnedProperties()){
 			if(p.isMortgaged()){
@@ -608,7 +612,8 @@ public class GameController {
 
 				for(Property p: mortgagedProperties){
 					if(p.getName() == choice){
-						unmortgagePropery(p);
+						unmortgageProperty(p);
+						gui.showMessage("You have successfully unmortgaged " + p.getName());
 					}
 				}
 
