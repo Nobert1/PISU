@@ -1,6 +1,5 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.controller;
 
-import dk.dtu.compute.se.pisd.monopoly.mini.MiniMonopoly;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.DALException;
 import dk.dtu.compute.se.pisd.monopoly.mini.database.dal.GameDAO;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.*;
@@ -13,8 +12,6 @@ import gui_main.GUI;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -88,12 +85,6 @@ public class GameController {
 		this.view = new View(game, gui, playerpanel);
 	}
 
-	/**
-	 * The main method to start the game. The game is started with the
-	 * current player of the game; this makes it possible to resume a
-	 * game at any point.
-	 */
-
 	public void databaseinteraction () {
 	    String selection = gui.getUserSelection("What you wanna do ","create game", "load game");
 	    if (selection.equals("load game")) {
@@ -109,6 +100,14 @@ public class GameController {
 		view.createplayers();
 		view.createFields();
     }
+
+	/**
+	 * Method which allows the players to chose which icon and colour they would like. Colour is unique so is removed
+	 * from list each time it is chosen
+	 * @author.
+	 * @param game
+	 */
+
 
 	public void createPlayers(Game game) {
 		int players = 0;
@@ -179,7 +178,7 @@ public class GameController {
 			game.addPlayer(p);
 
 			iconList.remove(name);
-			colourList.remove(0);
+			colourList.remove(colour);
 
 		}while(i <= players);
 
@@ -195,6 +194,11 @@ public class GameController {
 		return array;
 	}
 
+	/**
+	 * The main method to start the game. The game is started with the
+	 * current player of the game; this makes it possible to resume a
+	 * game at any point.
+	 */
 
 	public void play() throws DALException {
 		List<Player> players = game.getPlayers();
@@ -223,7 +227,17 @@ public class GameController {
 
 					}
 					break;
-				case "Build":
+				case "Build or Sell houses":
+					String s = gui.getUserButtonPressed("Would you like to buy or sell?","Buy","Sell");
+					if(s.equals("Buy")){
+						try {
+						buildHouses(game.getCurrentPlayer());
+					} catch (PlayerBrokeException e) {
+						}
+					} else {
+						//sellHouses();
+					}
+
 					try {
 						buildHouses(game.getCurrentPlayer());
 					} catch (PlayerBrokeException e) {
@@ -507,7 +521,7 @@ public class GameController {
 	 * @param property
 	 */
 
-	public void mortgageproperty(Property property) {
+	public void mortgageProperty(Property property) {
 		paymentFromBank(property.getOwner(), property.getMortgageValue());
 		property.setMortgaged(true);
 	}
@@ -557,7 +571,7 @@ public class GameController {
 								}
 							}
 							gui.showMessage("You will receive " + property.getMortgageValue() + " dollars.");
-							mortgageproperty(property);
+							mortgageProperty(property);
 							choice = "No";
 						}
 					}
@@ -568,7 +582,9 @@ public class GameController {
         }
 	}
 
-	public void unmortgagePropery(Property property){}
+	public void unmortgagePropery(Property property)throws PlayerBrokeException{
+		paymentToBank(property.getOwner(),property.getMortgageValue()+property.getMortgageValue()/10);
+	}
 
     public void unmortgage(Player player){
 		ArrayList<Property> mortgagedProperties = new ArrayList<>();
@@ -592,7 +608,7 @@ public class GameController {
 
 				for(Property p: mortgagedProperties){
 					if(p.getName() == choice){
-					//	unmo
+						unmortgagePropery(p);
 					}
 				}
 
@@ -627,58 +643,6 @@ public class GameController {
 		paymentFromBank(realEstate.getOwner(),soldHousesValue);
 	}
 
-
-	/*public void obtainCash(Player player, int amount) throws PlayerBrokeException {
-		// TODO implement
-		String button = "";
-		for (Player bidder : game.getPlayers()) {
-			if (bidder != player) {
-				//Er dette det rigtige sted at tilbyde at sælge?
-				// Kommer exit til at stå det rigtige sted her?
-				offertosellhouses(player);
-				Set<Property> ownedProperties = player.getOwnedProperties();
-				for (Property property : ownedProperties) {
-					if (property instanceof RealEstate) {
-						if (((RealEstate) property).getHouses() != 0 || ((RealEstate) property).isHotel()) {
-							ownedProperties.remove(property);
-						}
-					}
-				}
-				String[] buttons = new String[ownedProperties.size() + 1];
-				int increm = 0;
-				for (Property property : ownedProperties) {
-					buttons[increm] = property.getName();
-					increm++;
-				}
-				buttons[buttons.length - 1] = "no";
-                String selection = gui.getUserSelection("Would you like to mortgage properties?", "yes", "no");
-                if (selection.equals("yes"))
-					mortgage(player, buttons);
-
-				gui.showMessage("then we go to the bidding round!");
-				do {
-					//Kan det her være en parameter der bliver passeret i stedet?
-					button = gui.getUserButtonPressed(bidder.getName() + " What would you like to bid on?", buttons);
-					int bid = gui.getUserInteger("How much would you like to bid?");
-					String selection1 = gui.getUserSelection(player.getName() + " Do you accept this bid?", "yes", "no");
-
-					if (selection1.equals("yes")) {
-						payment(bidder, bid, player);
-						for (Property property : player.getOwnedProperties()) {
-							if (property.getName().equals(button)) {
-								property.setOwner(bidder);
-								bidder.getOwnedProperties().add(property);
-								player.getOwnedProperties().remove(property);
-							}
-						}
-					}
-				} while (!button.equals("no"));
-				}
-			if (player.getBalance() < amount && player.getOwnedProperties().size() == 0) {
-				throw new PlayerBrokeException(player);
-			}
-		}
-	}*/
 
 	/**
 	 * This method implements the activity of offering a player to buy
