@@ -1,0 +1,13 @@
+package dk.dtu.compute.se.pisd.monopoly.mini.database.dto;
+
+import java.util.List;
+
+public interface IGameDTO {
+
+    public int getGameID();
+
+    public void setGameID(int gameID);
+
+
+
+}
