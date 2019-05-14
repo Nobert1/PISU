@@ -1,0 +1,24 @@
+package dk.dtu.compute.se.pisd.monopoly.mini.database.dto;
+
+import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GameDTO implements IGameDTO {
+    //Fields
+    private int gameID;
+    private String gameName;
+
+    public int getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(int gameID) {
+        this.gameID = gameID;
+    }
+
+    public void setGameName(String gameName) { this.gameName = gameName; }
+
+    public String getGameName() { return gameName; }
+}
