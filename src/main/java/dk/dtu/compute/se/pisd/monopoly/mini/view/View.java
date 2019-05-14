@@ -173,7 +173,10 @@ public class View implements Observer {
 				guiFields[oldPosition].setCar(guiPlayer, false);
 			}
 			int pos = player.getCurrentPosition().getIndex();
-			if (pos < guiFields.length) {
+			if (pos == 30) {
+				player2position.put(player,pos);
+				guiFields[pos].setCar(guiPlayer,true);
+			} else if (pos < guiFields.length) {
 				player2position.put(player,pos);
 				guiFields[pos].setCar(guiPlayer, true);
 			}

@@ -315,6 +315,8 @@ public class GameController {
 	public void makeMove(Player player) throws PlayerBrokeException {
 		boolean castDouble;
 		int doublesCount = 0;
+		boolean isNotInJail = true;
+
 		do {
 			// TODO right now the dice are limited to the numbers 1, 2 and 3
 			// for making the game faster. Eventually, this should be set
@@ -322,9 +324,11 @@ public class GameController {
 			// be set to 6.0 again.
 			int die1 = (int) (1 + 6 * Math.random());
 			int die2 = (int) (1 + 6 * Math.random());
+
 			setDiecount(die1, die2);
 			castDouble = (die1 == die2);
 			gui.setDice(die1, die2);
+
 
 			if (player.isInPrison()) {
 				String choice = gui.getUserSelection("Would you like to pay your way out of prison?", "yes", "no");
@@ -359,11 +363,24 @@ public class GameController {
 				int newPos = (pos + die1 + die2) % spaces.size();
 				Space space = spaces.get(newPos);
 				moveToSpace(player, space);
-				if (castDouble) {
+				checkForGoToJail(player);
+
+				if (player.getCurrentPosition().getIndex() == 10) {
+					isNotInJail = false;
+				} else isNotInJail = true;
+
+				if (castDouble && isNotInJail) {
 					gui.showMessage("Player " + player.getName() + " cast a double and makes another move.");
 				}
 			}
-		} while (castDouble);
+		} while (castDouble && isNotInJail);
+	}
+
+	public void checkForGoToJail (Player player) throws PlayerBrokeException {
+		int pos = player.getCurrentPosition().getIndex();
+		if (pos == 30) {
+			gotoJail(player);
+		}
 	}
 
 	/**
@@ -518,7 +535,7 @@ public class GameController {
 	public void mortgageProperty(Property property) {
 		paymentFromBank(property.getOwner(), property.getMortgageValue());
 		property.setMortgaged(true);
-	}
+		}
 
 
 	/**

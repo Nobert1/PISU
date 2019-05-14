@@ -60,9 +60,20 @@ public class PlayerPanel extends JFrame {
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         JLabel l = new JLabel(player.getName());
         JLabel j = new JLabel(String.valueOf(player.getBalance()));
+        JLabel k = new JLabel("Jail status:\n");
+        JLabel m = new JLabel("In jail");
+        JLabel n = new JLabel("Not in jail");
         playerPanel.add(l);
         playerPanel.add(j);
+        playerPanel.add(k);
 
+        boolean inPrison = player.isInPrison();
+
+        if (inPrison) {
+            playerPanel.add(m);
+        } else {
+            playerPanel.add(n);
+        }
         contentPane.add(playerPanel);
 
 
