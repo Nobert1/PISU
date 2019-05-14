@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.Subject;
+import gui_fields.GUI_Car;
 
 import java.awt.*;
 import java.util.List;
@@ -22,6 +23,8 @@ public class Player extends Subject {
 	private String name;
 	
 	private Color color;
+
+	private String icon;
 	
 	private Space currentPosition;
 	
@@ -82,6 +85,14 @@ public class Player extends Subject {
 	public void setColor(Color color) {
 		this.color = color;
 		notifyChange();
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 	/**

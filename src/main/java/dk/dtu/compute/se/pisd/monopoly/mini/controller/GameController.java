@@ -10,6 +10,7 @@ import dk.dtu.compute.se.pisd.monopoly.mini.view.PlayerPanel;
 import dk.dtu.compute.se.pisd.monopoly.mini.view.View;
 import gui_main.GUI;
 
+import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -103,11 +104,97 @@ public class GameController {
                 e.printStackTrace();
             }
         } else if (selection.equals("create game")) {
-			MiniMonopoly.createPlayers(game);
+			createPlayers(game);
 		}
 		view.createplayers();
 		view.createFields();
     }
+
+	public void createPlayers(Game game) {
+		int players = 0;
+		do {
+			players = gui.getUserInteger(" How many players? Max 6 players.\n Remember youngest goes first!");
+			if (players > 1 && players < 7) {
+				break;
+			} else {
+				gui.showMessage("Not a valid number");
+			}
+		}while(players < 2 || players > 6);
+
+		ArrayList<String> iconList = new ArrayList<>();
+		iconList.add("CAR");
+		iconList.add("Racecar");
+		iconList.add("UFO");
+		iconList.add("Tractor");
+		ArrayList<String> colourList = new ArrayList<>();
+		colourList.add("Blue");
+		colourList.add("Red");
+		colourList.add("White");
+		colourList.add("Yellow");
+		colourList.add("Magneta");
+		colourList.add("Green");
+
+		int i = 1;
+		int j = 0;
+		do{
+			Player p = new Player();
+
+
+			String name = gui.getUserString("What would you like your name to be?");
+			String[] iconArr = arrayConverter(iconList);
+			String[] colourArr = arrayConverter(colourList);
+			String icon = gui.getUserButtonPressed("Which icon would you like to have?", iconArr);
+			String colour = gui.getUserButtonPressed("Which colour would you like?", colourArr);
+			Color c;
+			switch (colour){
+				case "Blue":
+					c = Color.BLUE;
+					break;
+				case "Red":
+					c = Color.RED;
+					break;
+				case "White":
+					c = Color.WHITE;
+					break;
+				case "Yellow":
+					c = Color.YELLOW;
+					break;
+				case "Magneta":
+					c = Color.magenta;
+					break;
+				case "Green":
+					c = Color.GREEN;
+					break;
+				default:
+					c = Color.GREEN;
+
+			}
+
+
+			p.setName(name);
+			p.setCurrentPosition(game.getSpaces().get(0));
+			p.setColor(c);
+			p.setIcon(icon.toUpperCase());
+			p.setPlayerID(i++);
+			game.addPlayer(p);
+
+			iconList.remove(name);
+			colourList.remove(0);
+
+		}while(i <= players);
+
+
+	}
+
+	public String[] arrayConverter(ArrayList<String> list){
+		String[] array = new String[list.size()];
+		int i = 0;
+		for(String s: list){
+			array[i++] = s;
+		}
+		return array;
+	}
+
 
 	public void play() throws DALException {
 		List<Player> players = game.getPlayers();
@@ -338,90 +425,13 @@ public class GameController {
 		game.returnCardToDeck(card);
 	}
 
-	/**
-	 * This method implements the activity where a player can obtain
-	 * cash by selling houses back to the bank, by mortgaging own properties,
-	 * or by selling properties to other players. This method is called, whenever
-	 * the player does not have enough cash available for an action. If
-	 * the player does not manage to free at least the given amount of money,
-	 * the player will be broke; this is to help the player make the right
-	 * choices for freeing enough money.
-	 * <p>
-	 *     Det her er lidt noget lort TODO få det her reviewet.
-	 * - method author s185031 - Gustav Emil Nobert
-	 *
-	 * @param player the player, @param amount the amount the player should have available after the act
-	 */
-
-	public void sellHouses(Player player) {
-
-		String selection = gui.getUserSelection(player.getName() + "Do you want to sell any houses? The property can't be sold if the strip contains houses", "yes", "no");
-		if (selection.equals("yes")) {
-			ArrayList<RealEstate> estatelist = new ArrayList<>();
-			for (Property property : player.getOwnedProperties()) {
-				if (property instanceof RealEstate) {
-					if (((RealEstate) property).getHouses() > 0 || ((RealEstate) property).isHotel() == true) {
-						estatelist.add((RealEstate) property);
-					} }
-					String[] estatebuttons = new String[estatelist.size() + 1];
-					estatebuttons[estatebuttons.length - 1] = "back";
-					for (int i = 0; i < estatelist.size(); i++) {
-						estatebuttons[i] = estatelist.get(i).getName();
-					}
-					do {
-						//Må være en smartere løsning, har jo allerede fundet det objekt der skal findes
-						RealEstate houseestate = null;
-						selection = gui.getUserButtonPressed(player.getName() + " Where do you wanna sell", estatebuttons);
-						for (RealEstate estate : estatelist) {
-							if (selection.equals(estate.getName()))
-								houseestate = estate;
-						}
-						int housecount;
-						try {
-							if (houseestate.isHotel()) {
-								housecount = 4;
-							} else {
-								housecount = houseestate.getHouses();
-							}
-						} catch (NullPointerException e) {
-							gui.showMessage("the estate you clicked didn't have any houses");
-							break;
-						}
-						//input validering
-						Pattern housepattern = Pattern.compile("\b(0|" + housecount + ")\b]");
-						boolean isnum = false;
-						int houseselection;
-						do {
-							houseselection = gui.getUserInteger(player.getName() + " How many would you like to sell? Type 4 to sell your hotel");
-							Matcher matcher = housepattern.matcher(String.valueOf(houseselection));
-							if (matcher.find()) {
-								isnum = true;
-							} else {
-								gui.showMessage("invalid input, try agian");
-							}
-						} while (!isnum);
-
-						paymentFromBank(player, 500 * housecount);
-						if (houseestate.isHotel()) {
-							houseestate.setHotel(false);
-							houseestate.setHouses(houseestate.getHouses() - housecount + 1);
-						} else {
-							houseestate.setHouses(houseestate.getHouses() - housecount);
-						}
-
-					} while (!selection.equals("back"));
-				}
-			}
-		}
-
 
 	/**
-	 * Gustav Emil Nobert
-	 * i have made a few methods to back this up, still needs work.
-	 *
+	 * TODO: Not finished
+	 * @author s175124 &s185031
 	 * @param player
-	 * @param amount
-	 * @throws PlayerBrokeException
+	 * @param amount: Needs amount missing to be input which then is used to check if the player has enough
+	 *                total value to get the missing amount.
 	 */
 
 
@@ -429,31 +439,31 @@ public class GameController {
 		boolean solvent = checkIfSolvent(player, amount);
 		if(!solvent){
 		    gui.showMessage("You do not have enough assets to get the missing money.\n");
-        }
-		    do{
-			String choice = gui.getUserButtonPressed("You are missing " + amount + " dollars. How would you like to get the money?",
-																				"Trade", "Sell houses", "Mortgage", "Forefit like a bitch");
-			switch(choice) {
-				case "Trade":
-					int amountBefore = player.getBalance();
-					try {
-						trade(player);
-					}catch(PlayerBrokeException e){
+        } else {
+			do {
+				String choice = gui.getUserButtonPressed("You are missing " + amount + " dollars. How would you like to get the money?",
+						"Trade", "Sell houses", "Mortgage", "Forefit like a bitch");
+				switch (choice) {
+					case "Trade":
+						int amountBefore = player.getBalance();
+						try {
+							trade(player);
+						} catch (PlayerBrokeException e) {
 
-					}
-					int amountAfter = player.getBalance();
-					amount -= (amountAfter-amountBefore);
-				case "Sell Houses":
+						}
+						int amountAfter = player.getBalance();
+						amount -= (amountAfter - amountBefore);
+					case "Sell Houses":
 
-				case "Mortgage":
-					amountBefore = player.getBalance();
-					mortgage(player);
-					amountAfter = player.getBalance();
-					amount -=(amountAfter-amountBefore);
-				default:
-			}
-
-		}while(amount > 0);
+					case "Mortgage":
+						amountBefore = player.getBalance();
+						mortgage(player);
+						amountAfter = player.getBalance();
+						amount -= (amountAfter - amountBefore);
+					default:
+				}
+			} while (amount > 0);
+		}
 	}
 
     /**
@@ -492,7 +502,7 @@ public class GameController {
 
 	/**
 	 * I need a method here, just not sure yet how to do it. Could also be a boolean status, probably easier to work with
-	 * Gustav Rmil Nobert
+	 * Gustav Emil Nobert
 	 *
 	 * @param property
 	 */
@@ -593,7 +603,7 @@ public class GameController {
     }
 
 	/**
-	 * Method which sells all the houses on a colourset so the player can mortgage a property. Need to update so gui does what it needs to
+	 * Method which sells all the houses on a colourset so the player can mortgage a property. Fixed gui problem. Is done.
 	 * @author s175124
 	 * @param realEstate
 	 */
@@ -774,8 +784,8 @@ public class GameController {
 	}
 
 	/**
-	 * This method implements the activity of auctioning a property.
-	 *
+	 * This method implements the activity of auctioning a property. Works rn
+	 * TODO: needs to be looked at agian and optimised with obtain cash
 	 * @param property the property which is for auction
 	 *                 The max and min amount of bid is currently not working when i have 'highest bid' instead of a raw number ex:1,5,100
 	 *                 It works when using mouse on screen it wont allow player to bid if it is out of range. But it is possible to press enter
@@ -1024,6 +1034,13 @@ public class GameController {
 	}
 
 
+	/**
+	 * Used in trade method.
+	 * @author s175124
+	 * @param propArray
+	 * @return
+	 */
+
 	public String propArrayStringCreator(Property[] propArray) {
 		String s = "";
 		for (int i = 0; i < propArray.length; i++) {
@@ -1039,6 +1056,14 @@ public class GameController {
 		return s;
 	}
 
+	/**
+	 * Used in the end of trade method
+	 * @author s175124
+	 * @param giver
+	 * @param receiver
+	 * @param properties
+	 */
+
 	public void tradeProperties(Player giver, Player receiver, Property[] properties){
 		for(Property p: properties){
 			if(p == null){
@@ -1051,11 +1076,17 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Done. Fixed problem with mortgaged properties.
+	 * @author s175124 & s185031
+	 * @param estate
+	 */
+
 	public void checkforbuildable(RealEstate estate) {
 		Set<RealEstate> estateSet = RealEstate.getcolormap(estate);
 		int counter = 0;
 		for (RealEstate realEstate : estateSet) {
-			if (realEstate.getOwner() == estate.getOwner()) {
+			if (realEstate.getOwner() == estate.getOwner() && !realEstate.isMortgaged()) {
 				counter++;
 			}
 		}

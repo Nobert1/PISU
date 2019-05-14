@@ -380,7 +380,8 @@ public class MiniMonopoly {
 	public static void createPlayers(Game game) {
 		// TODO the players should eventually be created interactively or be loaded from a database
         int i = 1;
-		Player p = new Player();
+
+        Player p = new Player();
 		p.setName("Player 1");
 		p.setCurrentPosition(game.getSpaces().get(0));
 		p.setColor(Color.RED);

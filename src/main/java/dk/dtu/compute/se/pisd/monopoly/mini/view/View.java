@@ -78,7 +78,7 @@ public class View implements Observer {
 
 	public void createplayers() {
 		for (Player player : game.getPlayers()) {
-			GUI_Car car = new GUI_Car(player.getColor(), Color.black, Type.CAR, Pattern.FILL);
+			GUI_Car car = new GUI_Car(player.getColor(), Color.black, GUI_Car.Type.getTypeFromString(player.getIcon()), Pattern.FILL);
 			GUI_Player guiPlayer = new GUI_Player(player.getName(), player.getBalance(), car);
 			PlayerPanel panel = new PlayerPanel(game, player);
 			player2GuiPlayer.put(player, guiPlayer);
