@@ -143,9 +143,7 @@ public class View implements Observer {
 		if (property instanceof RealEstate) {
 			RealEstate realestate = (RealEstate) property;
 			GUI_Street estatefield = (GUI_Street) field;
-				if (realestate.getHouses() != 0 ) {
 					estatefield.setHouses(realestate.getHouses());
-                }
 			if (realestate.isHotel()) {
 				estatefield.setHouses(0);
 				estatefield.setHotel(true);

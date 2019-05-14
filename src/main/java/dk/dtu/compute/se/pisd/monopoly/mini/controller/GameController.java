@@ -504,7 +504,7 @@ public class GameController {
 
 
 	/**
-	 * fixed
+	 * Just need to implement gui so that you can see which properties are mortgaged.
 	 * @author s175124
 	 * @param player
 	 */
@@ -582,7 +582,7 @@ public class GameController {
 
 				for(Property p: mortgagedProperties){
 					if(p.getName() == choice){
-						unmo
+					//	unmo
 					}
 				}
 
@@ -593,7 +593,7 @@ public class GameController {
     }
 
 	/**
-	 * Method which sells all the houses on a colourset so the player can mortgage a property.
+	 * Method which sells all the houses on a colourset so the player can mortgage a property. Need to update so gui does what it needs to
 	 * @author s175124
 	 * @param realEstate
 	 */

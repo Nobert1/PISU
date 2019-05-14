@@ -64,7 +64,6 @@ public class RealEstate extends Property {
 
     public void setHouses(int houses) {
         this.houses = houses;
-        if (this.houses > 0)
         notifyChange();
     }
 
@@ -114,7 +113,6 @@ public class RealEstate extends Property {
 
     public void setHotel(boolean hotel) {
         this.hotel = hotel;
-        if (this.hotel == true)
         notifyChange();
     }
 
