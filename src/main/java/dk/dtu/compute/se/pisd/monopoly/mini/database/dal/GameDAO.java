@@ -1,25 +1,14 @@
 package dk.dtu.compute.se.pisd.monopoly.mini.database.dal;
 
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
-import com.mysql.cj.jdbc.MysqlDataSource;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Game;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Player;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.Property;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.Space;
-import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Colors;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
-import gui_main.GUI;
-
-import javax.sql.ConnectionPoolDataSource;
-import javax.sql.DataSource;
 import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.Executor;
 
 
 public class GameDAO implements IGameDAO {
@@ -34,19 +23,11 @@ public class GameDAO implements IGameDAO {
 // TODO lav et statement der kører "create if not exists" med tabellerne.
 
     private Game game;
-    static Connection con=null;
 
 
     public GameDAO (Game game) {
         this.game = game;
     }
-
-    private Connection createConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185031?"
-                + "user=s185031&password=UfudYEA2p7RmipWZXxT2R");
-
-    }
-
 
 
     /**
@@ -57,19 +38,18 @@ public class GameDAO implements IGameDAO {
      * @throws DALException
      */
     @Override
-    public void savegame() throws DALException {
-        try {
-            Connection c = createConnection();
-            insertgameID(c);
-            int max = getmaxgameID(c);
-            insertintoPlayers(c, max);
-            insertintoTokens(c, max);
-            insertintoproperties(c, max);
-            insertintoRealEstates(c, max);
-             } catch (SQLException e) {
+    public void savegame(String saveName) throws DALException {
+        try (Connection c = DataSource.getConnection()) {
+            c.setAutoCommit(false);
+            int ID = insertIntoGame(saveName, c);
+            insertintoPlayers(ID, c);
+            insertintoproperties(ID, c);
+            insertintoRealEstates(ID, c);
+            c.commit();
+            //Grunden til vi bruger en forbindelse er både for performance og for atomicity.
+        } catch (SQLException e) {
             throw new DALException(e.getMessage());
         }
-
     }
 
     /**
@@ -81,6 +61,16 @@ public class GameDAO implements IGameDAO {
     @Override
     public void deleteSave(int gameId) throws DALException {
         //TODO går nok bare noget lignende et SQL statement der hedder DELETE * FROM gameID WHERE gameID=(?) og så med noget cascade.
+        try (Connection c = DataSource.getConnection()) {
+            c.setAutoCommit(false);
+            PreparedStatement preparedStatement = c.prepareStatement("DELETE FROM Game WHERE gameID =?");
+            preparedStatement.setInt(1, gameId);
+            int row = preparedStatement.executeUpdate();
+            c.commit();
+
+        } catch (SQLException e) {
+            throw new DALException(e.getMessage());
+        }
     }
 
 
@@ -90,10 +80,6 @@ public class GameDAO implements IGameDAO {
      *
      * @throws DALException
      */
-    @Override
-    public void creategame() throws DALException {
-        //TODO den her skal nok slettes, den giver sig selv.
-    }
 
     /**
      * Takes a gameID as a parameter, we need the gui to show a list of saved games. In the long run you could save with a string
@@ -103,11 +89,9 @@ public class GameDAO implements IGameDAO {
      */
     @Override
     public void getGame(int gameId) throws DALException {
-        try {
-            Connection c = createConnection();
+        try (Connection c = DataSource.getConnection()) {
             game.setPlayers(getPlayers(gameId, c));
             game.setSpaces(getspaces(gameId, c));
-
         } catch (SQLException e) {
             throw new DALException(e.getMessage());
         }
@@ -119,30 +103,35 @@ public class GameDAO implements IGameDAO {
      * @return
      * @throws DALException
      */
-
-    private List<Space> getspaces(int gameID, Connection c) throws DALException {
-     List<Space> spacelist = game.getSpaces();
-     List<RealEstate> estates = getRealEstates(gameID, c);
-     List<Utility> utilities = getUtilites(gameID, c);
-     int estatecounter = 0;
-     int utilitycounter = 0;
-     for (int i = 0; i < spacelist.size(); i++) {
-         if (spacelist.get(i) instanceof RealEstate) {
-             spacelist.set(i, estates.get(estatecounter));
-             estatecounter++;
-         } else if (spacelist.get(i) instanceof Utility) {
-             spacelist.set(i, utilities.get(utilitycounter));
-             utilitycounter++;
-         }
-     }
-
-     return spacelist;
+    @Override
+    public List<Space> getspaces(int gameID, Connection c) throws DALException {
+        List<Space> spacelist = game.getSpaces();
+        List<RealEstate> estates = getRealEstates(gameID, c);
+        List<Utility> utilities = getUtilites(gameID, c);
+        int estatecounter = 0;
+        int utilitycounter = 0;
+        for (int i = 0; i < spacelist.size(); i++) {
+            if (spacelist.get(i) instanceof RealEstate) {
+                spacelist.set(i, estates.get(estatecounter));
+                estatecounter++;
+            } else if (spacelist.get(i) instanceof Utility) {
+                spacelist.set(i, utilities.get(utilitycounter));
+                utilitycounter++;
+            }
+        }
+        return spacelist;
     }
 
-    private List<Utility> getUtilites(int gameID, Connection c) throws DALException {
-
-        //try (Connection c = getconnection()) {
-            try {
+    /**
+     * Returns utilites
+     * @param gameID
+     * @return
+     * @throws DALException
+     */
+    @Override
+    public List<Utility> getUtilites(int gameID, Connection c) throws DALException {
+        try {
+            // try (Connection c = DataSource.getConnection()) {
             PreparedStatement statement = c.prepareStatement("SELECT * FROM Properties WHERE gameID=?");
 
             statement.setInt(1, gameID);
@@ -158,10 +147,16 @@ public class GameDAO implements IGameDAO {
         }
     }
 
-    private List<RealEstate> getRealEstates(int gameID, Connection c) throws DALException {
-
-       try {
-      //  try (Connection c = getconnection()){
+    /**
+     * Returns realestates
+     * @param gameID
+     * @return
+     * @throws DALException
+     */
+    @Override
+    public List<RealEstate> getRealEstates(int gameID, Connection c) throws DALException {
+        try {
+            //  try (Connection c = DataSource.getConnection()) {
             Statement statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM RealEstate WHERE gameID="+ gameID);
             ArrayList<RealEstate> realEstatelist = new ArrayList<>();
@@ -175,98 +170,93 @@ public class GameDAO implements IGameDAO {
         }
     }
 
-    private List<Player> getPlayers(int gameID, Connection c) throws DALException {
+    /**
+     * Returns the players.
+     */
+    @Override
+    public List<Player> getPlayers(int gameID, Connection c) throws DALException {
         try {
+            //  try (Connection c = DataSource.getConnection()) {
             Statement statement = c.createStatement();
-            Statement statement2 = c.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM Player WHERE gameID=" + gameID);
-            ResultSet resultSet1 = statement2.executeQuery("SELECT * FROM Token WHERE gameID=" + gameID);
             ArrayList<Player> playerList = new ArrayList<>();
             while (resultSet.next()) {
                 Player player = makePlayerFromResultset(resultSet);
                 playerList.add(player);
             }
-            while (resultSet1.next()) {
-                for (Player player1 : playerList) {
-                    if (player1.getPlayerID() == resultSet1.getInt("ownerID")) {
-                        Color color = new Color(resultSet1.getInt("r"), resultSet1.getInt("g"), resultSet1.getInt("b"));
-                        player1.setColor(color);
-                    }
-                }
 
-            }
             return playerList;
         } catch (SQLException e) {
             throw new DALException(e.getMessage());
         }
-        }
-        /**
+    }
 
-        try (Connection c = getconnection()) {
-            Statement statement = c.createStatement();
-            Statement statement2 = c.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Player WHERE gameID=" + gameID);
-            ResultSet resultSet1 = statement2.executeQuery("SELECT * FROM Token WHERE gameID=" + gameID);
-            ArrayList<Player> playerList = new ArrayList<>();
-            while (resultSet.next() && resultSet1.next()) {
-                Player player = makePlayerFromResultset(resultSet);
-                //TODO en eller anden form for reference til playerID her.
-                Color color = new Color(resultSet1.getInt("r"), resultSet1.getInt("g"), resultSet1.getInt("b"));
-                player.setColor(color);
-                playerList.add(player);
-            }
-            return playerList;
-        } catch (SQLException e) {
-            throw new DALException(e.getMessage());
-        }
-         *
-         */
-
-
-    private RealEstate makeRealestateFromResultset(ResultSet resultSet) throws SQLException {
+    /**
+     * Produces the real estates. Not from the bottom but with the information that is not persistent.
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public RealEstate makeRealestateFromResultset(ResultSet resultSet) throws SQLException {
 
         RealEstate realEstate = new RealEstate();
         for (RealEstate realEstate1 : game.getRealestates()) {
-                if (realEstate1.getPropertid() == resultSet.getInt("RealEstateID")) {
-                    realEstate = realEstate1;
-                    for (Player player : game.getPlayers()) {
-                        if (player.getPlayerID() == resultSet.getInt("ownerID")) {
-                            realEstate.setOwner(player);
-                            realEstate.setOwned(true);
-                            player.addOwnedProperty(realEstate);
-                        }
+            if (realEstate1.getPropertid() == resultSet.getInt("RealEstateID")) {
+                realEstate = realEstate1;
+                for (Player player : game.getPlayers()) {
+                    if (player.getPlayerID() == resultSet.getInt("ownerID")) {
+                        realEstate.setOwner(player);
+                        realEstate.setOwned(true);
+                        player.addOwnedProperty(realEstate);
                     }
-                    realEstate.setHouses(resultSet.getInt("houses"));
-                    realEstate.setHotel(resultSet.getBoolean("hotel"));
-                    realEstate.setMortgaged(resultSet.getBoolean("mortgaged"));
                 }
+                realEstate.setHouses(resultSet.getInt("houses"));
+                realEstate.setHotel(resultSet.getBoolean("hotel"));
+                realEstate.setMortgaged(resultSet.getBoolean("mortgaged"));
             }
+        }
         return realEstate;
     }
 
+    /**
+     * Produces the utilities. Not from the bottom but with the information that is not persistent.
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
 
-    private Utility makeUtilityFromResultset(ResultSet resultSet) throws SQLException {
+    @Override
+    public Utility makeUtilityFromResultset(ResultSet resultSet) throws SQLException {
         //For at der skal kunne sættes en ejer kræver det han er oprettet først.
         Utility utility = new Utility();
         for (Utility utility1 : game.getUtilites()) {
             if (utility1.getPropertyid() == resultSet.getInt("PropertyID")) {
-                    utility = utility1;
-                    //Det her kan godt virke, men aner det ikke.
-                    for (Player player : game.getPlayers()) {
-                        if (player.getPlayerID() == resultSet.getInt("ownerID")) {
-                            utility.setOwner(player);
-                            utility.setOwned(true);
-                            player.addOwnedProperty(utility);
+                utility = utility1;
+                //Det her kan godt virke, men aner det ikke.
+                for (Player player : game.getPlayers()) {
+                    if (player.getPlayerID() == resultSet.getInt("ownerID")) {
+                        utility.setOwner(player);
+                        utility.setOwned(true);
+                        player.addOwnedProperty(utility);
 
-                        }
                     }
-                    utility.setMortgaged(resultSet.getBoolean("mortgaged"));
                 }
+                utility.setMortgaged(resultSet.getBoolean("mortgaged"));
             }
+        }
         return utility;
     }
 
-    private Player makePlayerFromResultset(ResultSet resultSet) throws SQLException {
+    /**
+     * Sets every attribute of the player.
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
+
+    @Override
+    public Player makePlayerFromResultset(ResultSet resultSet) throws SQLException {
         Player player = new Player();
         player.setPlayerID(resultSet.getInt("playerID"));
         player.setName(resultSet.getString("PlayerName"));
@@ -274,169 +264,153 @@ public class GameDAO implements IGameDAO {
         player.setCurrentPosition(game.getSpaces().get(resultSet.getInt("position")));
         player.setInPrison(resultSet.getBoolean("injail"));
         player.setBroke(resultSet.getBoolean("broke"));
-        //Der skal også ske noget med et token.
+        Color color = new Color(resultSet.getInt("r"),resultSet.getInt("g"),resultSet.getInt("b"));
+        player.setColor(color);
+        player.setIcon(resultSet.getString("tokentype"));
         return player;
     }
 
     /**
-     * Insert into methods, we still have to figure out how it works with peoples tokens.
-     * I think it will probably be best if tokens just have an owener ID or so and their own tabel.
-     *
+     * Insert into methods.
      * @throws DALException
      */
 
-    private void insertintoPlayers(Connection c, int max) throws DALException {
+    @Override
+    public void insertintoPlayers(int gameID, Connection c) throws DALException {
 
+        //try (Connection c = DataSource.getConnection()) {
         try {
-       // try (Connection c = getconnection()) {
-            PreparedStatement statement = c.prepareStatement("INSERT INTO Player VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-            c.setAutoCommit(false);
+            PreparedStatement statement = c.prepareStatement("INSERT INTO Player VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             for (Player player : game.getPlayers()) {
 
                 //TODO Regex this perhaps?
                 statement.setInt(1, player.getPlayerID());
                 statement.setString(2, player.getName());
-                statement.setInt(3, max);
+                statement.setInt(3, gameID);
                 statement.setInt(4, player.getBalance());
                 statement.setInt(5, player.getCurrentPosition().getIndex());
                 statement.setBoolean(6, player.isInPrison());
                 statement.setBoolean(7, player.isBroke());
+                statement.setInt(8, player.getColor().getRed());
+                statement.setInt(9, player.getColor().getGreen());
+                statement.setInt(10, player.getColor().getBlue());
+                statement.setString(11, player.getIcon());
                 statement.addBatch();
             }
+
             int[] rows = statement.executeBatch();
-            c.commit();
-        } catch (SQLException e) {
-            throw new DALException(e.getMessage());
-        }
-    }
-
-    //TODO find ud af hvordan det skal virke med bilerne.
-    public void insertintoTokens(Connection c, int max) throws DALException{
-
-        try {
-        //try (Connection c = getconnection()) {
-
-            PreparedStatement statement = c.prepareStatement("INSERT INTO Token VALUES (?, ?, ?, ?, ?, ?)");
-            c.setAutoCommit(false);
-
-            for (Player player : game.getPlayers()) {
-            statement.setInt(1, player.getPlayerID());
-            statement.setInt(2, max);
-            statement.setInt(3, player.getColor().getRed());
-            statement.setInt(4, player.getColor().getGreen());
-            statement.setInt(5, player.getColor().getBlue());
-            statement.setNull(6, Types.VARCHAR);
-
-            statement.addBatch();
-            }
-            int[] colorrows = statement.executeBatch();
-            c.commit();
         } catch (SQLException e) {
             throw new DALException(e.getMessage());
         }
     }
 
     /**
-     * Since nothing is actually properties but only utilities and realestates
+     * Only insert the non persistent attributes.
      *
      * @throws DALException
      */
-    private void insertintoproperties(Connection c, int max) throws DALException {
-
+    @Override
+    public void insertintoproperties(int gameID, Connection c) throws DALException {
         try {
-       // try (Connection c = getconnection()) {
-            c.setAutoCommit(false);
+            //try (Connection c = DataSource.getConnection()) {
             PreparedStatement statement = c.prepareStatement("INSERT INTO Properties VALUES (?, ?, ?, ?)");
-                    for (Utility utility : game.getUtilites()) {
-                    statement.setInt(1, max);
-                    if (utility.getOwner() != null) {
-                        statement.setInt(2, utility.getOwner().getPlayerID());
-                    } else {
-                        statement.setNull(2, Types.INTEGER);
-                    }
-                    statement.setInt(3, utility.getPropertyid());
-                    statement.setBoolean(4, utility.isMortgaged());
-                    statement.addBatch();
+            for (Utility utility : game.getUtilites()) {
+                statement.setInt(1, gameID);
+                if (utility.getOwner() != null) {
+                    statement.setInt(2, utility.getOwner().getPlayerID());
+                } else {
+                    statement.setNull(2, Types.INTEGER);
+                }
+                statement.setInt(3, utility.getPropertyid());
+                statement.setBoolean(4, utility.isMortgaged());
+                statement.addBatch();
             }
             int[] Propertiesrow = statement.executeBatch();
-            c.commit();
         } catch (SQLException e) {
             throw new DALException(e.getMessage());
         }
     }
 
-    private void insertintoRealEstates(Connection c, int max) throws DALException {
-
-        //try (Connection c = getconnection()) {
-          try {
-            c.setAutoCommit(false);
+    /**
+     * Only insert the non persistent attributes.
+     * @param gameID
+     * @throws DALException
+     */
+    @Override
+    public void insertintoRealEstates(int gameID, Connection c) throws DALException {
+        try {
+            // try (Connection c = DataSource.getConnection()) {
             PreparedStatement statement = c.prepareStatement("INSERT INTO RealEstate VALUES (?, ?, ?, ?, ?, ?)");
-                    for (RealEstate realEstate : game.getRealestates()) {
-                    statement.setInt(1, max);
-                    if (realEstate.getOwner() != null) {
+            for (RealEstate realEstate : game.getRealestates()) {
+                statement.setInt(1, gameID);
+                if (realEstate.getOwner() != null) {
                     statement.setInt(2, realEstate.getOwner().getPlayerID());
-                    } else {
+                } else {
                     statement.setNull(2, Types.INTEGER);
-                    }
-                    statement.setBoolean(3, realEstate.isMortgaged());
-                    statement.setInt(4, realEstate.getPropertid());
-                    statement.setInt(5, realEstate.getHouses());
-                    statement.setBoolean(6,realEstate.isHotel());
-                    statement.addBatch();
-                    }
+                }
+                statement.setBoolean(3, realEstate.isMortgaged());
+                statement.setInt(4, realEstate.getPropertid());
+                statement.setInt(5, realEstate.getHouses());
+                statement.setBoolean(6,realEstate.isHotel());
+                statement.addBatch();
+            }
 
             int[] Realestaterow = statement.executeBatch();
-            c.commit();
-            } catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DALException(e.getMessage());
         }
     }
 
-
-    public String[] generategameIDs() {
-        ArrayList<Integer> gameIDsList = new ArrayList<>();
-
-        try (Connection c = createConnection()) {
+    /**
+     * Inserts into game.
+     */
+    @Override
+    public int insertIntoGame(String gameName, Connection c) throws DALException{
+        try {
+            int ID = 0;
+            PreparedStatement statement = c.prepareStatement("INSERT INTO Game VALUES (default, ?)", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, gameName);
+            int row = statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    ID = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            } catch (SQLException e) {
+                e.getMessage();
+            }
+            return ID;
+        } catch (SQLException e) {
+            throw new DALException(e.getMessage());
+        }
+    }
+    /**
+     * Generate the list of games.
+     * @return
+     */
+    @Override
+    public String[] generategameIDs() throws DALException{
+        try (Connection c = DataSource.getConnection()) {
+            ArrayList<String> gameIDsList = new ArrayList<>();
             Statement statement = c.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM Game");
             while (resultSet.next()) {
                 int gameid = resultSet.getInt("gameID");
-                gameIDsList.add(gameid);
+                String games = gameid + ". " + resultSet.getString("SaveName");
+                gameIDsList.add(games);
             }
             String[] gameIdsArray = new String[gameIDsList.size()];
-            for (int i = 0; i < gameIDsList.size(); i++) {
-                gameIdsArray[i] = String.valueOf(gameIDsList.get(i));
+            int i = 0;
+            for (String name : gameIDsList) {
+                gameIdsArray[i] = name;
+                i++;
             }
+
             return gameIdsArray;
         } catch (SQLException e) {
+            throw new DALException(e.getMessage());
         }
-        return null;
-    }
-
-    public void insertgameID(Connection c) {
-        try {
-        //try (Connection c = getconnection()) {
-            Statement statement = c.createStatement();
-            statement.executeUpdate("INSERT INTO Game VALUES (default)");
-        } catch (SQLException e) {
-            e.getMessage();
-        }
-    }
-
-    public int getmaxgameID(Connection c) {
-        try {
-        //try (Connection c = getconnection()) {
-            Statement statement = c.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT MAX(gameID) FROM Game");
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.getMessage();
-        }
-        System.out.println("there wasn't anything to be found");
-        return -1;
     }
 }

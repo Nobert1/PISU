@@ -12,6 +12,8 @@ import gui_main.GUI;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The overall controller of a Monopoly game. It provides access
@@ -85,21 +87,24 @@ public class GameController {
 		this.view = new View(game, gui, playerpanel);
 	}
 
-	public void databaseInteraction() {
-	    String selection = gui.getUserSelection("What you wanna do ","create game", "load game");
-	    if (selection.equals("load game")) {
-	        int gameId = Integer.valueOf(gui.getUserButtonPressed("what game would you like to load", database.generategameIDs()));
-            try {
-                database.getGame(gameId);
-            } catch (DALException e) {
-                e.printStackTrace();
-            }
-        } else if (selection.equals("create game")) {
+	public void databaseinteraction () throws DALException {
+		String selection = gui.getUserSelection("What you wanna do ","create game", "load game");
+		if (selection.equals("load game")) {
+			String s = gui.getUserButtonPressed("what game would you like to load", database.generategameIDs());
+			Matcher matcher = Pattern.compile("\\d+").matcher(s);
+			matcher.find();
+			int i = Integer.valueOf(matcher.group());
+			try {
+				database.getGame(i);
+			} catch (DALException e) {
+				e.printStackTrace();
+			}
+		} else if (selection.equals("create game")) {
 			createPlayers(game);
 		}
 		view.createplayers();
 		view.createFields();
-    }
+	}
 
 	/**
 	 * Method which allows the players to chose which icon and colour they would like. Colour is unique so is removed
@@ -291,8 +296,10 @@ public class GameController {
 						"A round is finished. Do you want to continue the game?",
 						"yes",
 						"no");
+
 				if (selection.equals("no")) {
-					database.savegame();
+					String name = gui.getUserString("What would you like to save the game name as?");
+					database.savegame(name);
 					gui.showMessage("game saved");
 					terminated = true;
 				}

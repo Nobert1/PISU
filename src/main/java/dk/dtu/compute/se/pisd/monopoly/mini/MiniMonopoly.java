@@ -417,7 +417,7 @@ public class MiniMonopoly {
 		controller.initializeGUI();
 		try {
             createSpaces(game);
-		    controller.databaseInteraction();
+		    controller.databaseinteraction();
             game.shuffleCardDeck();
 
             controller.play();
