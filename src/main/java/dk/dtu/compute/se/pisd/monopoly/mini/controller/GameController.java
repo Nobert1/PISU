@@ -85,7 +85,7 @@ public class GameController {
 		this.view = new View(game, gui, playerpanel);
 	}
 
-	public void databaseinteraction () {
+	public void databaseInteraction() {
 	    String selection = gui.getUserSelection("What you wanna do ","create game", "load game");
 	    if (selection.equals("load game")) {
 	        int gameId = Integer.valueOf(gui.getUserButtonPressed("what game would you like to load", database.generategameIDs()));

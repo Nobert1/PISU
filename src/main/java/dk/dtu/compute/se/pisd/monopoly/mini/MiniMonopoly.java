@@ -10,8 +10,6 @@ import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Colors;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.RealEstate;
 import dk.dtu.compute.se.pisd.monopoly.mini.model.properties.Utility;
 
-import java.awt.*;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -419,7 +417,7 @@ public class MiniMonopoly {
 		controller.initializeGUI();
 		try {
             createSpaces(game);
-		    controller.databaseinteraction();
+		    controller.databaseInteraction();
             game.shuffleCardDeck();
 
             controller.play();
