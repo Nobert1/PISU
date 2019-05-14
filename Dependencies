@@ -52,3 +52,10 @@ public void databaseinteraction () {
 		view.createplayers();
 		view.createFields();
     }
+
+if (selection.equals("no")) {
+					String name = gui.getUserString("What would you like to save the game name as?");
+					database.savegame(name);
+					gui.showMessage("game saved");
+					terminated = true;
+				}
