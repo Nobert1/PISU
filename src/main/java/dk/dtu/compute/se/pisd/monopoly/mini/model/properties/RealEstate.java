@@ -38,6 +38,7 @@ public class RealEstate extends Property {
     private int propertid;
     private int mortgageValue;
 
+
     private static Set<RealEstate> Greyproperties = new HashSet<>();
     private static Set<RealEstate> Redproperties = new HashSet<>();
     private static Set<RealEstate> Greenproperties = new HashSet<>();

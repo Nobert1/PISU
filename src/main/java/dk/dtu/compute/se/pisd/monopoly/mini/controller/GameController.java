@@ -142,9 +142,10 @@ public class GameController {
 		int j = 0;
 		do{
 			Player p = new Player();
-
-
-			String name = gui.getUserString("What would you like your name to be?");
+			String name = "";
+			while(name.equals("")) {
+				 name = gui.getUserString("What would you like your name to be?");
+			}
 			String[] iconArr = arrayConverterString(iconList);
 			String[] colourArr = arrayConverterString(colourList);
 			String icon = gui.getUserButtonPressed("Which icon would you like to have?", iconArr);
@@ -233,7 +234,7 @@ public class GameController {
 			Player player = players.get(current);
 			String choice;
 			do{
-			choice = gui.getUserButtonPressed("What would you like to do " + game.getCurrentPlayer().getName()+"?", "Roll", "Trade", "Build or Sell houses", "Mortgage");
+			choice = gui.getUserButtonPressed("What would you like to do " + game.getCurrentPlayer().getName()+"?",  "Trade", "Build or Sell houses", "Mortgaging", "Roll");
 			switch(choice) {
 				case "Trade":
 					try {
@@ -243,8 +244,8 @@ public class GameController {
 					}
 					break;
 				case "Build or Sell houses":
-					String s = gui.getUserButtonPressed("Would you like to build or sell?","Build","Sell");
-					if(s.equals("Build")){
+					String h = gui.getUserButtonPressed("Would you like to build or sell?","Build","Sell");
+					if(h.equals("Build")){
 						try {
 						buildHouses(game.getCurrentPlayer());
 					} catch (PlayerBrokeException e) {
@@ -253,8 +254,17 @@ public class GameController {
 						sellHouses(game.getCurrentPlayer());
 					}
 					break;
-				case "Mortgage":
-				    mortgage(game.getCurrentPlayer());
+				case "Mortgaging":
+					String m = gui.getUserButtonPressed("Would you like to mortgage or unmortgage?", "Mortgage","Unmortgage");
+					if(m.equals("Mortgage")) {
+						mortgage(game.getCurrentPlayer());
+					} else {
+						try {
+							unmortgage(game.getCurrentPlayer());
+						}catch (PlayerBrokeException e){
+
+						}
+					}
 					break;
 
 				default:
@@ -550,8 +560,8 @@ public class GameController {
 	 */
 
 	public void mortgageProperty(Property property) {
-		paymentFromBank(property.getOwner(), property.getMortgageValue());
 		property.setMortgaged(true);
+		paymentFromBank(property.getOwner(), property.getMortgageValue());
 		}
 
 
@@ -567,7 +577,7 @@ public class GameController {
             gui.showMessage("You have no properties to mortgage");
         } else {
 
-			String choice = "";
+			String choice;
 			do {
 				ArrayList<String> propList = new ArrayList<>();
 
@@ -597,11 +607,13 @@ public class GameController {
 										if (realEstate.getHouses() > 0 || realEstate.isHotel()) {
 											choice = gui.getUserButtonPressed("You are unable to mortgage this property as there are houses on one or more of the same colour. " +
 													"\nWould you like to sell these houses for 50% of what you payed, and then mortgage?", "Yes", "No");
-											sellHousesMortgage((RealEstate) property);
+											if(!choice.equals("No")) {
+												sellHousesMortgage((RealEstate) property);
+											}
 										}
 									}
 								}
-								if(!choice.equals("Yes")) {
+								if(!choice.equals("No")) {
 									gui.showMessage("You will receive " + property.getMortgageValue() + " dollars.");
 									mortgageProperty(property);
 									gui.showMessage("You have successfully mortgaged " + property.getName());
@@ -617,11 +629,13 @@ public class GameController {
 	}
 
 	public void unmortgageProperty(Property property)throws PlayerBrokeException{
-		paymentToBank(property.getOwner(),property.getMortgageValue()+property.getMortgageValue()/10);
 		property.setMortgaged(false);
+		paymentToBank(property.getOwner(),property.getMortgageValue()+property.getMortgageValue()/10);
 	}
 
     public void unmortgage(Player player)throws PlayerBrokeException{
+		String choice = "";
+		do{
 		ArrayList<Property> mortgagedProperties = new ArrayList<>();
 		for(Property p: player.getOwnedProperties()){
 			if(p.isMortgaged()){
@@ -629,29 +643,28 @@ public class GameController {
 			}
 		} if(mortgagedProperties.isEmpty()){
 			gui.showMessage("You have no mortgaged properties.");
+			choice = "Back";
 		} else {
-			String[] mortgagedPropertiesArr = new String[mortgagedProperties.size()+1];
-			int i = 0;
-			for(Property p: mortgagedProperties){
-				mortgagedPropertiesArr[i++] = p.getName();
-			}
-			mortgagedPropertiesArr[mortgagedProperties.size()] = "Back";
-			String choice = "";
-			do{
-				choice = gui.getUserButtonPressed("Which property would you like to unmortgage." +
-						"\nIt will cost what you received to mortgage plus 10%.",mortgagedPropertiesArr);
+				String[] mortgagedPropertiesArr = new String[mortgagedProperties.size() + 1];
+				int i = 0;
+				for (Property p : mortgagedProperties) {
+					mortgagedPropertiesArr[i++] = p.getName();
+				}
+				mortgagedPropertiesArr[mortgagedProperties.size()] = "Back";
 
-				for(Property p: mortgagedProperties){
-					if(p.getName() == choice){
+				choice = gui.getUserButtonPressed("Which property would you like to unmortgage." +
+						"\nIt will cost what you received to mortgage plus 10%.", mortgagedPropertiesArr);
+
+				for (Property p : mortgagedProperties) {
+					if (p.getName() == choice) {
 						unmortgageProperty(p);
 						gui.showMessage("You have successfully unmortgaged " + p.getName());
+						choice = "Back";
 					}
 				}
 
-
+			}
 			}while(choice != "Back");
-		}
-
     }
 
 	/**
@@ -835,7 +848,7 @@ public class GameController {
 
 	/**
 	 * This method implements the activity of auctioning a property. Works rn
-	 * TODO: needs to be looked at agian and optimised with obtain cash
+	 * TODO: needs to be looked at again and optimised with obtain cash
 	 * @param property the property which is for auction
 	 *                 The max and min amount of bid is currently not working when i have 'highest bid' instead of a raw number ex:1,5,100
 	 *                 It works when using mouse on screen it wont allow player to bid if it is out of range. But it is possible to press enter
@@ -864,23 +877,22 @@ public class GameController {
 		int counter = 0;
 		while (counter < bidList.size() - 1) {
 			for (int i = 0; bidList.size() > i; i++) {
-				if (bidList.get(i).getBalance() <= highestBid) {
-					gui.showMessage("You do not have sufficient funds to participate in the auction");
-					bidList.remove(i);
-				} else {
 					String option = gui.getUserButtonPressed("The highest bid is " + highestBid + " by " + highestBidder.getName() + ".\n"
 							+ bidList.get(i).getName() + " Do you want to bid? ", "yes", "no");
 					if (option.equals("yes")) {
+					do {
 						currentBid = gui.getUserInteger("The highest bid is " + highestBid + " by " + highestBidder.getName() + ".\n" +
-										bidList.get(i).getName() + ", how much would you like to bid? Must be between " + highestBid + " and " + bidList.get(i).getBalance()
-								, highestBid, bidList.get(i).getBalance());
+										bidList.get(i).getName() + ", how much would you like to bid? Must be between more that");
+						gui.showMessage("The bid must be higher than the highest bid!");
+					}while(currentBid <= highestBid);
 						highestBid = currentBid;
 						highestBidder = bidList.get(i);
 						counter = 0;
 					} else if (option.equals("no")) {
+						gui.showMessage("You are removed from the auction ");
+						bidList.remove(i);
 						counter++;
 					}
-				}
 			}
 		}
 		if (!highestBidder.getName().equals("No one")) {
@@ -1166,7 +1178,7 @@ public class GameController {
 		String[] buildList = new String[counter];
 		for(Property p: player.getOwnedProperties()){
 			if(p instanceof RealEstate){
-				if(((RealEstate) p).isBuildable()){
+				if(((RealEstate) p).isBuildable() && !((RealEstate) p).isHotel()){
 					buildList[counter2] = p.getName();
 					counter2++;
 				}

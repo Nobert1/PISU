@@ -54,6 +54,7 @@ public class MiniMonopoly {
 		p.setCost(1200);
 		p.setRent(50);
 		p.setMortgageValue(750);
+
         p.setColor(Colors.getcolor(Colors.LIGHTBLUE));
         RealEstate.insertintoColorMap(p);
         p.setPropertid(i++);

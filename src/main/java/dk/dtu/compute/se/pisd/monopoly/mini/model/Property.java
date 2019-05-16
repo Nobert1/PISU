@@ -24,6 +24,12 @@ public class Property extends Space {
     private Player owner;
     private boolean mortgaged = false;
     private Color color;
+    private int rentHouse1;
+    private int rentHouse2;
+    private int rentHouse3;
+    private int rentHouse4;
+    private int rentHotel;
+
 
     //Made a color attribute since i need it for the Jframe. We can just give colors to utilities as well cause it will look good.
 
