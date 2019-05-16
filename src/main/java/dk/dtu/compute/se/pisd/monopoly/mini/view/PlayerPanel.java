@@ -65,7 +65,7 @@ public class PlayerPanel extends JFrame {
         JLabel n = new JLabel("Not in jail");
         playerPanel.add(l);
         playerPanel.add(j);
-        playerPanel.add(k);
+        //playerPanel.add(k);
 
         boolean inPrison = player.isInPrison();
 
@@ -98,8 +98,12 @@ public class PlayerPanel extends JFrame {
                 String nameString = "";
                 for (Property property1 : player.getOwnedProperties()) {
                     if (color.equals(property1.getColor())) {
-                        nameString += property1.getName() + "\n";
+                        nameString += property1.getName();
+                        if(property1.isMortgaged()){
+                            nameString += "   M\n";
+                        }
                     }
+                    nameString += "\n";
                 }
 
                 JTextArea textArea = new JTextArea(3, 5);

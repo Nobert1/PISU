@@ -145,8 +145,8 @@ public class GameController {
 
 
 			String name = gui.getUserString("What would you like your name to be?");
-			String[] iconArr = arrayConverter(iconList);
-			String[] colourArr = arrayConverter(colourList);
+			String[] iconArr = arrayConverterString(iconList);
+			String[] colourArr = arrayConverterString(colourList);
 			String icon = gui.getUserButtonPressed("Which icon would you like to have?", iconArr);
 			String colour = gui.getUserButtonPressed("Which colour would you like?", colourArr);
 			Color c;
@@ -190,7 +190,7 @@ public class GameController {
 
 	}
 
-	public String[] arrayConverter(ArrayList<String> list){
+	public String[] arrayConverterString(ArrayList<String> list){
 		String[] array = new String[list.size()];
 		int i = 0;
 		for(String s: list){
@@ -198,6 +198,16 @@ public class GameController {
 		}
 		return array;
 	}
+
+	public String[] arrayConverterRealestate(ArrayList<RealEstate> list){
+		String[] array = new String[list.size()];
+		int i = 0;
+		for(RealEstate r: list){
+			array[i++] = r.getName();
+		}
+		return array;
+	}
+
 
 	/**
 	 * The main method to start the game. The game is started with the
@@ -233,14 +243,14 @@ public class GameController {
 					}
 					break;
 				case "Build or Sell houses":
-					String s = gui.getUserButtonPressed("Would you like to buy or sell?","Buy","Sell");
-					if(s.equals("Buy")){
+					String s = gui.getUserButtonPressed("Would you like to build or sell?","Build","Sell");
+					if(s.equals("Build")){
 						try {
 						buildHouses(game.getCurrentPlayer());
 					} catch (PlayerBrokeException e) {
 						}
 					} else {
-						//sellHouses();
+						sellHouses(game.getCurrentPlayer());
 					}
 					break;
 				case "Mortgage":
@@ -561,18 +571,15 @@ public class GameController {
 			do {
 				ArrayList<String> propList = new ArrayList<>();
 
-
 				for (Property p : player.getOwnedProperties()) {
 					if (!p.isMortgaged()) {
 						propList.add(p.getName());
 					}
 				}
-				int i = 0;
+
 				if (!propList.isEmpty()) {
-					String[] propArray = new String[propList.size() + 1];
-					for (String s : propList) {
-						propArray[i++] = s;
-					}
+					String[] p = arrayConverterString(propList);
+					String[] propArray = Arrays.copyOf(p,p.length+1);
 					propArray[propList.size()] = "Back";
 
 					//The player chooses which property they would like to mortgage. The system then checks
@@ -646,6 +653,56 @@ public class GameController {
 		}
 
     }
+
+	/**
+	 * Method that sells houses. Evt. can add that selling 5 houses when hotel just says hotel.
+	 * @author s175124
+	 * @param player
+	 */
+
+	public void sellHouses(Player player){
+		ArrayList<RealEstate> estateList = new ArrayList<>();
+		for(Property p: player.getOwnedProperties()) {
+			if (p instanceof RealEstate) {
+				if (((RealEstate) p).getHouses() > 0 || ((RealEstate) p).isHotel()) {
+					estateList.add((RealEstate) p);
+				}
+			}
+		}
+		if(estateList.isEmpty()){
+			gui.showMessage("You have no properties with houses or hotels.");
+		} else {
+			do{
+				String[] estateArr = arrayConverterRealestate(estateList);
+
+				String chosenProperty = gui.getUserButtonPressed("Which property would you like to sell houses from?",estateArr);
+				for(RealEstate r: estateList){
+					if(r.getName().equals(chosenProperty)){
+						String[] houseArr = new String[r.getHouses()];
+						for(int i = 0; i < houseArr.length; i++){
+							houseArr[i] = String.valueOf(i+1);
+						}
+						String housesToSell = gui.getUserButtonPressed("You have chosen " + r.getName() + " where there are " + r.getHouses()
+						+ " built.\n How many would you like to sell? You will receive 50% of what you played",houseArr);
+						String accept = gui.getUserButtonPressed("Are you sure you want to sell " + housesToSell + " houses?",
+								"Yes", "no");
+						if(accept.equals("Yes")){
+							paymentFromBank(player,(Integer.valueOf(housesToSell) * (r.getHouseprice() / 2)));
+							if(r.isHotel()){
+								r.setHotel(false);
+							}
+							r.setHouses(r.getHouses()-Integer.valueOf(housesToSell));
+							gui.showMessage("You have sold " + housesToSell + " and received " +
+									Integer.valueOf(housesToSell) * (r.getHouseprice() / 2) + "dollars");
+						}
+
+					}
+				}
+			}while(!estateList.isEmpty());
+		}
+
+
+	}
 
 	/**
 	 * Method which sells all the houses on a colourset so the player can mortgage a property. Fixed gui problem. Is done.
@@ -1088,7 +1145,7 @@ public class GameController {
 	}
 
 	/**
-	 * sorry gulle i fixed it
+	 * fixed. Evt. can add hotel as the last option instead of "when you have bought 5 houses it will turn into a hotel"
 	 * @author s175124
 	 * @param player
 	 */
@@ -1099,7 +1156,7 @@ public class GameController {
 		for(Property p: player.getOwnedProperties()){
 			if(p instanceof RealEstate){
 				checkforbuildable((RealEstate) p);
-				if(((RealEstate) p).isBuildable()){
+				if(((RealEstate) p).isBuildable() && !((RealEstate) p).isHotel()){
 					counter++;
 				}
 			}
